@@ -1,7 +1,715 @@
-// HAIRGATOR 완전한 블로그 자동화 시스템 - JavaScript
+// 타겟별 샘플 콘텐츠 생성 (네이버 SEO 최적화)
+function generateTargetSpecificSampleContent(topic, targetName) {
+    const seoTitle = `${topic.title} | ${targetName} 필수가이드 2024`;
+    
+    return `# ${seoTitle}
 
-// 전역 변수
-let currentTopic = null;
+안녕하세요, **${targetName}** 여러분! 오늘은 **${topic.keywords[0]}**에 대해 현장에서 바로 활용할 수 있는 **전문적인 내용**을 상세히 공유하겠습니다.
+
+${topic.keywords[0]}는 ${targetName}에게 매우 중요한 요소입니다. 특히 **${topic.keywords[1]}**와 연관하여 체계적으로 접근하면 더욱 효과적인 결과를 얻을 수 있습니다.
+
+## ${topic.keywords[0]}의 핵심 이해
+
+### 왜 ${topic.keywords[0]}가 중요한가?
+
+**${targetName}**으로서 여러분이 일상적으로 마주치는 ${topic.keywords[0]} 관련 이슈들을 효과적으로 해결할 수 있는 방법들을 알아보겠습니다.
+
+현장에서 **${topic.keywords[1]}**와 관련된 업무를 처리할 때, 체계적인 접근법이 없다면 시간과 비용이 낭비될 수 있습니다. 특히 ${targetName}에게는 다음과 같은 이유로 중요합니다:
+
+- **효율성 향상**: 올바른 ${topic.keywords[0]} 적용으로 업무 처리 시간 30% 단축
+- **품질 개선**: 전문적인 ${topic.keywords[2]} 활용으로 서비스 품질 향상
+- **고객 만족**: 더 나은 결과로 고객 만족도 85% 이상 달성
+- **수익성**: 효과적인 방법으로 월평균 수익성 15% 개선
+
+## 실무 적용 가능한 구체적 방법론
+
+### 1단계: ${topic.keywords[0]} 현상 파악 및 분석
+
+**${topic.keywords[0]}**를 다룰 때 가장 먼저 해야 할 일은 정확한 현상 파악입니다. 실무에서 검증된 체크리스트를 활용해보세요.
+
+**필수 체크리스트:**
+- [ ] 기본 상황 및 조건 확인
+- [ ] 관련 요소들 종합 분석  
+- [ ] 명확한 목표 설정 및 우선순위 결정
+- [ ] 필요 자원 및 도구 파악
+- [ ] 예상 소요 시간 및 비용 산정
+
+### 2단계: 전문적 접근법 적용
+
+**${targetName}**의 전문성을 활용한 체계적 접근 방식입니다:
+
+**이론적 기반 마련**
+- ${topic.keywords[0]}의 핵심 원리와 작동 메커니즘 이해
+- 업계 표준 및 베스트 프랙티스 철저 검토
+- 최신 연구 결과 및 트렌드 분석
+
+**실무 기술 적용**
+- 현장에서 검증된 **${topic.keywords[1]}** 기법 활용
+- 개인별/상황별 맞춤 조정 방법
+- 효과 측정 및 개선 방안
+
+**결과 모니터링 및 최적화**
+- 단계별 진행 상황 체크
+- 실시간 피드백 수집 및 분석
+- 필요시 즉시 조정 및 보완
+
+### 3단계: 고급 테크닉과 실전 노하우
+
+경험 많은 **${targetName}**들이 실제로 사용하는 고급 기법들을 공개합니다:
+
+**전문가 핵심 팁 #1**: ${topic.keywords[2]} 최대 활용법
+- 구체적인 적용 방법과 단계별 가이드
+- 주의해야 할 핵심 포인트 5가지
+- 다양한 상황별 응용 방법
+
+**전문가 핵심 팁 #2**: 효율성 극대화 전략
+- 시간 절약을 위한 핵심 테크닉
+- 품질 향상을 위한 체크포인트
+- 비용 효율적 접근법과 리소스 관리
+
+**전문가 핵심 팁 #3**: 문제 해결 시나리오
+- 일반적인 문제 상황별 대응법
+- 응급 상황 시 빠른 해결 방법
+- 예방을 위한 사전 관리 시스템
+
+## ${targetName}을 위한 실제 현장 사례
+
+### 사례 1: 일반적인 상황에서의 ${topic.keywords[0]} 적용
+
+"실제로 저희 현장에서 **${topic.keywords[0]}**를 적용할 때 가장 효과적이었던 방법은..."
+
+**상황**: 전형적인 업무 환경에서의 적용 사례
+**적용 방법**: 단계별 구체적 실행 과정
+**결과**: 30일 후 측정된 정량적 성과
+**핵심 포인트**: 성공 요인 3가지 분석
+
+### 사례 2: 까다로운 상황에서의 문제 해결
+
+"특별히 어려운 케이스의 경우, **${topic.keywords[1]}** 접근법이 매우 유용했습니다..."
+
+**도전 과제**: 복잡하고 까다로운 상황 설명
+**해결 과정**: 창의적 문제 해결 접근법
+**교훈**: 향후 유사 상황 대비 노하우
+
+### 사례 3: 혁신적 적용으로 성과 극대화
+
+"창의적으로 접근했던 이 성공 사례는 업계에서도 주목받았습니다..."
+
+**혁신 포인트**: 기존 방식과 차별화된 접근
+**실행 과정**: 단계별 실행 전략
+**성과**: 예상보다 200% 향상된 결과
+
+## 자주 묻는 질문 (FAQ)
+
+### Q1: ${topic.keywords[0]} 적용 시 가장 흔한 실수는?
+
+**A**: 가장 흔한 실수는 **기본기를 무시하고 고급 기법만 추구하는 것**입니다. ${topic.keywords[0]}의 기초 원리를 충분히 이해하지 못한 상태에서 복잡한 방법을 적용하면 오히려 역효과가 날 수 있습니다.
+
+**예방법**:
+- 기초 이론 충분히 학습
+- 단계별 점진적 적용
+- 정기적인 기본기 점검
+
+### Q2: ${targetName} 초보자도 바로 적용 가능한가요?
+
+**A**: 네, 충분히 가능합니다. 다만 **단계별 접근**이 중요합니다. 처음에는 기본적인 ${topic.keywords[1]} 방법부터 시작하여 점차 고급 기법으로 발전시켜 나가세요.
+
+**초보자 추천 순서**:
+- 1단계: 기본 이론 학습 (1-2주)
+- 2단계: 간단한 실습 (2-3주)  
+- 3단계: 응용 및 심화 (4주 이후)
+
+### Q3: 얼마나 자주 ${topic.keywords[0]}를 적용해야 하나요?
+
+**A**: **일관성**이 가장 중요합니다. 매일 조금씩이라도 꾸준히 적용하는 것이 일주일에 한 번 많이 하는 것보다 효과적입니다.
+
+**권장 빈도**:
+- 초기 단계: 주 2-3회 (학습 기간)
+- 중급 단계: 주 4-5회 (숙련 기간)
+- 고급 단계: 매일 (유지 및 발전)
+
+## 주의사항과 전문가 특별 조언
+
+### 반드시 피해야 할 실수들
+
+**1. 과도한 적용**
+- 무리한 시도는 오히려 역효과 초래
+- 개인의 역량과 상황을 고려한 적절한 수준 유지
+- 점진적 발전이 지속가능한 성장의 열쇠
+
+**2. 기본 원리 무시**
+- 기초를 건너뛰고 고급 기법만 추구하는 실수
+- **${topic.keywords[0]}**의 핵심 원리 충분한 이해 필요
+- 기본기가 탄탄해야 응용도 자유롭게 가능
+
+**3. 획일적 적용**
+- 상황별 맞춤 없이 동일한 방법만 반복 사용
+- 개인차와 환경적 요인 고려 필수
+- 유연한 사고와 적응력이 성공의 핵심
+
+### 성공을 위한 핵심 성공 요소
+
+**지속적 학습과 업데이트**
+- 새로운 기법과 트렌드 지속적 습득
+- 동료 전문가들과의 정보 교환
+- 정기적인 교육 및 세미나 참석
+
+**실전 경험 축적**
+- 다양한 케이스 직접 경험하기
+- 실패를 통한 학습과 개선
+- 성공 사례 체계적 기록 및 분석
+
+**네트워킹과 협업**
+- 동료 **${targetName}**들과의 활발한 교류
+- 온라인 커뮤니티 적극 참여
+- 멘토 및 선배와의 정기적 상담
+
+## 도구와 리소스 완벽 활용법
+
+### 필수 준비 사항
+
+**기본 도구 및 장비**
+- **필수 도구**: 반드시 갖춰야 할 핵심 장비 5가지
+- **보조 도구**: 효율성 향상을 위한 추가 도구들
+- **디지털 도구**: 최신 앱 및 소프트웨어 활용법
+
+**지식 및 정보 자원**
+- 전문 서적 및 연구 자료
+- 온라인 강의 및 튜토리얼
+- 업계 전문지 및 뉴스레터
+
+### 추천 학습 리소스
+
+**온라인 교육 과정**
+- **${targetName}** 전용 인증 과정
+- 해외 유명 기관의 온라인 강의
+- 실무 중심의 현장 교육 프로그램
+
+**커뮤니티 및 네트워크**
+- 국내 최대 **${targetName}** 온라인 카페
+- 해외 전문가 포럼 및 그룹
+- 지역별 오프라인 모임 정보
+
+## 단계별 실행 계획 및 로드맵
+
+### 즉시 실행 가능한 액션 플랜
+
+**이번 주 내 실행 목표**
+- [ ] 기본 체크리스트 작성 및 현황 파악
+- [ ] **${topic.keywords[0]}** 관련 도구 및 자료 정리
+- [ ] 첫 번째 실습 계획 수립
+
+**이번 달 내 달성 목표**
+- [ ] 핵심 기법 2-3가지 현장 적용
+- [ ] 동료와의 경험 공유 및 피드백 수집
+- [ ] 초기 결과 측정 및 분석
+
+**3개월 내 중기 목표**
+- [ ] 전체 시스템 완전 정착
+- [ ] 개인 맞춤 방법론 확립
+- [ ] 정량적 성과 측정 및 개선점 도출
+
+### 장기 발전 계획
+
+**6개월 목표**: 숙련도 향상 및 응용 범위 확대
+- 고급 기법 마스터
+- 창의적 응용 방법 개발
+- 후배 지도 및 멘토링 시작
+
+**1년 목표**: 해당 분야 인정받는 전문가 되기
+- 업계 내 전문가로 인정
+- 강의 및 컨설팅 기회 확보
+- 개인 브랜드 구축 및 네트워크 확장
+
+**지속적 목표**: 최신 트렌드 반영 및 지속적 개선
+- 최신 기술 및 트렌드 지속 학습
+- 개인 노하우 지속적 업데이트
+- 업계 발전에 기여하는 활동
+
+## 마무리: ${targetName}을 위한 특별한 조언
+
+**${topic.keywords[0]}**에 대한 이해와 적용은 **${targetName}**에게 경쟁력을 제공하는 핵심 역량입니다. 
+
+오늘 소개한 방법들을 현장에서 단계적으로 적용해보시고, 여러분만의 노하우로 발전시켜 나가시기 바랍니다.
+
+**중요한 것은 꾸준함입니다.** 전문가는 하루아침에 만들어지지 않습니다. 지속적인 학습과 실습을 통해 더욱 발전된 **${targetName}**이 되어가시길 응원합니다.
+
+**${topic.keywords[1]}**와 **${topic.keywords[2]}**를 조합한 여러분만의 창의적인 방법을 개발해보세요. 그것이 바로 진정한 전문가로 성장하는 지름길입니다.
+
+---
+
+💬 **여러분의 ${topic.keywords[0]} 경험을 댓글로 공유해주세요!** 어떤 방법이 가장 효과적이었는지, 또는 어려웠던 점은 무엇인지 궁금합니다.
+
+👍 **이 글이 도움이 되셨다면 좋아요와 공유 부탁드립니다!** 더 많은 **${targetName}**들에게 유용한 정보가 전달될 수 있도록 함께해주세요.
+
+🔔 **정기적인 전문 정보를 받아보시려면 구독해주세요!** 매주 실무에 도움되는 최신 정보와 노하우를 공유하겠습니다.
+
+📞 **개별 상담이나 문의사항이 있으시면 언제든 연락주세요!** ${targetName} 전문 컨설팅도 제공하고 있습니다.
+
+---
+
+**💼 ${targetName} 전용 추가 리소스**
+- 📚 관련 전문 교육 과정 정보 및 할인 혜택
+- 📈 업계 동향 및 최신 트렌드 분석 레포트
+- 🤝 전문가 네트워크 참여 방법 및 모임 일정
+- 🛠️ 실무 도구 및 장비 추천 리스트
+
+*본 글은 현장 경험이 풍부한 **${targetName}**들의 실무 노하우와 최신 연구 결과를 바탕으로 작성되었습니다. 모든 내용은 실제 적용 가능하며, 지속적으로 업데이트하여 최신 정보를 제공합니다.*`;
+}// HAIRGATOR 완전한 블로그 자동화 시스템 - JavaScript
+
+// 타겟 독자별 전문 분야 및 주제 데이터
+const targetAudienceData = {
+    hair_professionals: {
+        name: "헤어 디자이너 & 헤어 관련 종사자",
+        description: "헤어 전문가들을 위한 실무 중심 콘텐츠를 작성합니다.",
+        features: [
+            "최신 헤어 트렌드 및 기법",
+            "고객 상담 및 서비스 노하우", 
+            "살롱 운영 및 마케팅 팁",
+            "제품 지식 및 기술 정보"
+        ],
+        categories: {
+            techniques: "헤어 기법 & 테크닉",
+            trends: "트렌드 & 스타일",
+            business: "살롱 운영 & 비즈니스",
+            products: "제품 & 도구"
+        },
+        topics: {
+            techniques: [
+                {
+                    id: 1,
+                    title: "2024 트렌드 컷 기법: 레이어드 볼륨 컷 마스터하기",
+                    keywords: ["레이어드컷", "볼륨컷", "헤어기법", "커팅테크닉", "트렌드컷"],
+                    targetLevel: "intermediate"
+                },
+                {
+                    id: 2, 
+                    title: "문제 모발 고객 대응법: 손상모발 복구 시술 가이드",
+                    keywords: ["손상모발", "복구시술", "고객상담", "문제해결", "헤어케어"],
+                    targetLevel: "expert"
+                }
+            ],
+            trends: [
+                {
+                    id: 3,
+                    title: "2024 F/W 헤어컬러 트렌드: 고객에게 제안할 베스트 컬러",
+                    keywords: ["헤어컬러", "트렌드컬러", "고객제안", "컬러링", "시즌트렌드"],
+                    targetLevel: "intermediate"
+                }
+            ],
+            business: [
+                {
+                    id: 4,
+                    title: "헤어샵 매출 증대 전략: 단골 고객 만들기 7가지 방법",
+                    keywords: ["살롱운영", "매출증대", "고객관리", "마케팅", "단골고객"],
+                    targetLevel: "expert"
+                }
+            ],
+            products: [
+                {
+                    id: 5,
+                    title: "프로용 헤어도구 완벽 가이드: 가위부터 드라이어까지",
+                    keywords: ["헤어도구", "프로용기기", "도구선택", "장비관리", "투자가이드"],
+                    targetLevel: "beginner"
+                }
+            ]
+        },
+        expertTerms: ["커팅", "레이어링", "그라데이션", "텍스처라이징", "포인트컷", "슬라이스", "섹션", "가이드라인", "오버다이렉션"],
+        writingStyle: {
+            tone: "전문적이면서 실무 중심적",
+            approach: "기술적 디테일과 실전 노하우 강조",
+            structure: "이론 → 실습 → 응용 → 고객 적용"
+        }
+    },
+    
+    beauty_professionals: {
+        name: "뷰티 전문가 & 미용사", 
+        description: "뷰티 전문가들을 위한 종합 미용 정보를 제공합니다.",
+        features: [
+            "최신 뷰티 트렌드 분석",
+            "고객별 맞춤 서비스",
+            "샵 운영 노하우",
+            "제품 및 기술 정보"
+        ],
+        categories: {
+            skincare: "스킨케어 & 관리",
+            makeup: "메이크업 & 컬러",
+            nails: "네일 & 아트",
+            business: "샵 운영 & 마케팅"
+        }
+    },
+    
+    fitness_trainers: {
+        name: "퍼스널 트레이너 & 피트니스 전문가",
+        description: "피트니스 전문가들을 위한 운동 및 트레이닝 정보를 제공합니다.",
+        features: [
+            "운동 프로그램 설계",
+            "고객 맞춤 트레이닝",
+            "영양 및 컨디셔닝", 
+            "PT샵 운영 노하우"
+        ],
+        categories: {
+            training: "트레이닝 & 운동법",
+            nutrition: "영양 & 식단",
+            rehabilitation: "재활 & 교정",
+            business: "PT샵 운영"
+        }
+    },
+    
+    chefs_cooks: {
+        name: "셰프 & 요리사",
+        description: "요리 전문가들을 위한 조리 기법 및 레시피 정보를 제공합니다.",
+        features: [
+            "전문 조리 기법",
+            "메뉴 개발 및 기획",
+            "식재료 관리법",
+            "주방 운영 시스템"
+        ],
+        categories: {
+            techniques: "조리 기법 & 스킬",
+            menu: "메뉴 개발 & 기획", 
+            ingredients: "식재료 & 관리",
+            kitchen: "주방 운영 & 관리"
+        }
+    },
+    
+    it_developers: {
+        name: "개발자 & IT 전문가",
+        description: "개발자들을 위한 기술 및 개발 정보를 제공합니다.",
+        features: [
+            "최신 개발 기술 트렌드",
+            "코딩 베스트 프랙티스",
+            "프로젝트 관리 노하우",
+            "커리어 개발 가이드"
+        ],
+        categories: {
+            frontend: "프론트엔드 개발",
+            backend: "백엔드 개발",
+            devops: "데브옵스 & 인프라",
+            career: "커리어 & 성장"
+        }
+    }
+};
+
+// 현재 선택된 타겟 독자
+let currentTargetAudience = 'hair_professionals';
+
+// 타겟 독자 설정 초기화
+function initializeTargetAudience() {
+    const targetSelect = document.getElementById('primaryTarget');
+    const customTargetDiv = document.getElementById('customTarget');
+    const targetDescription = document.getElementById('targetDescription');
+    
+    if (targetSelect) {
+        targetSelect.addEventListener('change', function() {
+            const selectedTarget = this.value;
+            
+            if (selectedTarget === 'custom') {
+                customTargetDiv.style.display = 'block';
+                targetDescription.innerHTML = `
+                    <p><strong>사용자 정의 타겟</strong>을 위한 맞춤형 콘텐츠를 작성합니다.</p>
+                    <p class="custom-note">구체적인 직업이나 분야를 입력해주세요 (예: 카페 사장들, 펜션 운영자들)</p>
+                `;
+            } else {
+                customTargetDiv.style.display = 'none';
+                updateTargetDescription(selectedTarget);
+                currentTargetAudience = selectedTarget;
+                loadTopicsForTarget(selectedTarget);
+            }
+        });
+    }
+    
+    // 초기 설정
+    updateTargetDescription(currentTargetAudience);
+    loadTopicsForTarget(currentTargetAudience);
+}
+
+// 타겟 설명 업데이트
+function updateTargetDescription(targetKey) {
+    const targetDescription = document.getElementById('targetDescription');
+    const targetData = targetAudienceData[targetKey];
+    
+    if (targetData && targetDescription) {
+        const featuresHTML = targetData.features.map(feature => `<li>• ${feature}</li>`).join('');
+        
+        targetDescription.innerHTML = `
+            <p><strong>${targetData.name}</strong>를 위한 전문 콘텐츠를 작성합니다.</p>
+            <ul>${featuresHTML}</ul>
+        `;
+    }
+}
+
+// 타겟별 주제 로드
+function loadTopicsForTarget(targetKey) {
+    const targetData = targetAudienceData[targetKey];
+    if (!targetData || !targetData.topics) {
+        // 기존 헤어케어 주제 사용 (fallback)
+        loadTopics();
+        return;
+    }
+    
+    // 타겟별 주제로 전역 변수 업데이트
+    Object.assign(haircareTopics, targetData.topics);
+    
+    // 카테고리 탭 업데이트
+    updateCategoryTabs(targetData.categories);
+    
+    // 주제 목록 새로고침
+    loadTopics();
+}
+
+// 카테고리 탭 업데이트
+function updateCategoryTabs(categories) {
+    const categoryTabsContainer = document.querySelector('.category-tabs');
+    if (!categoryTabsContainer || !categories) return;
+    
+    categoryTabsContainer.innerHTML = `
+        <button class="tab-btn active" data-category="all">전체</button>
+        ${Object.entries(categories).map(([key, name]) => 
+            `<button class="tab-btn" data-category="${key}">${name}</button>`
+        ).join('')}
+    `;
+    
+    // 이벤트 리스너 재설정
+    setupCategoryTabs();
+}
+
+// 네이버 상위노출 최적화 프롬프트 생성
+function createNaverOptimizedPrompt(topic) {
+    const targetData = targetAudienceData[currentTargetAudience];
+    const targetName = targetData ? targetData.name : '전문가들';
+    
+    return `당신은 네이버 블로그 상위노출 전문가이며 ${targetName}을 위한 콘텐츠 작성자입니다.
+
+【네이버 SEO 최적화 필수 요구사항】
+
+1. 제목 최적화:
+- 핵심 키워드 "${topic.keywords[0]}" 반드시 포함
+- 30-60자 길이 (네이버 검색결과 노출 최적화)
+- 클릭을 유도하는 흥미로운 표현 사용
+- 예: "${topic.keywords[0]} 완전정복", "${topic.keywords[0]} 실전가이드"
+
+2. 본문 구조 (네이버 알고리즘 선호):
+- 첫 문단에 핵심 키워드 자연스럽게 2-3회 포함
+- H2 소제목 3-5개 (## 사용), 각 소제목에 키워드 포함
+- H3 세부 소제목 2-3개 (### 사용)
+- 목록 형태(-) 적극 활용 (최소 5개 이상)
+- **굵은 글씨** 강조 구문 5개 이상 사용
+- 적절한 단락 나누기 (한 단락 3-4줄)
+
+3. 키워드 최적화:
+- 핵심 키워드: ${topic.keywords.join(', ')}
+- 키워드 밀도: 전체 글의 2-3% (자연스럽게)
+- 제목, 첫문단, 소제목, 마지막문단에 키워드 배치
+- 연관 키워드와 동의어 적극 활용
+
+4. 사용자 참여 유도 (네이버 알고리즘 가점):
+- 댓글 유도 문구 3개 이상 포함
+- "댓글로 경험을 공유해주세요"
+- "좋아요와 공유 부탁드립니다"
+- 질문형 문장으로 독자 참여 유도
+
+5. 전문성 및 신뢰성:
+- ${targetName}의 실무 경험담 포함
+- 구체적인 수치와 데이터 제시
+- 전문 용어 사용 후 쉬운 설명 병행
+- 단계별 실행 방법 상세 제공
+
+6. 콘텐츠 길이:
+- 최소 2000자 이상 (네이버 선호 길이)
+- 정보 밀도 높은 알찬 내용
+- 실무에 바로 적용 가능한 구체적 방법
+
+【글 구조 템플릿】
+# [키워드 포함 SEO 제목]
+
+## 서론 (첫 문단에 키워드 2-3회)
+${targetName}들이 ${topic.keywords[0]}에 대해 알아야 할 핵심 내용...
+
+## ${topic.keywords[0]}의 기본 이해 
+### 핵심 개념
+### 중요성
+
+## 실무 적용 방법
+### 1단계: [구체적 방법]
+### 2단계: [상세 설명]
+### 3단계: [실전 팁]
+
+## ${targetName}을 위한 전문 노하우
+- 실무 경험담
+- 주의사항
+- 효과적인 활용법
+
+## 자주 묻는 질문 (FAQ)
+### Q1: [실제 궁금한 점]
+### Q2: [현실적 문제]
+
+## 마무리 및 실행 계획
+[키워드 재언급, CTA 포함]
+
+---
+💬 여러분의 ${topic.keywords[0]} 경험을 댓글로 공유해주세요!
+👍 도움이 되셨다면 좋아요와 공유 부탁드립니다!
+
+작성 시 반드시 지켜야 할 사항:
+- 자연스러운 키워드 배치 (스팸성 키워드 반복 금지)
+- 읽기 쉬운 문체와 적절한 존댓말 사용
+- 실제 도움이 되는 유용한 정보 제공
+- 원본성 확보 (표절이나 복사 금지)
+- 정확한 정보와 최신 트렌드 반영
+
+주제: ${topic.title}
+타겟: ${targetName}
+키워드: ${topic.keywords.join(', ')}
+목표: 네이버 블로그 상위 노출 + 높은 사용자 만족도`;
+}
+
+// 기존 generateHaircareContent 함수 수정
+async function generateTargetSpecificContent(topic) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const targetData = targetAudienceData[currentTargetAudience];
+            const targetName = targetData ? targetData.name : '전문가들';
+            
+            // 타겟별 맞춤 샘플 콘텐츠 생성
+            const content = {
+                title: `${topic.title} | ${targetName} 전용 가이드`,
+                content: generateTargetSpecificSampleContent(topic, targetName),
+                metaDescription: `${topic.title}에 대한 ${targetName}을 위한 전문 가이드입니다.`
+            };
+            
+            resolve(content);
+        }, 3000);
+    });
+}
+
+// 타겟별 샘플 콘텐츠 생성
+function generateTargetSpecificSampleContent(topic, targetName) {
+    const targetData = targetAudienceData[currentTargetAudience];
+    
+    return `# ${topic.title}
+
+안녕하세요, ${targetName} 여러분! 오늘은 ${topic.keywords[0]}에 대해 현장에서 바로 활용할 수 있는 전문적인 내용을 공유하겠습니다.
+
+## 현장 전문가 관점에서 보는 ${topic.keywords[0]}
+
+${targetName}으로서 여러분이 일상적으로 마주치는 ${topic.keywords[0]} 관련 이슈들을 효과적으로 해결할 수 있는 방법들을 알아보겠습니다.
+
+### 왜 이것이 중요한가?
+
+현장에서 ${topic.keywords[1]}와 관련된 업무를 처리할 때, 체계적인 접근법이 없다면 시간과 비용이 낭비될 수 있습니다. 특히 ${targetName}에게는 다음과 같은 이유로 중요합니다:
+
+- **효율성 향상**: 올바른 방법으로 업무 처리 시간 단축
+- **품질 개선**: 전문적인 서비스 품질 향상
+- **고객 만족**: 더 나은 결과로 고객 만족도 증대
+- **수익성**: 효과적인 방법으로 수익성 개선
+
+## 실무 적용 가능한 구체적 방법론
+
+### 1단계: 현상 파악 및 분석
+${topic.keywords[0]}를 다룰 때 가장 먼저 해야 할 일은 정확한 현상 파악입니다.
+
+**체크리스트:**
+- [ ] 기본 상황 확인
+- [ ] 관련 요소들 분석  
+- [ ] 목표 설정
+- [ ] 필요 자원 파악
+
+### 2단계: 전문적 접근법 적용
+${targetName}의 전문성을 활용한 체계적 접근:
+
+1. **이론적 기반 마련**
+   - 관련 원리와 메커니즘 이해
+   - 업계 표준 및 베스트 프랙티스 검토
+
+2. **실무 기술 적용**
+   - 현장에서 검증된 기법 활용
+   - 개인별/상황별 맞춤 조정
+
+3. **결과 모니터링**
+   - 진행 상황 체크
+   - 필요시 조정 및 보완
+
+### 3단계: 고급 테크닉과 노하우
+
+경험 많은 ${targetName}들이 사용하는 고급 기법들:
+
+**전문가 팁 #1**: ${topic.keywords[2]} 활용법
+- 구체적인 적용 방법
+- 주의해야 할 포인트
+- 응용 가능한 상황들
+
+**전문가 팁 #2**: 효율성 극대화 방법
+- 시간 절약 테크닉
+- 품질 향상 포인트
+- 비용 효율적 접근법
+
+## 실제 현장 사례와 경험담
+
+### 사례 1: 일반적인 상황 대응
+"실제로 저희 현장에서 ${topic.keywords[0]}를 적용할 때..."
+
+### 사례 2: 까다로운 상황 해결
+"특별히 어려운 케이스의 경우..."
+
+### 사례 3: 혁신적 적용 사례
+"창의적으로 접근했던 성공 사례..."
+
+## 주의사항과 전문가 조언
+
+### 피해야 할 실수들
+1. **과도한 적용**: 무리한 시도는 역효과
+2. **기본 무시**: 기초를 건너뛰고 고급 기법만 추구
+3. **일괄 적용**: 상황별 맞춤 없이 동일하게 적용
+
+### 성공을 위한 핵심 포인트
+- **지속적 학습**: 새로운 기법과 트렌드 습득
+- **경험 축적**: 다양한 케이스 경험하기
+- **네트워킹**: 동료 전문가들과의 정보 교환
+- **고객 중심**: 항상 최종 사용자/고객 관점에서 접근
+
+## 도구와 리소스 활용법
+
+### 필수 도구들
+- **기본 도구**: 반드시 갖춰야 할 장비/소프트웨어
+- **고급 도구**: 전문성 향상을 위한 추가 도구
+- **관리 도구**: 효율적 업무 관리를 위한 시스템
+
+### 추천 리소스
+- 전문 교육 과정
+- 업계 간행물 및 매체
+- 온라인 커뮤니티 및 포럼
+- 전문가 네트워크
+
+## 실행 계획과 다음 단계
+
+### 즉시 실행 가능한 액션 플랜
+1. **이번 주 내**: 기본 체크리스트 작성 및 현황 파악
+2. **이번 달 내**: 핵심 기법 1-2가지 현장 적용
+3. **3개월 내**: 전체 시스템 정착 및 효과 측정
+
+### 장기 발전 계획
+- **6개월 목표**: 숙련도 향상 및 응용 범위 확대
+- **1년 목표**: 해당 분야 전문가로 인정받기
+- **지속적**: 최신 트렌드 반영 및 지속적 개선
+
+## 마무리: ${targetName}을 위한 특별 조언
+
+${topic.keywords[0]}에 대한 이해와 적용은 ${targetName}에게 경쟁력을 제공하는 핵심 역량입니다. 
+
+오늘 소개한 방법들을 현장에서 단계적으로 적용해보시고, 여러분만의 노하우로 발전시켜 나가시기 바랍니다.
+
+**기억하세요**: 전문가는 하루아침에 만들어지지 않습니다. 꾸준한 학습과 실습을 통해 더욱 발전된 ${targetName}이 되어가시길 응원합니다.
+
+---
+
+💼 **${targetName} 전용 추가 리소스**
+- 관련 전문 교육 과정 정보
+- 업계 동향 및 트렌드 분석
+- 전문가 네트워크 참여 방법
+
+*본 글은 현장 경험이 풍부한 ${targetName}들의 실무 노하우를 바탕으로 작성되었습니다.*`;
+}
 let generatedContent = null;
 let qualityData = null;
 let automationEnabled = false;
@@ -134,13 +842,30 @@ const aiConfig = {
     }
 };
 
-// 품질 검사 기준
-const qualityStandards = {
-    wordCount: { min: 1200, ideal: 2000, max: 3000 },
-    readability: { min: 70, ideal: 85 },
-    keywordDensity: { min: 1.5, ideal: 3.0, max: 5.0 },
-    structure: { min: 70, ideal: 90 },
-    expertise: { min: 60, ideal: 80 }
+// 네이버 SEO 최적화를 위한 품질 기준 (업데이트됨)
+const seoQualityStandards = {
+    wordCount: { min: 1500, ideal: 2500, max: 5000 }, // 네이버 선호 길이
+    keywordDensity: { min: 1.5, ideal: 2.5, max: 4.0 },
+    titleLength: { min: 30, ideal: 50, max: 60 },
+    metaLength: { min: 120, ideal: 140, max: 150 },
+    headingCount: { min: 3, ideal: 5, max: 10 },
+    engagement: { min: 1, ideal: 3, max: 5 } // CTA, 댓글유도 등
+};
+
+// 네이버 상위노출 키워드 패턴
+const naverSEOPatterns = {
+    titlePatterns: [
+        "완전정복", "총정리", "핵심가이드", "실전팁", "비법공개", 
+        "상세가이드", "완벽분석", "전문가추천", "베스트", "최신트렌드"
+    ],
+    engagementWords: [
+        "댓글", "공유", "좋아요", "구독", "팔로우", "클릭", 
+        "문의", "상담", "예약", "신청"
+    ],
+    trustSignals: [
+        "전문가", "검증된", "인증", "추천", "후기", "리뷰", 
+        "경험담", "실제", "진짜", "정말"
+    ]
 };
 
 // 초기화 함수
@@ -159,6 +884,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 시스템 초기화
 function initializeSystem() {
+    // 타겟 독자 설정 초기화
+    initializeTargetAudience();
+    
     // 통계 업데이트
     updateSystemStats();
     
@@ -196,9 +924,11 @@ function setupEventListeners() {
         }
     });
     
-    // 콘텐츠 변경 감지
+    // 콘텐츠 변경 감지 + 문자 카운터
     const contentTextarea = document.getElementById('postContent');
     const titleInput = document.getElementById('postTitle');
+    const seoTitleInput = document.getElementById('seoTitle');
+    const metaDescInput = document.getElementById('metaDescription');
     
     if (contentTextarea) {
         contentTextarea.addEventListener('input', debounce(updateQualityMetrics, 500));
@@ -206,6 +936,19 @@ function setupEventListeners() {
     
     if (titleInput) {
         titleInput.addEventListener('input', debounce(updateQualityMetrics, 500));
+    }
+    
+    // 문자 수 카운터 설정
+    if (seoTitleInput) {
+        seoTitleInput.addEventListener('input', function() {
+            updateCharCounter('seoTitle', 'seoTitleCounter', 60);
+        });
+    }
+    
+    if (metaDescInput) {
+        metaDescInput.addEventListener('input', function() {
+            updateCharCounter('metaDescription', 'metaDescCounter', 150);
+        });
     }
     
     // 자동화 토글
@@ -635,7 +1378,7 @@ function hideGenerationProgress() {
     }
 }
 
-// 품질 검사
+// 품질 검사 (네이버 SEO 적용)
 async function checkQuality() {
     const title = document.getElementById('postTitle')?.value || '';
     const content = document.getElementById('postContent')?.value || '';
@@ -645,36 +1388,559 @@ async function checkQuality() {
         return;
     }
     
-    const quality = analyzeContentQuality(title, content);
+    const quality = analyzeNaverSEOQuality(title, content);
     qualityData = quality;
     
-    updateQualityDisplay(quality);
-    logActivity('품질 검사', `품질 점수: ${quality.overall}/100`);
+    updateNaverSEODisplay(quality);
+    logActivity('네이버 SEO 검사', `품질 점수: ${quality.overall}/100, 최적화: ${quality.naverOptimized ? 'YES' : 'NO'}`);
     
     return quality;
 }
 
-// 콘텐츠 품질 분석
-function analyzeContentQuality(title, content) {
+// 네이버 SEO 최적화 콘텐츠 품질 분석
+function analyzeNaverSEOQuality(title, content) {
     const analysis = {
         wordCount: analyzeWordCount(content),
-        readability: analyzeReadability(content),
-        keywordDensity: analyzeKeywordDensity(content),
-        structure: analyzeStructure(content),
-        expertise: analyzeExpertise(content),
-        overall: 0
+        keywordPlacement: analyzeKeywordPlacement(title, content),
+        structureOptimization: analyzeNaverStructure(content),
+        expertiseScore: analyzeExpertise(content),
+        engagementScore: analyzeEngagement(content),
+        overall: 0,
+        naverOptimized: false
     };
     
-    // 전체 점수 계산 (가중 평균)
+    // 네이버 SEO 종합 점수 계산
     analysis.overall = Math.round(
-        (analysis.wordCount.score * 0.2) +
-        (analysis.readability.score * 0.2) +
-        (analysis.keywordDensity.score * 0.2) +
-        (analysis.structure.score * 0.2) +
-        (analysis.expertise.score * 0.2)
+        (analysis.wordCount.score * 0.15) +
+        (analysis.keywordPlacement.score * 0.25) +
+        (analysis.structureOptimization.score * 0.25) +
+        (analysis.expertiseScore.score * 0.20) +
+        (analysis.engagementScore.score * 0.15)
     );
     
+    // 네이버 최적화 여부 판단
+    analysis.naverOptimized = analysis.overall >= 80 && 
+                             analysis.keywordPlacement.score >= 80 &&
+                             analysis.structureOptimization.score >= 75;
+    
     return analysis;
+}
+
+// 키워드 배치 분석 (네이버 SEO 핵심)
+function analyzeKeywordPlacement(title, content) {
+    if (!currentTopic) {
+        return { score: 50, placements: [], details: {} };
+    }
+    
+    const keywords = currentTopic.keywords;
+    const placements = [];
+    let score = 0;
+    
+    // 1. 제목에 핵심 키워드 포함 (25점)
+    const titleHasKeyword = keywords.some(keyword => 
+        title.toLowerCase().includes(keyword.toLowerCase())
+    );
+    if (titleHasKeyword) {
+        placements.push("제목");
+        score += 25;
+    }
+    
+    // 2. 첫 문단에 키워드 포함 (20점)
+    const firstParagraph = content.split('\n\n')[0] || '';
+    const firstParaHasKeyword = keywords.some(keyword => 
+        firstParagraph.toLowerCase().includes(keyword.toLowerCase())
+    );
+    if (firstParaHasKeyword) {
+        placements.push("첫문단");
+        score += 20;
+    }
+    
+    // 3. 소제목(H2, H3)에 키워드 포함 (25점)
+    const headings = content.match(/^#{2,3}\s+(.+)/gm) || [];
+    const headingHasKeyword = headings.some(heading => 
+        keywords.some(keyword => 
+            heading.toLowerCase().includes(keyword.toLowerCase())
+        )
+    );
+    if (headingHasKeyword) {
+        placements.push("소제목");
+        score += 25;
+    }
+    
+    // 4. 본문 전체 키워드 밀도 (15점)
+    const keywordDensity = calculateKeywordDensityScore(content, keywords);
+    if (keywordDensity >= 1.5 && keywordDensity <= 4.0) {
+        placements.push("본문밀도");
+        score += 15;
+    }
+    
+    // 5. 마지막 문단에 키워드 포함 (15점)
+    const lastParagraph = content.split('\n\n').slice(-1)[0] || '';
+    const lastParaHasKeyword = keywords.some(keyword => 
+        lastParagraph.toLowerCase().includes(keyword.toLowerCase())
+    );
+    if (lastParaHasKeyword) {
+        placements.push("마지막문단");
+        score += 15;
+    }
+    
+    return {
+        score: Math.min(100, score),
+        placements: placements,
+        details: {
+            title: titleHasKeyword,
+            firstParagraph: firstParaHasKeyword,
+            headings: headingHasKeyword,
+            density: keywordDensity,
+            lastParagraph: lastParaHasKeyword
+        }
+    };
+}
+
+// 네이버 최적화 구조 분석
+function analyzeNaverStructure(content) {
+    let score = 0;
+    const details = {};
+    
+    // 1. 소제목 개수 (H2, H3) - 30점
+    const h2Count = (content.match(/^##\s/gm) || []).length;
+    const h3Count = (content.match(/^###\s/gm) || []).length;
+    const totalHeadings = h2Count + h3Count;
+    
+    if (totalHeadings >= 3 && totalHeadings <= 8) {
+        score += 30;
+        details.headings = "optimal";
+    } else if (totalHeadings >= 1) {
+        score += 15;
+        details.headings = "fair";
+    } else {
+        details.headings = "poor";
+    }
+    
+    // 2. 목록 사용 (네이버 선호) - 25점
+    const bulletLists = (content.match(/^[\-\*\+]\s/gm) || []).length;
+    const numberedLists = (content.match(/^\d+\.\s/gm) || []).length;
+    const totalLists = bulletLists + numberedLists;
+    
+    if (totalLists >= 5) {
+        score += 25;
+        details.lists = "excellent";
+    } else if (totalLists >= 2) {
+        score += 15;
+        details.lists = "good";
+    } else if (totalLists >= 1) {
+        score += 8;
+        details.lists = "fair";
+    } else {
+        details.lists = "poor";
+    }
+    
+    // 3. 강조 구문 (**굵게**) - 20점
+    const boldText = (content.match(/\*\*[^*]+\*\*/g) || []).length;
+    if (boldText >= 5) {
+        score += 20;
+        details.emphasis = "excellent";
+    } else if (boldText >= 2) {
+        score += 12;
+        details.emphasis = "good";
+    } else if (boldText >= 1) {
+        score += 6;
+        details.emphasis = "fair";
+    } else {
+        details.emphasis = "poor";
+    }
+    
+    // 4. 단락 구조 (적절한 문단 나누기) - 15점
+    const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    if (paragraphs.length >= 5 && paragraphs.length <= 15) {
+        score += 15;
+        details.paragraphs = "optimal";
+    } else if (paragraphs.length >= 3) {
+        score += 8;
+        details.paragraphs = "fair";
+    } else {
+        details.paragraphs = "poor";
+    }
+    
+    // 5. 네이버 선호 구조 요소 - 10점
+    const hasIntro = /^#+\s*(?:서론|소개|시작|들어가며)/mi.test(content);
+    const hasConclusion = /^#+\s*(?:결론|마무리|정리|끝으로)/mi.test(content);
+    const hasFAQ = /^#+\s*(?:FAQ|자주|질문|궁금)/mi.test(content);
+    
+    let structureBonus = 0;
+    if (hasIntro) structureBonus += 3;
+    if (hasConclusion) structureBonus += 4;
+    if (hasFAQ) structureBonus += 3;
+    
+    score += structureBonus;
+    details.structure = { hasIntro, hasConclusion, hasFAQ };
+    
+    return {
+        score: Math.min(100, score),
+        details: details,
+        recommendations: generateStructureRecommendations(details)
+    };
+}
+
+// 사용자 참여 유도 분석
+function analyzeEngagement(content) {
+    let score = 0;
+    const details = {};
+    
+    // 1. CTA (Call to Action) 포함 - 40점
+    const ctaPatterns = [
+        /댓글로.*알려주세요/gi,
+        /공유.*부탁드립니다/gi,
+        /좋아요.*눌러주세요/gi,
+        /구독.*해주세요/gi,
+        /팔로우.*해주세요/gi,
+        /문의.*주세요/gi,
+        /상담.*받아보세요/gi,
+        /클릭.*해보세요/gi
+    ];
+    
+    let ctaCount = 0;
+    ctaPatterns.forEach(pattern => {
+        if (pattern.test(content)) ctaCount++;
+    });
+    
+    if (ctaCount >= 3) {
+        score += 40;
+        details.cta = "excellent";
+    } else if (ctaCount >= 2) {
+        score += 25;
+        details.cta = "good";
+    } else if (ctaCount >= 1) {
+        score += 15;
+        details.cta = "fair";
+    } else {
+        details.cta = "poor";
+    }
+    
+    // 2. 질문형 문장 (댓글 유도) - 30점
+    const questionCount = (content.match(/[?？]/g) || []).length;
+    if (questionCount >= 3) {
+        score += 30;
+        details.questions = "excellent";
+    } else if (questionCount >= 1) {
+        score += 15;
+        details.questions = "good";
+    } else {
+        details.questions = "poor";
+    }
+    
+    // 3. 개인적 경험/의견 요청 - 20점
+    const personalPatterns = [
+        /여러분.*경험/gi,
+        /의견.*남겨주세요/gi,
+        /생각.*어떠신가요/gi,
+        /경험.*공유/gi,
+        /어떻게.*생각하시나요/gi
+    ];
+    
+    let personalCount = 0;
+    personalPatterns.forEach(pattern => {
+        if (pattern.test(content)) personalCount++;
+    });
+    
+    if (personalCount >= 2) {
+        score += 20;
+        details.personal = "excellent";
+    } else if (personalCount >= 1) {
+        score += 10;
+        details.personal = "good";
+    } else {
+        details.personal = "poor";
+    }
+    
+    // 4. 소셜 미디어 언급 - 10점
+    const socialPatterns = [
+        /인스타그램/gi, /페이스북/gi, /카카오톡/gi, 
+        /유튜브/gi, /틱톡/gi, /공유/gi
+    ];
+    
+    const hasSocial = socialPatterns.some(pattern => pattern.test(content));
+    if (hasSocial) {
+        score += 10;
+        details.social = "included";
+    } else {
+        details.social = "none";
+    }
+    
+    return {
+        score: Math.min(100, score),
+        details: details,
+        ctaCount: ctaCount,
+        questionCount: questionCount
+    };
+}
+
+// 키워드 밀도 점수 계산
+function calculateKeywordDensityScore(content, keywords) {
+    const words = content.split(/\s+/).filter(w => w.length > 0);
+    const totalWords = words.length;
+    
+    if (totalWords === 0) return 0;
+    
+    let totalKeywordCount = 0;
+    keywords.forEach(keyword => {
+        const keywordCount = content.toLowerCase().split(keyword.toLowerCase()).length - 1;
+        totalKeywordCount += keywordCount;
+    });
+    
+    return (totalKeywordCount / totalWords) * 100;
+}
+
+// SEO 도구 함수들
+function generateSEOTitle() {
+    if (!currentTopic) {
+        showNotification('warning', '주제 선택 필요', '먼저 주제를 선택해주세요.');
+        return;
+    }
+    
+    const targetData = targetAudienceData[currentTargetAudience];
+    const targetName = targetData ? targetData.name : '전문가들';
+    
+    const titlePatterns = [
+        `${currentTopic.title} | ${targetName} 필수 가이드`,
+        `2024년 최신 ${currentTopic.keywords[0]} 완전정복`,
+        `${currentTopic.keywords[0]} 전문가가 알려주는 실전 노하우`,
+        `${targetName}을 위한 ${currentTopic.keywords[0]} 핵심 전략`,
+        `실무진이 인정한 ${currentTopic.keywords[0]} 베스트 가이드`
+    ];
+    
+    const randomTitle = titlePatterns[Math.floor(Math.random() * titlePatterns.length)];
+    
+    const seoTitleInput = document.getElementById('seoTitle');
+    if (seoTitleInput) {
+        seoTitleInput.value = randomTitle;
+        updateCharCounter('seoTitle', 'seoTitleCounter', 60);
+    }
+    
+    showNotification('success', 'SEO 제목 생성', 'SEO 최적화된 제목이 생성되었습니다.');
+}
+
+function generateMetaDescription() {
+    if (!currentTopic) {
+        showNotification('warning', '주제 선택 필요', '먼저 주제를 선택해주세요.');
+        return;
+    }
+    
+    const targetData = targetAudienceData[currentTargetAudience];
+    const targetName = targetData ? targetData.name : '전문가들';
+    const keywords = currentTopic.keywords.slice(0, 3).join(', ');
+    
+    const metaTemplate = `${currentTopic.title}에 대한 ${targetName} 전용 가이드입니다. ${keywords} 관련 실무 노하우와 전문 팁을 상세히 알아보세요. 클릭해서 확인하세요!`;
+    
+    const metaDescInput = document.getElementById('metaDescription');
+    if (metaDescInput) {
+        metaDescInput.value = metaTemplate;
+        updateCharCounter('metaDescription', 'metaDescCounter', 150);
+    }
+    
+    showNotification('success', '메타 설명 생성', '클릭률을 높이는 메타 설명이 생성되었습니다.');
+}
+
+function suggestKeywords() {
+    if (!currentTopic) {
+        showNotification('warning', '주제 선택 필요', '먼저 주제를 선택해주세요.');
+        return;
+    }
+    
+    const suggestions = document.getElementById('keywordSuggestions');
+    if (!suggestions) return;
+    
+    // 타겟별 추천 키워드 생성
+    const baseKeywords = currentTopic.keywords;
+    const targetData = targetAudienceData[currentTargetAudience];
+    
+    let additionalKeywords = [];
+    if (targetData && targetData.expertTerms) {
+        additionalKeywords = targetData.expertTerms.slice(0, 5);
+    } else {
+        additionalKeywords = ["전문가", "노하우", "가이드", "팁", "방법"];
+    }
+    
+    const allKeywords = [...baseKeywords, ...additionalKeywords];
+    
+    suggestions.innerHTML = allKeywords.map(keyword => 
+        `<span class="keyword-suggestion" onclick="addKeyword('${keyword}')">${keyword}</span>`
+    ).join('');
+    
+    showNotification('info', '키워드 제안', '추천 키워드가 생성되었습니다. 클릭하여 추가하세요.');
+}
+
+function addKeyword(keyword) {
+    const primaryKeywords = document.getElementById('primaryKeywords');
+    if (primaryKeywords) {
+        const currentValue = primaryKeywords.value;
+        const keywords = currentValue ? currentValue.split(',').map(k => k.trim()) : [];
+        
+        if (!keywords.includes(keyword)) {
+            keywords.push(keyword);
+            primaryKeywords.value = keywords.join(', ');
+        }
+    }
+}
+
+function checkSEOScore() {
+    const title = document.getElementById('postTitle')?.value || '';
+    const content = document.getElementById('postContent')?.value || '';
+    
+    if (!title || !content) {
+        showNotification('warning', '내용 필요', '제목과 본문을 입력해주세요.');
+        return;
+    }
+    
+    const seoAnalysis = analyzeNaverSEOQuality(title, content);
+    updateNaverSEODisplay(seoAnalysis);
+    
+    const message = seoAnalysis.naverOptimized ? 
+        '네이버 상위 노출에 최적화되었습니다!' : 
+        `SEO 점수: ${seoAnalysis.overall}/100 - 개선이 필요합니다.`;
+    
+    showNotification(
+        seoAnalysis.naverOptimized ? 'success' : 'warning', 
+        'SEO 분석 완료', 
+        message
+    );
+}
+
+// 문자 수 카운터 업데이트
+function updateCharCounter(inputId, counterId, maxLength) {
+    const input = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    
+    if (input && counter) {
+        const length = input.value.length;
+        counter.textContent = `${length}/${maxLength}자`;
+        
+        // 색상 변경
+        counter.className = 'char-counter';
+        if (length > maxLength) {
+            counter.classList.add('error');
+        } else if (length >= maxLength * 0.8) {
+            counter.classList.add('warning');
+        } else if (length >= maxLength * 0.5) {
+            counter.classList.add('success');
+        }
+    }
+}
+
+// 네이버 SEO 표시 업데이트
+function updateNaverSEODisplay(analysis) {
+    // SEO 상태 업데이트
+    const seoStatus = document.getElementById('seoStatus');
+    if (seoStatus) {
+        const statusIcon = analysis.naverOptimized ? '✅' : analysis.overall >= 70 ? '⚠️' : '❌';
+        const statusText = analysis.naverOptimized ? 
+            '네이버 SEO 최적화 완료' : 
+            analysis.overall >= 70 ? 
+            '네이버 SEO 개선 필요' : 
+            'SEO 최적화 부족';
+        
+        seoStatus.innerHTML = `
+            <span class="status-icon">${statusIcon}</span>
+            <span class="status-text">${statusText}</span>
+        `;
+    }
+    
+    // 전체 점수 업데이트
+    const overallQuality = document.getElementById('overallQuality');
+    if (overallQuality) {
+        overallQuality.textContent = analysis.overall;
+        overallQuality.className = 'quality-score ' + getQualityClass(analysis.overall);
+        
+        if (analysis.naverOptimized) {
+            overallQuality.classList.add('naver-optimized');
+        }
+    }
+    
+    // 개별 메트릭 업데이트
+    updateMetric('wordCount', analysis.wordCount.count, analysis.wordCount.score);
+    updateMetric('keywordPlacement', `${analysis.keywordPlacement.placements.length}/5`, analysis.keywordPlacement.score);
+    updateMetric('structureScore', analysis.structureOptimization.score, analysis.structureOptimization.score);
+    updateMetric('expertiseScore', analysis.expertiseScore.score, analysis.expertiseScore.score);
+    updateMetric('engagementScore', analysis.engagementScore.score, analysis.engagementScore.score);
+    
+    // SEO 추천사항 업데이트
+    updateSEORecommendations(analysis);
+}
+
+// SEO 추천사항 업데이트
+function updateSEORecommendations(analysis) {
+    const container = document.getElementById('seoRecommendations');
+    if (!container) return;
+    
+    const recommendations = [];
+    
+    // 우선순위별 추천사항 생성
+    if (analysis.wordCount.score < 70) {
+        const priority = analysis.wordCount.score < 40 ? 'high' : 'medium';
+        const message = analysis.wordCount.count < seoQualityStandards.wordCount.min ? 
+            `글 길이가 짧습니다. 네이버는 1500자 이상의 글을 선호합니다. (현재: ${analysis.wordCount.count}자)` :
+            `글이 너무 깁니다. 3000-5000자 사이로 조정해보세요.`;
+        recommendations.push({ priority, message });
+    }
+    
+    if (analysis.keywordPlacement.score < 80) {
+        const missing = [];
+        if (!analysis.keywordPlacement.details.title) missing.push('제목');
+        if (!analysis.keywordPlacement.details.firstParagraph) missing.push('첫 문단');
+        if (!analysis.keywordPlacement.details.headings) missing.push('소제목');
+        
+        recommendations.push({
+            priority: 'high',
+            message: `핵심 키워드를 다음 위치에 추가하세요: ${missing.join(', ')}`
+        });
+    }
+    
+    if (analysis.structureOptimization.score < 75) {
+        recommendations.push({
+            priority: 'medium',
+            message: '소제목(##), 목록(-), 강조(**굵게**)를 더 활용해 구조를 개선하세요.'
+        });
+    }
+    
+    if (analysis.engagementScore.score < 60) {
+        recommendations.push({
+            priority: 'medium',
+            message: '댓글 유도, 공유 요청 등 사용자 참여를 높이는 CTA를 추가하세요.'
+        });
+    }
+    
+    if (recommendations.length === 0) {
+        recommendations.push({
+            priority: 'low',
+            message: '네이버 SEO 최적화가 잘 되어 있습니다! 상위 노출 가능성이 높습니다.'
+        });
+    }
+    
+    container.innerHTML = `
+        <h4>🎯 네이버 상위노출 개선사항</h4>
+        ${recommendations.map(rec => 
+            `<div class="recommendation priority-${rec.priority}">${rec.message}</div>`
+        ).join('')}
+    `;
+}
+
+// 구조 추천사항 생성
+function generateStructureRecommendations(details) {
+    const recommendations = [];
+    
+    if (details.headings === 'poor') {
+        recommendations.push('소제목(## 제목)을 3-5개 추가하세요.');
+    }
+    
+    if (details.lists === 'poor') {
+        recommendations.push('목록 형태(-또는 1.)로 정보를 정리하세요.');
+    }
+    
+    if (details.emphasis === 'poor') {
+        recommendations.push('중요한 내용은 **굵게** 강조하세요.');
+    }
+    
+    return recommendations;
 }
 
 // 글자 수 분석
