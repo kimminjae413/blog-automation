@@ -425,8 +425,14 @@ class HairGatorQueueApp {
         const waitingEl = document.getElementById('queueWaiting');
         const completedEl = document.getElementById('queueCompleted');
         
-        if (waitingEl) waitingEl.textContent = stats.waiting;
-        if (completedEl) completedEl.textContent = stats.completed;
+        if (waitingEl) {
+            waitingEl.textContent = stats.waiting;
+            console.log(`📊 UI 업데이트: 대기중 ${stats.waiting}개`);
+        }
+        if (completedEl) {
+            completedEl.textContent = stats.completed;
+            console.log(`📊 UI 업데이트: 완료 ${stats.completed}개`);
+        }
     }
     
     // 다음 예정 아이템 미리보기 업데이트
@@ -434,7 +440,12 @@ class HairGatorQueueApp {
         const nextItem = this.getNextQueueItem();
         const preview = document.getElementById('nextItemPreview');
         
-        if (!preview) return;
+        console.log('🔄 다음 아이템 미리보기 업데이트:', nextItem);
+        
+        if (!preview) {
+            console.warn('❌ nextItemPreview 요소를 찾을 수 없습니다');
+            return;
+        }
         
         if (nextItem) {
             preview.innerHTML = `
@@ -449,8 +460,10 @@ class HairGatorQueueApp {
                     </div>
                 </div>
             `;
+            console.log('✅ 다음 아이템 미리보기 업데이트 완료');
         } else {
             preview.innerHTML = '<p class="text-center" style="color: #6b7280; font-style: italic;">큐가 비어있습니다</p>';
+            console.log('📭 큐가 비어있음');
         }
     }
     
@@ -503,13 +516,18 @@ class HairGatorQueueApp {
     
     // 빠른 글감 추가
     addQuickContent() {
+        console.log('🚀 빠른 글감 추가 시작');
+        
         const target = this.getInputValue('quickTarget');
         const title = this.getInputValue('quickTitle');
         const keywords = this.getInputValue('quickKeywords');
         const tone = this.getInputValue('quickTone');
         
+        console.log('📝 입력값 확인:', { target, title, keywords, tone });
+        
         if (!target || !title || !keywords) {
             this.showNotification('warning', '입력 필요', '모든 필드를 입력해주세요.');
+            console.log('❌ 필수 필드 누락');
             return;
         }
         
@@ -521,11 +539,15 @@ class HairGatorQueueApp {
             priority: 'normal'
         });
         
+        console.log('🆕 새 큐 아이템 생성:', newItem);
+        
         this.addToQueue(newItem);
         this.clearQuickForm();
         
         this.showNotification('success', '글감 추가', '새 글감이 큐에 추가되었습니다.');
         this.logActivity('글감 추가', `"${title}" 글감이 추가되었습니다.`);
+        
+        console.log('✅ 빠른 글감 추가 완료');
     }
     
     // 새 글감 추가 (상세 모달)
@@ -573,16 +595,30 @@ class HairGatorQueueApp {
     
     // 큐에 아이템 추가
     addToQueue(item) {
+        console.log('➕ 큐에 아이템 추가 시작:', item);
+        
         contentQueue.push(item);
+        console.log(`📝 현재 큐 상태: ${contentQueue.length}개 항목`);
+        
+        // 저장 및 UI 업데이트
         this.saveQueueToStorage();
+        console.log('💾 저장 완료');
+        
         this.updateQueueStats();
+        console.log('📊 큐 상태 업데이트 완료');
+        
         this.updateNextItemPreview();
+        console.log('🔄 다음 아이템 미리보기 업데이트 완료');
+        
         this.updateQueueManagerContent();
+        console.log('📋 큐 관리자 업데이트 완료');
         
         // 커스텀 이벤트 발송
         document.dispatchEvent(new CustomEvent('queue-item-added', {
             detail: { item }
         }));
+        
+        console.log('✅ 큐 아이템 추가 완료');
     }
     
     // 큐 아이템 삭제
