@@ -437,7 +437,7 @@
 
     <!-- 말투 학습 모달 -->
     <div id="writingSampleModal" class="modal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header">
                 <h3>📚 말투 학습용 텍스트 추가</h3>
                 <button class="modal-close" onclick="closeWritingSampleModal()">&times;</button>
@@ -446,12 +446,12 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="sampleTitle">글 제목</label>
-                    <input type="text" id="sampleTitle" placeholder="예: 겨울철 헤어케어 가이드">
+                    <input type="text" id="sampleTitle" class="form-input" placeholder="예: 겨울철 헤어케어 가이드">
                 </div>
                 
                 <div class="form-group">
                     <label for="sampleContent">내용 (내 말투가 담긴 글)</label>
-                    <textarea id="sampleContent" rows="10" placeholder="내가 평소에 쓰는 말투와 스타일이 담긴 글을 붙여넣어주세요. Claude가 이 글을 분석해서 비슷한 톤으로 새로운 글을 작성합니다.
+                    <textarea id="sampleContent" class="form-textarea" rows="8" placeholder="내가 평소에 쓰는 말투와 스타일이 담긴 글을 붙여넣어주세요. Claude가 이 글을 분석해서 비슷한 톤으로 새로운 글을 작성합니다.
 
 예:
 안녕하세요! 오늘은 겨울철 모발 관리에 대해 이야기해볼게요. 
@@ -460,7 +460,7 @@
                 
                 <div class="form-group">
                     <label for="sampleCategory">카테고리</label>
-                    <select id="sampleCategory">
+                    <select id="sampleCategory" class="form-select">
                         <option value="haircare">헤어케어</option>
                         <option value="beauty">뷰티</option>
                         <option value="lifestyle">라이프스타일</option>
@@ -470,8 +470,8 @@
             </div>
             
             <div class="modal-footer">
-                <button onclick="closeWritingSampleModal()" class="cancel-btn">취소</button>
-                <button onclick="addWritingSample()" class="add-sample-btn">학습 샘플 추가</button>
+                <button onclick="closeWritingSampleModal()" class="btn btn-secondary">취소</button>
+                <button onclick="addWritingSample()" class="btn btn-primary">학습 샘플 추가</button>
             </div>
             
             <!-- 기존 학습 샘플 목록 -->
