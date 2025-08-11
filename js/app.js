@@ -213,6 +213,11 @@ class HairGatorQueueApp {
         window.addKeyword = this.addKeyword.bind(this);
         window.downloadImage = this.downloadImage.bind(this);
         
+        // 큐 순위 변경 함수들
+        window.moveQueueItemUp = this.moveQueueItemUp.bind(this);
+        window.moveQueueItemDown = this.moveQueueItemDown.bind(this);
+        window.moveQueueItem = this.moveQueueItem.bind(this);
+        
         console.log('🔗 전역 함수 바인딩 완료');
     }
     
@@ -480,6 +485,9 @@ class HairGatorQueueApp {
         }
         
         container.innerHTML = filteredQueue.map(item => this.createQueueItemHTML(item)).join('');
+        
+        // 드래그 앤 드롭 이벤트 설정
+        this.setupDragAndDrop();
     }
     
     // 큐 아이템 HTML 생성
@@ -488,10 +496,13 @@ class HairGatorQueueApp {
         const priorityClass = `priority-${item.priority || 'normal'}`;
         
         return `
-            <div class="queue-item ${statusClass} ${priorityClass}" data-id="${item.id}">
+            <div class="queue-item ${statusClass} ${priorityClass}" data-id="${item.id}" draggable="true">
                 <div class="queue-header">
+                    <div class="queue-drag-handle">⋮⋮</div>
                     <div class="queue-title">${item.title}</div>
                     <div class="queue-actions">
+                        <button class="btn btn-secondary btn-small" onclick="moveQueueItemUp(${item.id})" title="위로 이동">↑</button>
+                        <button class="btn btn-secondary btn-small" onclick="moveQueueItemDown(${item.id})" title="아래로 이동">↓</button>
                         <button class="btn btn-secondary btn-small" onclick="editQueueItem(${item.id})">수정</button>
                         <button class="btn btn-error btn-small" onclick="deleteQueueItem(${item.id})">삭제</button>
                     </div>
@@ -1399,7 +1410,152 @@ class HairGatorQueueApp {
         }
     }
     
-    // ===== 유틸리티 함수들 =====
+    // ===== 큐 순위 변경 기능 =====
+    
+    // 드래그 앤 드롭 설정
+    setupDragAndDrop() {
+        const container = document.getElementById('queueContainer');
+        if (!container) return;
+        
+        const queueItems = container.querySelectorAll('.queue-item');
+        
+        queueItems.forEach(item => {
+            item.addEventListener('dragstart', this.handleDragStart.bind(this));
+            item.addEventListener('dragover', this.handleDragOver.bind(this));
+            item.addEventListener('drop', this.handleDrop.bind(this));
+            item.addEventListener('dragend', this.handleDragEnd.bind(this));
+        });
+    }
+    
+    // 드래그 시작
+    handleDragStart(e) {
+        this.draggedItem = e.target;
+        e.target.style.opacity = '0.5';
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', e.target.outerHTML);
+    }
+    
+    // 드래그 오버
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        const afterElement = this.getDragAfterElement(e.clientY);
+        const container = document.getElementById('queueContainer');
+        
+        if (afterElement == null) {
+            container.appendChild(this.draggedItem);
+        } else {
+            container.insertBefore(this.draggedItem, afterElement);
+        }
+    }
+    
+    // 드롭 처리
+    handleDrop(e) {
+        e.preventDefault();
+        
+        // 큐 순서 업데이트
+        this.updateQueueOrder();
+        
+        this.showNotification('success', '순서 변경', '큐 순서가 변경되었습니다.');
+        this.logActivity('순서 변경', '큐 아이템 순서가 변경되었습니다.');
+    }
+    
+    // 드래그 종료
+    handleDragEnd(e) {
+        e.target.style.opacity = '';
+        this.draggedItem = null;
+    }
+    
+    // 드래그 위치 계산
+    getDragAfterElement(y) {
+        const container = document.getElementById('queueContainer');
+        const draggableElements = [...container.querySelectorAll('.queue-item:not(.dragging)')];
+        
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+    
+    // 큐 순서 업데이트
+    updateQueueOrder() {
+        const container = document.getElementById('queueContainer');
+        const queueItems = container.querySelectorAll('.queue-item');
+        const newOrder = [];
+        
+        queueItems.forEach(item => {
+            const id = parseInt(item.dataset.id);
+            const queueItem = this.findQueueItem(id);
+            if (queueItem) {
+                newOrder.push(queueItem);
+            }
+        });
+        
+        // 전역 contentQueue 업데이트
+        const otherItems = contentQueue.filter(item => !newOrder.find(newItem => newItem.id === item.id));
+        contentQueue = [...newOrder, ...otherItems];
+        
+        this.saveQueueToStorage();
+        this.updateNextItemPreview();
+    }
+    
+    // 위로 이동
+    moveQueueItemUp(id) {
+        const index = contentQueue.findIndex(item => item.id == id);
+        if (index > 0) {
+            // 배열에서 위치 교체
+            [contentQueue[index], contentQueue[index - 1]] = [contentQueue[index - 1], contentQueue[index]];
+            
+            this.saveQueueToStorage();
+            this.updateQueueManagerContent();
+            this.updateNextItemPreview();
+            
+            this.showNotification('success', '순서 변경', '위로 이동했습니다.');
+            this.logActivity('순서 변경', `"${contentQueue[index - 1].title}" 글감을 위로 이동했습니다.`);
+        }
+    }
+    
+    // 아래로 이동
+    moveQueueItemDown(id) {
+        const index = contentQueue.findIndex(item => item.id == id);
+        if (index < contentQueue.length - 1 && index >= 0) {
+            // 배열에서 위치 교체
+            [contentQueue[index], contentQueue[index + 1]] = [contentQueue[index + 1], contentQueue[index]];
+            
+            this.saveQueueToStorage();
+            this.updateQueueManagerContent();
+            this.updateNextItemPreview();
+            
+            this.showNotification('success', '순서 변경', '아래로 이동했습니다.');
+            this.logActivity('순서 변경', `"${contentQueue[index + 1].title}" 글감을 아래로 이동했습니다.`);
+        }
+    }
+    
+    // 특정 위치로 이동
+    moveQueueItem(id, newIndex) {
+        const currentIndex = contentQueue.findIndex(item => item.id == id);
+        if (currentIndex === -1 || newIndex < 0 || newIndex >= contentQueue.length) return;
+        
+        // 아이템을 배열에서 제거하고 새 위치에 삽입
+        const [movedItem] = contentQueue.splice(currentIndex, 1);
+        contentQueue.splice(newIndex, 0, movedItem);
+        
+        this.saveQueueToStorage();
+        this.updateQueueManagerContent();
+        this.updateNextItemPreview();
+        
+        this.showNotification('success', '순서 변경', '순서가 변경되었습니다.');
+        this.logActivity('순서 변경', `"${movedItem.title}" 글감의 순서가 변경되었습니다.`);
+    }
+    
+    // ===== 기존 함수들 계속... =====
     
     // 큐 필터링
     filterQueue(status) {
