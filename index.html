@@ -1602,7 +1602,11 @@ https://news.example.com/hair-trend-2024
         💡 단축키: Ctrl+Enter (다음 글), Ctrl+S (저장), Ctrl+P (품질검사), F1 (도움말)
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
+        // PDF.js 워커 설정
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
         // HAIRGATOR AI 서비스 클래스
         class HairGatorAIService {
             constructor() {
@@ -1637,6 +1641,476 @@ https://news.example.com/hair-trend-2024
                 
                 this.loadWritingStyle();
                 console.log('🤖 HAIRGATOR AI 서비스 초기화 완료');
+            }
+            
+            // ===== URL 콘텐츠 실제 읽기 =====
+            async fetchUrlContent(url) {
+                try {
+                    console.log(`🌐 URL 콘텐츠 읽는 중: ${url}`);
+                    
+                    // CORS 우회를 위한 여러 프록시 시도
+                    const proxies = [
+                        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                        `https://cors-anywhere.herokuapp.com/${url}`
+                    ];
+                    
+                    for (let proxy of proxies) {
+                        try {
+                            const response = await fetch(proxy);
+                            if (response.ok) {
+                                const data = await response.json();
+                                const content = data.contents || data.content || '';
+                                
+                                // HTML 태그 제거하고 텍스트만 추출
+                                const textContent = this.extractTextFromHtml(content);
+                                
+                                console.log(`✅ URL 읽기 성공: ${url} (${textContent.length}자)`);
+                                return textContent;
+                            }
+                        } catch (error) {
+                            console.log(`❌ 프록시 ${proxy} 실패:`, error.message);
+                            continue;
+                        }
+                    }
+                    
+                    throw new Error('모든 프록시에서 URL 읽기 실패');
+                    
+                } catch (error) {
+                    console.error(`❌ URL 읽기 실패 (${url}):`, error);
+                    return `URL 읽기 실패: ${url} (${error.message})`;
+                }
+            }
+            
+            // HTML에서 텍스트 추출
+            extractTextFromHtml(html) {
+                try {
+                    // 임시 DOM 요소 생성
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    
+                    // 스크립트, 스타일 태그 제거
+                    const scripts = tempDiv.querySelectorAll('script, style, nav, footer, aside');
+                    scripts.forEach(el => el.remove());
+                    
+                    // 텍스트만 추출
+                    const text = tempDiv.textContent || tempDiv.innerText || '';
+                    
+                    // 공백 정리
+                    return text.replace(/\s+/g, ' ').trim().substring(0, 5000); // 최대 5000자
+                    
+                } catch (error) {
+                    console.error('HTML 텍스트 추출 실패:', error);
+                    return html.substring(0, 5000);
+                }
+            }
+            
+            // ===== PDF 파일 실제 읽기 =====
+            async extractPdfText(file) {
+                try {
+                    console.log(`📄 PDF 읽는 중: ${file.name}`);
+                    
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    
+                    let fullText = '';
+                    const maxPages = Math.min(pdf.numPages, 10); // 최대 10페이지만
+                    
+                    for (let i = 1; i <= maxPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        
+                        const pageText = textContent.items
+                            .map(item => item.str)
+                            .join(' ')
+                            .replace(/\s+/g, ' ')
+                            .trim();
+                        
+                        fullText += pageText + '\n\n';
+                        
+                        // 최대 10,000자 제한
+                        if (fullText.length > 10000) {
+                            fullText = fullText.substring(0, 10000) + '... (내용 생략)';
+                            break;
+                        }
+                    }
+                    
+                    console.log(`✅ PDF 읽기 성공: ${file.name} (${fullText.length}자, ${maxPages}페이지)`);
+                    return fullText;
+                    
+                } catch (error) {
+                    console.error(`❌ PDF 읽기 실패 (${file.name}):`, error);
+                    return `PDF 읽기 실패: ${file.name} (${error.message})`;
+                }
+            }
+            
+            // ===== 참고자료 종합 처리 =====
+            async processReferenceData(queueItem) {
+                let processedReferences = '';
+                
+                try {
+                    // URL 콘텐츠 읽기
+                    if (queueItem.referenceUrls && queueItem.referenceUrls.length > 0) {
+                        console.log(`🌐 ${queueItem.referenceUrls.length}개 URL 처리 시작`);
+                        
+                        for (let i = 0; i < Math.min(queueItem.referenceUrls.length, 3); i++) {
+                            const url = queueItem.referenceUrls[i];
+                            const content = await this.fetchUrlContent(url);
+                            
+                            processedReferences += `\n\n=== 참고자료 ${i + 1}: ${url} ===\n${content}\n`;
+                        }
+                    }
+                    
+                    // PDF 파일 읽기
+                    if (queueItem.pdfFiles && queueItem.pdfFiles.length > 0) {
+                        console.log(`📄 ${queueItem.pdfFiles.length}개 PDF 처리 시작`);
+                        
+                        for (let i = 0; i < Math.min(queueItem.pdfFiles.length, 2); i++) {
+                            const pdfInfo = queueItem.pdfFiles[i];
+                            
+                            // 실제 파일 객체 찾기 (브라우저에서 업로드된 파일)
+                            const fileInputs = document.querySelectorAll('input[type="file"]');
+                            let actualFile = null;
+                            
+                            for (let input of fileInputs) {
+                                for (let file of input.files) {
+                                    if (file.name === pdfInfo.name && file.size === pdfInfo.size) {
+                                        actualFile = file;
+                                        break;
+                                    }
+                                }
+                                if (actualFile) break;
+                            }
+                            
+                            if (actualFile) {
+                                const pdfText = await this.extractPdfText(actualFile);
+                                processedReferences += `\n\n=== PDF 자료 ${i + 1}: ${pdfInfo.name} ===\n${pdfText}\n`;
+                            } else {
+                                processedReferences += `\n\n=== PDF 자료 ${i + 1}: ${pdfInfo.name} ===\n파일을 찾을 수 없습니다.\n`;
+                            }
+                        }
+                    }
+                    
+                    console.log(`✅ 참고자료 처리 완료: ${processedReferences.length}자`);
+                    return processedReferences;
+                    
+                } catch (error) {
+                    console.error('❌ 참고자료 처리 중 오류:', error);
+                    return `참고자료 처리 중 오류가 발생했습니다: ${error.message}`;
+                }
+            }
+            
+            // ===== 실제 AI 글 생성 (참고자료 포함) =====
+            async generateBlogContent(queueItem) {
+                try {
+                    const startTime = Date.now();
+                    console.log(`🚀 실제 AI로 블로그 콘텐츠 생성 시작: "${queueItem.title}"`);
+                    
+                    if (!this.config.claude.apiKey && !this.config.openai.apiKey) {
+                        throw new Error('API 키가 설정되지 않았습니다. 설정 탭에서 API 키를 입력해주세요.');
+                    }
+                    
+                    // 참고자료 실제 읽기 및 처리
+                    console.log('📚 참고자료 처리 중...');
+                    const referenceContent = await this.processReferenceData(queueItem);
+                    
+                    // 강화된 프롬프트 생성
+                    const prompt = this.createAdvancedContentPrompt(queueItem, referenceContent);
+                    
+                    // AI API 호출
+                    let content;
+                    if (this.config.claude.apiKey) {
+                        try {
+                            content = await this.callClaudeAPI(prompt, queueItem);
+                            console.log('✅ Claude API 호출 성공');
+                        } catch (error) {
+                            console.log('❌ Claude 실패, OpenAI 시도:', error.message);
+                            if (this.config.openai.apiKey) {
+                                content = await this.callOpenAIAPI(prompt, queueItem);
+                                console.log('✅ OpenAI API 호출 성공');
+                            } else {
+                                throw error;
+                            }
+                        }
+                    } else if (this.config.openai.apiKey) {
+                        content = await this.callOpenAIAPI(prompt, queueItem);
+                        console.log('✅ OpenAI API 호출 성공');
+                    } else {
+                        throw new Error('사용 가능한 API 키가 없습니다.');
+                    }
+                    
+                    const responseTime = Date.now() - startTime;
+                    
+                    console.log(`✅ 실제 AI 콘텐츠 생성 완료: "${queueItem.title}" (${responseTime}ms)`);
+                    
+                    return {
+                        success: true,
+                        data: content,
+                        service: this.config.claude.apiKey ? 'claude' : 'openai',
+                        responseTime: responseTime,
+                        referencesProcessed: referenceContent.length > 0
+                    };
+                    
+                } catch (error) {
+                    console.error('❌ AI 콘텐츠 생성 실패:', error);
+                    
+                    return {
+                        success: false,
+                        error: error.message,
+                        service: 'none'
+                    };
+                }
+            }
+            
+            // ===== 강화된 프롬프트 생성 (실제 참고자료 포함) =====
+            createAdvancedContentPrompt(queueItem, referenceContent) {
+                let styleInstructions = '';
+                let experienceSection = '';
+                
+                // 학습된 말투 적용
+                if (this.writingStyle.samples.length >= 3) {
+                    const style = this.writingStyle.analyzedStyle;
+                    styleInstructions = `
+
+**학습된 말투 적용:**
+- 문장 길이: ${style.sentenceLength === 'long' ? '긴 문장 선호 (50자 이상)' : 
+                style.sentenceLength === 'short' ? '짧은 문장 선호 (25자 이하)' : '적당한 길이 문장 (25-50자)'}
+- 톤: ${style.tone === 'friendly' ? '친근하고 따뜻한 톤' : '전문적이고 신뢰감 있는 톤'}
+- 어휘: ${style.vocabulary === 'professional' ? '전문적인 용어 적극 사용' : '쉬운 일상 용어 위주'}
+- 구조: ${style.structure === 'organized' ? '체계적인 소제목과 목록 구조' : '자연스러운 흐름'}
+
+**참고할 기존 글 스타일:**
+${this.writingStyle.samples.slice(-3).map(s => `"${s.content.substring(0, 200)}..."`).join('\n')}
+
+위 스타일을 참고하여 일관성 있는 톤으로 작성해주세요.`;
+                }
+                
+                // 개인 경험 섹션
+                if (queueItem.personalExperience && queueItem.personalExperience.trim()) {
+                    experienceSection = `
+
+**💡 작성자의 실제 경험 및 노하우 (핵심 활용):**
+"${queueItem.personalExperience}"
+
+**경험 활용 지침:**
+- 위 실제 경험을 글의 핵심 근거로 활용하세요
+- 구체적인 수치나 사례는 그대로 인용하되, 자연스럽게 녹여내세요
+- "실제로 경험해본 결과..." "저희 샵에서 적용한 방법은..." 등으로 표현
+- 성공/실패 사례는 객관적인 분석과 함께 제시하세요
+- 개인 경험을 일반화할 수 있는 원리나 법칙을 도출하세요`;
+                }
+                
+                // 실제 참고자료 내용 포함
+                let referenceSection = '';
+                if (referenceContent && referenceContent.trim()) {
+                    referenceSection = `
+
+**📚 실제 참고자료 내용 (반드시 활용):**
+${referenceContent}
+
+**참고자료 활용 지침:**
+- 위 참고자료의 핵심 내용을 분석하여 글에 반영하세요
+- 직접 인용할 때는 반드시 출처를 명시하세요: [출처: 사이트명 또는 연구명]
+- 데이터나 통계는 정확한 수치와 함께 출처를 밝히세요
+- 상반된 의견이 있다면 객관적으로 비교 분석하세요
+- 참고자료를 바탕으로 한 추가 인사이트를 제공하세요
+- 여러 자료의 내용을 종합하여 새로운 관점을 제시하세요`;
+                }
+                
+                return `당신은 헤어케어 분야의 최고 전문가이자 경험 많은 디자이너입니다. 제공된 참고자료와 실제 경험을 바탕으로 실무에서 바로 적용할 수 있는 깊이 있고 전문적인 헤어케어 콘텐츠를 작성해주세요.
+
+**글 정보:**
+- 타겟 독자: ${queueItem.targetAudience}
+- 글 제목: ${queueItem.title}
+- 핵심 키워드: ${queueItem.keywords.join(', ')}
+- 톤 앤 매너: ${queueItem.tone}${styleInstructions}${referenceSection}${experienceSection}
+
+**전문가급 작성 요구사항:**
+
+1. **참고자료 완전 활용**
+   - 제공된 모든 참고자료의 핵심 내용을 반드시 분석하고 활용
+   - URL 콘텐츠와 PDF 자료의 정보를 종합하여 통찰력 있는 글 작성
+   - 자료 간 연관성을 찾아 새로운 관점 제시
+   - 출처 표기를 정확하게 하여 신뢰성 확보
+
+2. **깊이와 전문성**
+   - 표면적인 정보가 아닌 업계 인사이더만 아는 노하우 포함
+   - 실제 수치, 데이터, 사례를 구체적으로 제시
+   - 일반적인 상식을 넘어선 전문적 관점 제공
+   - 현장에서 검증된 실무 팁과 주의사항
+
+3. **실무 적용성**
+   - 독자가 바로 실행할 수 있는 구체적 방법 제시
+   - 단계별 실행 가이드 포함
+   - 예상되는 문제점과 해결책 미리 제시
+   - 비용, 시간, 효과 등 현실적 고려사항 포함
+
+4. **글 구조 (2500-4000자)**
+   - ## 도입부: 문제 제기와 글의 가치 제시 (참고자료 언급)
+   - ### 본문 1: 이론적 배경과 전문 지식 (참고자료 활용)
+   - ### 본문 2: 실제 경험과 사례 분석 (개인 경험 활용)
+   - ### 본문 3: 구체적 실행 방법과 팁 (종합적 제시)
+   - ### 본문 4: 주의사항과 고급 노하우 (전문가 관점)
+   - ## 결론: 핵심 요약과 실행 로드맵
+
+5. **신뢰성과 윤리성**
+   - 과장된 표현 금지 (예: "100% 보장", "완벽한 해결")
+   - 개인차가 있을 수 있음을 명시
+   - 전문가 상담이 필요한 경우 안내
+   - 참고자료 출처 정확히 표기
+
+**최종 목표**: ${queueItem.targetAudience}가 읽고 나서 "이 정보는 정말 전문적이고 실용적이다. 실제 자료를 바탕으로 한 신뢰할 만한 글이다"라고 생각할 수 있는 수준의 콘텐츠
+
+**중요**: 제공된 참고자료와 개인 경험을 최대한 활용하여 일반적인 AI 글과 차별화된 전문성을 보여주세요. 단순 정보 나열이 아닌, 독자에게 진정한 가치를 제공하는 실질적인 글을 작성해주세요.
+
+헤어케어 전문 블로그 글만 작성해주세요 (다른 설명이나 주석은 제외):`;
+            }
+            
+            // ===== Claude API 호출 (프록시 포함) =====
+            async callClaudeAPI(prompt, queueItem) {
+                // 여러 방법으로 CORS 우회 시도
+                const methods = [
+                    () => this.directClaudeCall(prompt),
+                    () => this.proxyClaudeCall(prompt, 'https://api.allorigins.win/raw?url='),
+                    () => this.proxyClaudeCall(prompt, 'https://corsproxy.io/?')
+                ];
+                
+                for (let i = 0; i < methods.length; i++) {
+                    try {
+                        const result = await methods[i]();
+                        console.log(`✅ Claude 호출 성공 (방법 ${i + 1})`);
+                        return this.formatResponse(result, queueItem);
+                    } catch (error) {
+                        console.log(`❌ Claude 방법 ${i + 1} 실패:`, error.message);
+                        if (i === methods.length - 1) {
+                            throw error;
+                        }
+                    }
+                }
+            }
+            
+            // Claude 직접 호출
+            async directClaudeCall(prompt) {
+                const response = await fetch(this.config.claude.baseURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': this.config.claude.apiKey,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify({
+                        model: this.config.claude.model,
+                        max_tokens: 4000,
+                        messages: [{
+                            role: 'user',
+                            content: prompt
+                        }]
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Claude API 오류 (${response.status}): ${errorText}`);
+                }
+                
+                const result = await response.json();
+                return result.content[0].text;
+            }
+            
+            // Claude 프록시 호출
+            async proxyClaudeCall(prompt, proxyUrl) {
+                const targetUrl = encodeURIComponent(this.config.claude.baseURL);
+                
+                const response = await fetch(proxyUrl + targetUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': this.config.claude.apiKey,
+                        'anthropic-version': '2023-06-01',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        model: this.config.claude.model,
+                        max_tokens: 4000,
+                        messages: [{
+                            role: 'user',
+                            content: prompt
+                        }]
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`프록시 호출 실패 (${response.status})`);
+                }
+                
+                const result = await response.json();
+                
+                // 프록시 응답 파싱
+                let content;
+                if (result.contents) {
+                    content = JSON.parse(result.contents).content[0].text;
+                } else if (result.content) {
+                    content = result.content[0].text;
+                } else {
+                    throw new Error('프록시 응답 파싱 실패');
+                }
+                
+                return content;
+            }
+            
+            // ===== OpenAI API 호출 =====
+            async callOpenAIAPI(prompt, queueItem) {
+                const response = await fetch(this.config.openai.baseURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.config.openai.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4o',
+                        messages: [{
+                            role: 'user',
+                            content: prompt
+                        }],
+                        max_tokens: 4000,
+                        temperature: 0.7
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`OpenAI API 오류 (${response.status}): ${errorText}`);
+                }
+                
+                const result = await response.json();
+                const generatedText = result.choices[0].message.content;
+                
+                return this.formatResponse(generatedText, queueItem);
+            }
+            
+            // 응답 포맷팅
+            formatResponse(content, queueItem) {
+                return {
+                    title: queueItem.title,
+                    content: content,
+                    metaDescription: this.generateMetaDescription(content),
+                    keywords: queueItem.keywords,
+                    targetAudience: queueItem.targetAudience,
+                    tone: queueItem.tone,
+                    wordCount: content.length
+                };
+            }
+            
+            // 메타 설명 생성
+            generateMetaDescription(content) {
+                const firstParagraph = content.split('\n\n')[0] || '';
+                let metaDesc = firstParagraph.replace(/[#*`]/g, '').trim();
+                
+                if (metaDesc.length > 150) {
+                    metaDesc = metaDesc.substring(0, 147) + '...';
+                }
+                
+                return metaDesc;
             }
             
             // API 키 설정
