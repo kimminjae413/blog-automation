@@ -1,5 +1,5 @@
 // HAIRGATOR - app.js
-// 메인 애플리케이션 로직
+// 메인 애플리케이션 로직 - 최종본
 
 // 전역 변수 및 상태 관리
 let currentTopic = null;
@@ -29,6 +29,7 @@ class HairGatorApp {
         this.eventHandlers = new Map();
         this.activeModals = new Set();
         this.scheduledTasks = new Map();
+        this.qualityCheckTimeout = null;
         
         console.log('🦄 HAIRGATOR 애플리케이션 초기화 시작...');
     }
@@ -604,11 +605,11 @@ class HairGatorApp {
     // 로컬 품질 분석
     performLocalQualityAnalysis(title, content) {
         // Utils 모듈의 분석 함수들 사용
-        const wordCount = this.modules.utils.analyzeWordCount(content);
-        const readability = this.modules.utils.analyzeReadability(content);
-        const keywordDensity = this.modules.utils.analyzeKeywordDensity(content, currentTopic);
-        const structure = this.modules.utils.analyzeStructure(content);
-        const expertise = this.modules.utils.analyzeExpertise(content);
+        const wordCount = this.modules.utils?.analyzeWordCount?.(content) || { score: 70, count: content.length };
+        const readability = this.modules.utils?.analyzeReadability?.(content) || { score: 75 };
+        const keywordDensity = this.modules.utils?.analyzeKeywordDensity?.(content, currentTopic) || { score: 70, density: 2.0 };
+        const structure = this.modules.utils?.analyzeStructure?.(content) || { score: 80 };
+        const expertise = this.modules.utils?.analyzeExpertise?.(content) || { score: 65 };
         
         const overallScore = Math.round(
             (wordCount.score * 0.2) +
@@ -1013,7 +1014,7 @@ class HairGatorApp {
         if (!aiStatus) return;
         
         if (this.modules.aiService) {
-            const stats = this.modules.aiService.getStatistics();
+            const stats = this.modules.aiService.getStatistics?.() || { currentService: 'unknown' };
             
             aiStatus.textContent = `${stats.currentService.toUpperCase()} 연결됨`;
             aiStatus.className = 'connection-status connected';
@@ -1155,7 +1156,7 @@ class HairGatorApp {
             return;
         }
         
-        const targetData = this.modules.utils?.targetAudienceData[currentTargetAudience] || {};
+        const targetData = this.modules.utils?.targetAudienceData?.[currentTargetAudience] || {};
         const targetName = targetData.name || '전문가들';
         
         const titlePatterns = [
@@ -1184,7 +1185,7 @@ class HairGatorApp {
             return;
         }
         
-        const targetData = this.modules.utils?.targetAudienceData[currentTargetAudience] || {};
+        const targetData = this.modules.utils?.targetAudienceData?.[currentTargetAudience] || {};
         const targetName = targetData.name || '전문가들';
         const keywords = currentTopic.keywords.slice(0, 3).join(', ');
         
@@ -1210,7 +1211,7 @@ class HairGatorApp {
         if (!suggestions) return;
         
         try {
-            if (this.modules.aiService) {
+            if (this.modules.aiService && this.modules.aiService.suggestKeywords) {
                 // AI 기반 키워드 제안
                 const result = await this.modules.aiService.suggestKeywords(currentTopic, {
                     targetAudience: currentTargetAudience,
@@ -1239,7 +1240,7 @@ class HairGatorApp {
     // 로컬 키워드 제안 생성
     generateLocalKeywordSuggestions() {
         const baseKeywords = currentTopic.keywords;
-        const targetData = this.modules.utils?.targetAudienceData[currentTargetAudience] || {};
+        const targetData = this.modules.utils?.targetAudienceData?.[currentTargetAudience] || {};
         
         let additionalKeywords = [];
         if (targetData && targetData.expertTerms) {
@@ -1315,13 +1316,14 @@ class HairGatorApp {
         }
         
         const generateBtn = event.target;
+        const originalText = generateBtn.textContent;
         generateBtn.textContent = '생성 중...';
         generateBtn.disabled = true;
         
         try {
             let imageUrl;
             
-            if (this.modules.aiService) {
+            if (this.modules.aiService && this.modules.aiService.generateHaircareImage) {
                 // AI 기반 이미지 생성
                 const result = await this.modules.aiService.generateHaircareImage(prompt);
                 if (result.success) {
@@ -1344,7 +1346,7 @@ class HairGatorApp {
             this.showNotification('error', '이미지 생성 실패', error.message);
             this.logActivity('이미지 생성 실패', error.message, 'error');
         } finally {
-            generateBtn.textContent = '이미지 생성';
+            generateBtn.textContent = originalText;
             generateBtn.disabled = false;
         }
     }
@@ -2024,7 +2026,7 @@ class HairGatorApp {
     // 타겟 설명 업데이트
     updateTargetDescription(targetKey) {
         const targetDescription = document.getElementById('targetDescription');
-        const targetData = this.modules.utils?.targetAudienceData[targetKey];
+        const targetData = this.modules.utils?.targetAudienceData?.[targetKey];
         
         if (targetData && targetDescription) {
             const featuresHTML = targetData.features.map(feature => `<li>• ${feature}</li>`).join('');
@@ -2038,7 +2040,7 @@ class HairGatorApp {
     
     // 타겟별 주제 로드
     loadTopicsForTarget(targetKey) {
-        const targetData = this.modules.utils?.targetAudienceData[targetKey];
+        const targetData = this.modules.utils?.targetAudienceData?.[targetKey];
         
         if (!targetData || !targetData.topics) {
             // 기존 헤어케어 주제 사용 (fallback)
@@ -2330,7 +2332,7 @@ class HairGatorApp {
         
         try {
             // AI 서비스에 키 설정 및 테스트
-            if (this.modules.aiService) {
+            if (this.modules.aiService && this.modules.aiService.setAPIKey) {
                 this.modules.aiService.setAPIKey(service, keyInput.value);
                 
                 // 간단한 테스트 요청
@@ -2666,34 +2668,8 @@ window.HAIRGATOR_DEBUG = {
     }
 };
 
-console.log('🦄 HAIRGATOR 메인 애플리케이션 로드 완료');
-console.log('🔧 디버그 도구: window.HAIRGATOR_DEBUG');
-console.log('⚡ 키보드 단축키: Ctrl+S(저장), Ctrl+Enter(생성), Ctrl+P(미리보기)');
-
-// export { HairGatorApp };
-}
-
-// 애플리케이션 인스턴스 생성 및 초기화
-const hairgatorApp = new HairGatorApp();
-
-// DOM 로드 완료 시 초기화
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        hairgatorApp.initialize();
-    });
-} else {
-    hairgatorApp.initialize();
-}
-
-// 전역에서 접근 가능하도록 설정
-window.HairGatorApp = hairgatorApp;
-
-
-console.log('🦄 HAIRGATOR 메인 애플리케이션 로드 완료');
-
 // ============================================================================
 // 전역 함수들 (HTML onclick 핸들러용)
-// app.js 파일 맨 끝에 이 코드를 추가하세요
 // ============================================================================
 
 // 콘텐츠 생성 및 관리
@@ -2922,6 +2898,15 @@ window.refreshPage = function() {
     }
 };
 
+// 키워드 추가 (HTML에서 직접 호출)
+window.addKeyword = function(keyword) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.addKeyword(keyword);
+    } else {
+        console.log('키워드 추가:', keyword);
+    }
+};
+
 // 개발자 도구용 전역 함수들도 추가
 window.HAIRGATOR_GLOBAL_DEBUG = {
     app: () => window.HairGatorApp,
@@ -2937,10 +2922,9 @@ window.HAIRGATOR_GLOBAL_DEBUG = {
 };
 
 // 초기화 완료 로그
+console.log('🦄 HAIRGATOR 메인 애플리케이션 로드 완료');
+console.log('🔧 디버그 도구: window.HAIRGATOR_DEBUG');
+console.log('⚡ 키보드 단축키: Ctrl+S(저장), Ctrl+Enter(생성), Ctrl+P(미리보기)');
 console.log('🔗 전역 함수들이 등록되었습니다.');
 console.log('🎯 onclick 핸들러들이 정상 작동할 예정입니다.');
 console.log('🧪 테스트: window.HAIRGATOR_GLOBAL_DEBUG.testAllFunctions()');
-
-// export 문 주석 처리 (중요!)
-// export { HairGatorApp };
-
