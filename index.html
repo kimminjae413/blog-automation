@@ -34,11 +34,11 @@
             <section class="queue-status-section">
                 <h3>📝 글감 큐</h3>
                 <div class="flex justify-between items-center mb-2">
-                    <span>대기중: <strong id="queueWaiting">0</strong></span>
+                    <span>대기중: <strong id="queueWaiting">5</strong></span>
                     <span>완료: <strong id="queueCompleted">0</strong></span>
                 </div>
                 <div class="flex gap-1">
-                    <button class="btn btn-primary" onclick="processNextInQueue()">
+                    <button class="btn btn-primary" onclick="processNextInQueue()" title="Ctrl+Enter">
                         🤖 다음 글 작성
                     </button>
                     <button class="btn btn-secondary" onclick="showQueueManager()">
@@ -77,7 +77,16 @@
             <section class="next-item-section mt-2">
                 <h3>⏳ 다음 예정</h3>
                 <div id="nextItemPreview">
-                    <p class="text-center" style="color: #6b7280; font-style: italic;">큐가 비어있습니다</p>
+                    <div class="queue-item">
+                        <div class="queue-title">겨울철 건조한 모발 완벽 관리법</div>
+                        <div class="queue-meta">
+                            <span>30대 직장인 여성들</span>
+                            <span class="queue-status waiting">대기중</span>
+                        </div>
+                        <div class="queue-priority priority-normal">
+                            우선순위: 보통
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -86,10 +95,10 @@
         <div class="main-editor">
             <!-- 에디터 탭 네비게이션 -->
             <div class="tab-nav">
-                <button class="editor-tab active" data-tab="write">✍️ 글쓰기</button>
-                <button class="editor-tab" data-tab="queue">📝 글감 큐</button>
-                <button class="editor-tab" data-tab="seo">🔍 SEO</button>
-                <button class="editor-tab" data-tab="image">🖼️ 이미지</button>
+                <button class="editor-tab active" data-tab="write" onclick="switchTab('write')">✍️ 글쓰기</button>
+                <button class="editor-tab" data-tab="queue" onclick="switchTab('queue')">📝 글감 큐</button>
+                <button class="editor-tab" data-tab="seo" onclick="switchTab('seo')">🔍 SEO</button>
+                <button class="editor-tab" data-tab="image" onclick="switchTab('image')">🖼️ 이미지</button>
             </div>
 
             <!-- 글쓰기 탭 -->
@@ -101,7 +110,7 @@
 
                 <div class="form-group">
                     <label for="postContent" class="form-label">본문</label>
-                    <textarea id="postContent" class="form-textarea" placeholder="AI가 생성한 콘텐츠가 여기에 표시됩니다..."></textarea>
+                    <textarea id="postContent" class="form-textarea" rows="20" placeholder="AI가 생성한 콘텐츠가 여기에 표시됩니다..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -129,7 +138,7 @@
                     <button class="btn btn-primary" onclick="processAllQueue()">
                         🚀 전체 처리
                     </button>
-                    <button class="btn btn-secondary" onclick="checkQuality()">📊 품질 검사</button>
+                    <button class="btn btn-secondary" onclick="checkQuality()" title="Ctrl+P">📊 품질 검사</button>
                     <button class="btn btn-success" onclick="publishContent()">
                         📤 발행하기
                     </button>
@@ -141,15 +150,16 @@
                 <div class="flex justify-between items-center mb-2">
                     <h3>📋 글감 큐 관리</h3>
                     <div class="flex gap-1">
-                        <button class="btn btn-secondary" onclick="filterQueue('all')">전체</button>
-                        <button class="btn btn-secondary" onclick="filterQueue('waiting')">대기중</button>
-                        <button class="btn btn-secondary" onclick="filterQueue('completed')">완료</button>
-                        <button class="btn btn-secondary" onclick="filterQueue('failed')">실패</button>
+                        <button class="btn btn-primary" onclick="filterQueue('all')">전체</button>
+                        <button class="btn btn-secondary" onclick="filterQueue('대기중')">대기중</button>
+                        <button class="btn btn-secondary" onclick="filterQueue('완료')">완료</button>
+                        <button class="btn btn-secondary" onclick="filterQueue('실패')">실패</button>
                     </div>
                 </div>
                 
                 <div id="queueContainer">
-                    <!-- 글감 큐 아이템들이 여기에 표시됩니다 -->
+                    <!-- 글감 큐 아이템들이 동적으로 표시됩니다 -->
+                    <p class="text-center" style="color: #6b7280; margin: 2rem 0;">글감 큐가 로딩 중입니다...</p>
                 </div>
 
                 <div class="flex gap-2 mt-2">
@@ -220,7 +230,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
                     <div>
                         <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
-                        <div id="claudeStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
+                        <div id="claudeStatus" style="font-size: 0.9rem; color: var(--success-color);">🔄 확인 중...</div>
                     </div>
                     <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
                 </div>
@@ -228,7 +238,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
                     <div>
                         <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
-                        <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
+                        <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">🔄 확인 중...</div>
                     </div>
                     <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
                 </div>
@@ -279,16 +289,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="metric-item">
-                        <span>전문성</span>
-                        <div class="flex items-center gap-1">
-                            <span id="expertiseScore">--</span>
-                            <div class="metric-bar">
-                                <div id="expertiseScoreBar" class="metric-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <div id="qualityRecommendations" class="mt-2">
@@ -310,7 +310,7 @@
                     <label for="processInterval" class="form-label">처리 간격 (분)</label>
                     <select id="processInterval" class="form-select">
                         <option value="30">30분</option>
-                        <option value="60">1시간</option>
+                        <option value="60" selected>1시간</option>
                         <option value="120">2시간</option>
                         <option value="240">4시간</option>
                     </select>
@@ -318,42 +318,63 @@
                 
                 <button class="btn btn-success" onclick="startAutomation()">🚀 자동화 시작</button>
             </section>
+
+            <!-- 시스템 정보 -->
+            <section class="system-section mt-2">
+                <h3>📈 시스템 상태</h3>
+                <div class="system-stats">
+                    <div class="stat-item">
+                        <span>생성된 글</span>
+                        <span id="totalGenerated">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>발행된 글</span>
+                        <span id="totalPublished">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>시스템 상태</span>
+                        <span id="systemStatus">정상</span>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
     <!-- 모달들 -->
     <!-- 글감 추가 모달 -->
-    <div id="addContentModal" class="modal">
+    <div id="addContentModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">➕ 새 글감 추가</h2>
                 <button class="modal-close" onclick="closeModal('addContentModal')">&times;</button>
             </div>
-            <div class="form-group">
-                <label for="newTargetAudience" class="form-label">타겟 독자</label>
-                <input type="text" id="newTargetAudience" class="form-input" placeholder="예: 30대 직장인 여성들">
-            </div>
-            <div class="form-group">
-                <label for="newTitle" class="form-label">글 제목</label>
-                <input type="text" id="newTitle" class="form-input" placeholder="예: 겨울철 건조한 모발 완벽 관리법">
-            </div>
-            <div class="form-group">
-                <label for="newKeywords" class="form-label">키워드 (쉼표로 구분)</label>
-                <input type="text" id="newKeywords" class="form-input" placeholder="예: 겨울, 건조, 헤어케어, 보습">
-            </div>
-            <div class="form-group">
-                <label for="newTone" class="form-label">톤 앤 매너</label>
-                <select id="newTone" class="form-select">
-                    <option value="친근하고 실용적">친근하고 실용적</option>
-                    <option value="전문적이면서 비즈니스 중심">전문적이면서 비즈니스 중심</option>
-                    <option value="트렌디하고 캐주얼">트렌디하고 캐주얼</option>
-                    <option value="신뢰감 있고 전문적">신뢰감 있고 전문적</option>
-                    <option value="실무적이고 구체적">실무적이고 구체적</option>
-                </select>
-            </div>
-            <div class="flex gap-2">
-                <button class="btn btn-primary" onclick="addNewContent()">추가</button>
-                <button class="btn btn-secondary" onclick="closeModal('addContentModal')">취소</button>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newTargetAudience" class="form-label">타겟 독자</label>
+                    <input type="text" id="newTargetAudience" class="form-input" placeholder="예: 30대 직장인 여성들">
+                </div>
+                <div class="form-group">
+                    <label for="newTitle" class="form-label">글 제목</label>
+                    <input type="text" id="newTitle" class="form-input" placeholder="예: 겨울철 건조한 모발 완벽 관리법">
+                </div>
+                <div class="form-group">
+                    <label for="newKeywords" class="form-label">키워드 (쉼표로 구분)</label>
+                    <input type="text" id="newKeywords" class="form-input" placeholder="예: 겨울, 건조, 헤어케어, 보습">
+                </div>
+                <div class="form-group">
+                    <label for="newTone" class="form-label">톤 앤 매너</label>
+                    <select id="newTone" class="form-select">
+                        <option value="친근하고 실용적">친근하고 실용적</option>
+                        <option value="전문적이면서 비즈니스 중심">전문적이면서 비즈니스 중심</option>
+                        <option value="트렌디하고 캐주얼">트렌디하고 캐주얼</option>
+                        <option value="신뢰감 있고 전문적">신뢰감 있고 전문적</option>
+                        <option value="실무적이고 구체적">실무적이고 구체적</option>
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-primary" onclick="addNewContent()">추가</button>
+                    <button class="btn btn-secondary" onclick="closeModal('addContentModal')">취소</button>
+                </div>
             </div>
         </div>
     </div>
@@ -361,6 +382,11 @@
     <!-- 알림 컨테이너 -->
     <div id="notificationContainer" class="notification-container">
         <!-- 알림들이 여기에 동적으로 추가됩니다 -->
+    </div>
+
+    <!-- 키보드 단축키 도움말 -->
+    <div style="position: fixed; bottom: 1rem; left: 1rem; font-size: 0.8rem; color: #6b7280; background: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 4px; border: 1px solid #e5e7eb;">
+        💡 단축키: Ctrl+Enter (다음 글), Ctrl+S (저장), Ctrl+P (품질검사), F1 (도움말)
     </div>
 
     <!-- JavaScript 파일들 연결 -->
