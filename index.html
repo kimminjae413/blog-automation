@@ -849,43 +849,39 @@
         </div>
 
         <!-- 오른쪽 사이드바 -->
-        <div class="sidebar">
-           <!-- AI 연결 상태 (API 키 입력 폼 제거) -->
-            <section class="ai-section">
-                <h3>🤖 AI 서비스</h3>
-                
-                <!-- Claude 상태 표시만 -->
-                <div class="ai-service-status">
-                    <div class="service-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
-                        <div class="service-info">
-                            <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
-                            <div id="claudeStatus" class="connection-status" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
-                        </div>
-                        <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
-                    </div>
-                </div>
-                
-                <!-- OpenAI 상태 표시만 -->
-                <div class="ai-service-status">
-                    <div class="service-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
-                        <div class="service-info">
-                            <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
-                            <div id="openaiStatus" class="connection-status" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
-                        </div>
-                        <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
-                    </div>
-                </div>
-                
-                <!-- API 상태 정보 -->
-                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-                    <div style="font-size: 0.9rem; color: #166534; font-weight: 500; margin-bottom: 0.5rem;">🔑 API 키 상태</div>
-                    <div style="font-size: 0.8rem; color: #15803d;">
-                        • Claude & OpenAI API 키가 안전하게 연결되었습니다<br>
-                        • 즉시 AI 콘텐츠 생성이 가능합니다<br>
-                        • 별도 설정이 필요하지 않습니다
-                    </div>
-                </div>
-            </section>
+<div class="sidebar">
+    <!-- AI 연결 상태 (API 키 입력 폼 제거) -->
+    <section class="ai-section">
+        <h3>🤖 AI 서비스</h3>
+        
+        <!-- Claude 상태 표시만 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
+            <div>
+                <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
+                <div id="claudeStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
+            </div>
+            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
+        </div>
+        
+        <!-- OpenAI 상태 표시만 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
+            <div>
+                <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
+                <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
+            </div>
+            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
+        </div>
+        
+        <!-- API 상태 정보 -->
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.9rem; color: #166534; font-weight: 500; margin-bottom: 0.5rem;">🔑 API 키 상태</div>
+            <div style="font-size: 0.8rem; color: #15803d;">
+                • Claude & OpenAI API 키가 안전하게 연결되었습니다<br>
+                • 즉시 AI 콘텐츠 생성이 가능합니다<br>
+                • 별도 설정이 필요하지 않습니다
+            </div>
+        </div>
+    </section>
 
             <!-- 품질 메트릭 -->
             <section class="quality-section mt-2">
@@ -1108,5 +1104,6 @@
     </div>
 </body>
 </html>
+
 
 
