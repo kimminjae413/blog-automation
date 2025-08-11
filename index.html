@@ -47,6 +47,43 @@
                         <div class="connection-status" id="aiStatus">연결 대기</div>
                     </div>
                     <div class="panel-content">
+                        <!-- 타겟 독자 설정 -->
+                        <div class="target-audience-config">
+                            <h3>타겟 독자 설정</h3>
+                            <div class="target-selection">
+                                <label>이 시스템이 작성해 주는 타겟은 누구인가요?</label>
+                                <select id="primaryTarget">
+                                    <option value="hair_professionals">헤어 디자이너 & 헤어 관련 종사자</option>
+                                    <option value="beauty_professionals">뷰티 전문가 & 미용사</option>
+                                    <option value="fitness_trainers">퍼스널 트레이너 & 피트니스 전문가</option>
+                                    <option value="nutritionists">영양사 & 건강 관리사</option>
+                                    <option value="chefs_cooks">셰프 & 요리사</option>
+                                    <option value="it_developers">개발자 & IT 전문가</option>
+                                    <option value="marketers">마케터 & 광고 전문가</option>
+                                    <option value="designers">디자이너 & 크리에이티브 전문가</option>
+                                    <option value="educators">교육자 & 강사</option>
+                                    <option value="medical_professionals">의료진 & 간병사</option>
+                                    <option value="real_estate">부동산 전문가 & 중개사</option>
+                                    <option value="financial_advisors">재정 관리사 & 투자 전문가</option>
+                                    <option value="custom">사용자 정의</option>
+                                </select>
+                                
+                                <div class="custom-target" id="customTarget" style="display: none;">
+                                    <input type="text" id="customTargetInput" placeholder="예: 카페 사장들, 펜션 운영자들, 온라인 쇼핑몰 운영자들">
+                                </div>
+                                
+                                <div class="target-description" id="targetDescription">
+                                    <p><strong>헤어 디자이너 & 헤어 관련 종사자</strong>를 위한 전문 콘텐츠를 작성합니다.</p>
+                                    <ul>
+                                        <li>• 최신 헤어 트렌드 및 기법</li>
+                                        <li>• 고객 상담 및 서비스 노하우</li>
+                                        <li>• 살롱 운영 및 마케팅 팁</li>
+                                        <li>• 제품 지식 및 기술 정보</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="service-config">
                             <div class="service-item">
                                 <label>Claude API (텍스트 생성)</label>
@@ -159,6 +196,16 @@
                         <div class="tab-content" id="metaTab">
                             <div class="meta-grid">
                                 <div class="meta-item">
+                                    <label>SEO 제목 (30-60자 권장)</label>
+                                    <input type="text" id="seoTitle" placeholder="클릭을 유도하는 SEO 최적화 제목">
+                                    <div class="char-counter" id="seoTitleCounter">0/60자</div>
+                                </div>
+                                <div class="meta-item">
+                                    <label>메타 설명 (120-150자, 네이버 노출용)</label>
+                                    <textarea id="metaDescription" placeholder="검색 결과에 표시될 설명 - 클릭률을 높이는 핵심 정보 포함"></textarea>
+                                    <div class="char-counter" id="metaDescCounter">0/150자</div>
+                                </div>
+                                <div class="meta-item">
                                     <label>카테고리</label>
                                     <select id="postCategory">
                                         <option value="haircare">헤어케어</option>
@@ -168,16 +215,31 @@
                                     </select>
                                 </div>
                                 <div class="meta-item">
-                                    <label>태그</label>
-                                    <input type="text" id="postTags" placeholder="태그1, 태그2, 태그3">
+                                    <label>핵심 키워드 (네이버 검색 최적화)</label>
+                                    <input type="text" id="primaryKeywords" placeholder="주요 키워드 3-5개 (콤마로 구분)">
+                                    <div class="keyword-suggestions" id="keywordSuggestions"></div>
                                 </div>
                                 <div class="meta-item">
-                                    <label>SEO 설명</label>
-                                    <textarea id="metaDescription" placeholder="검색 결과에 표시될 설명 (150자 이내)"></textarea>
+                                    <label>롱테일 키워드 (실제 검색어)</label>
+                                    <input type="text" id="longTailKeywords" placeholder="사용자가 실제 검색하는 문장형 키워드">
+                                </div>
+                                <div class="meta-item">
+                                    <label>해시태그 (네이버 블로그용)</label>
+                                    <input type="text" id="postTags" placeholder="#헤어케어 #뷰티 #헤어스타일 (# 포함)">
                                 </div>
                                 <div class="meta-item">
                                     <label>예약 발행</label>
                                     <input type="datetime-local" id="publishDate">
+                                </div>
+                            </div>
+                            
+                            <div class="seo-optimization">
+                                <h4>네이버 SEO 최적화 도구</h4>
+                                <div class="seo-tools">
+                                    <button class="tool-btn" onclick="generateSEOTitle()">🎯 SEO 제목 자동 생성</button>
+                                    <button class="tool-btn" onclick="generateMetaDescription()">📝 메타 설명 자동 생성</button>
+                                    <button class="tool-btn" onclick="suggestKeywords()">🔍 키워드 제안</button>
+                                    <button class="tool-btn" onclick="checkSEOScore()">📊 SEO 점수 체크</button>
                                 </div>
                             </div>
                         </div>
@@ -199,49 +261,71 @@
                 <!-- 품질 분석 패널 -->
                 <section class="panel quality-analysis">
                     <div class="panel-header">
-                        <h2>품질 분석</h2>
+                        <h2>네이버 SEO 품질 분석</h2>
                         <div class="quality-score" id="overallQuality">0</div>
                     </div>
                     <div class="panel-content">
+                        <div class="seo-summary">
+                            <div class="seo-status" id="seoStatus">
+                                <span class="status-icon">⚠️</span>
+                                <span class="status-text">SEO 분석 대기중</span>
+                            </div>
+                        </div>
+                        
                         <div class="quality-metrics">
                             <div class="metric">
-                                <div class="metric-name">글자 수</div>
-                                <div class="metric-value" id="wordCount">0</div>
+                                <div class="metric-name">
+                                    글자 수 <span class="seo-impact">(네이버 선호: 1500자+)</span>
+                                    <div class="metric-value" id="wordCount">0</div>
+                                </div>
                                 <div class="metric-bar">
                                     <div class="metric-fill" id="wordCountBar"></div>
                                 </div>
                             </div>
+                            
                             <div class="metric">
-                                <div class="metric-name">가독성</div>
-                                <div class="metric-value" id="readability">0</div>
+                                <div class="metric-name">
+                                    키워드 배치 <span class="seo-impact">(제목+첫문단+소제목)</span>
+                                    <div class="metric-value" id="keywordPlacement">0/5</div>
+                                </div>
                                 <div class="metric-bar">
-                                    <div class="metric-fill" id="readabilityBar"></div>
+                                    <div class="metric-fill" id="keywordPlacementBar"></div>
                                 </div>
                             </div>
+                            
                             <div class="metric">
-                                <div class="metric-name">키워드 밀도</div>
-                                <div class="metric-value" id="keywordDensity">0%</div>
-                                <div class="metric-bar">
-                                    <div class="metric-fill" id="keywordBar"></div>
+                                <div class="metric-name">
+                                    구조 최적화 <span class="seo-impact">(소제목+리스트+강조)</span>
+                                    <div class="metric-value" id="structureScore">0</div>
                                 </div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-name">구조 점수</div>
-                                <div class="metric-value" id="structureScore">0</div>
                                 <div class="metric-bar">
                                     <div class="metric-fill" id="structureBar"></div>
                                 </div>
                             </div>
+                            
                             <div class="metric">
-                                <div class="metric-name">헤어케어 전문성</div>
-                                <div class="metric-value" id="expertiseScore">0</div>
+                                <div class="metric-name">
+                                    전문성 점수 <span class="seo-impact">(전문용어+데이터+사례)</span>
+                                    <div class="metric-value" id="expertiseScore">0</div>
+                                </div>
                                 <div class="metric-bar">
                                     <div class="metric-fill" id="expertiseBar"></div>
                                 </div>
                             </div>
+                            
+                            <div class="metric">
+                                <div class="metric-name">
+                                    사용자 참여 <span class="seo-impact">(CTA+댓글유도+공유)</span>
+                                    <div class="metric-value" id="engagementScore">0</div>
+                                </div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="engagementBar"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="quality-recommendations" id="qualityRecommendations">
-                            <!-- 개선 제안이 여기에 표시됩니다 -->
+                        
+                        <div class="seo-recommendations" id="seoRecommendations">
+                            <!-- 네이버 SEO 개선 제안이 여기에 표시됩니다 -->
                         </div>
                     </div>
                 </section>
