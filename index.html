@@ -68,6 +68,40 @@
                         <option value="실무적이고 구체적">실무적이고 구체적</option>
                     </select>
                 </div>
+                
+                <!-- 참고 자료 섹션 -->
+                <div class="reference-section">
+                    <h4>📚 참고 자료</h4>
+                    <div class="form-group">
+                        <label>참고 URL (여러 개 가능)</label>
+                        <textarea id="quickReferenceUrls" class="form-textarea" rows="3" placeholder="https://blog.example.com/haircare-tips
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC123456/
+https://news.example.com/hair-trend-2024
+
+(한 줄에 하나씩 입력)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>PDF 파일 (논문, 자료)</label>
+                        <input type="file" id="quickPdfFiles" class="form-input" multiple accept=".pdf" onchange="handlePdfUpload(this)">
+                        <div id="pdfFileList" class="file-list"></div>
+                    </div>
+                </div>
+                
+                <!-- 개인 경험 섹션 -->
+                <div class="experience-section">
+                    <h4>💡 개인 경험 & 노하우</h4>
+                    <div class="form-group">
+                        <textarea id="quickPersonalExperience" class="form-textarea" rows="6" placeholder="실제 경험했던 사례를 구체적으로 작성해주세요:
+
+예시:
+- 재방문율 200% 증가 사례: 2023년 3월부터 상담 방식을 바꿔서 6개월간 추적한 결과, 기존 30% → 90%로 증가
+- 고객 A씨 케이스: 탈모 고민으로 내원 → XX 제품 + YY 관리법 적용 → 3개월 후 모발 밀도 25% 증가 (사진 비교)
+- 실패 사례: ZZ 방법을 시도했지만 효과 없었던 이유는...
+
+구체적인 수치, 기간, 방법을 포함해주세요."></textarea>
+                    </div>
+                </div>
+                
                 <button class="btn btn-success" onclick="addQuickContent()">
                     ⚡ 큐에 추가
                 </button>
