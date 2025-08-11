@@ -8,12 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS 파일들 연결 -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
-    <!-- 임시 인라인 CSS (GitHub Pages 로딩 문제 해결용) -->
     <style>
         /* 기본 스타일 */
         * {
@@ -255,13 +249,8 @@
             color: white;
         }
         
-        /* 주제 목록 */
-        .topic-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .topic-item {
+        /* 글감 큐 스타일 */
+        .queue-item {
             padding: 1rem;
             border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
@@ -271,26 +260,66 @@
             background: var(--bg-color);
         }
         
-        .topic-item:hover {
+        .queue-item:hover {
             border-color: var(--primary-color);
             transform: translateY(-1px);
             box-shadow: var(--shadow);
         }
         
-        .topic-item.selected {
-            border-color: var(--primary-color);
-            background: rgba(102, 126, 234, 0.1);
+        .queue-item.processing {
+            border-color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.1);
         }
         
-        .topic-title {
+        .queue-item.completed {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .queue-item.failed {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .queue-title {
             font-weight: 600;
             color: var(--text-color);
             margin-bottom: 0.5rem;
         }
         
-        .topic-meta {
+        .queue-meta {
             font-size: 0.9rem;
             color: var(--text-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .queue-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .queue-status.waiting {
+            background: var(--bg-light);
+            color: var(--text-light);
+        }
+        
+        .queue-status.processing {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .queue-status.completed {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .queue-status.failed {
+            background: var(--error-color);
+            color: white;
         }
         
         /* 품질 메트릭 */
@@ -441,17 +470,6 @@
             }
         }
         
-        @keyframes notificationSlideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-        
         /* 로딩 스피너 */
         .btn-loader {
             display: none;
@@ -527,448 +545,6 @@
             background: var(--bg-light);
             color: var(--text-color);
         }
-
-        /* ===================================
-           간편 작성 모드 전용 스타일
-           =================================== */
-        .simple-writer-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .simple-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, #F59E0B20, #EC489920);
-            border-radius: 1rem;
-            border: 2px solid #F59E0B;
-        }
-
-        .simple-header h2 {
-            color: #F59E0B;
-            margin-bottom: 0.5rem;
-            font-size: 2rem;
-        }
-
-        .simple-header p {
-            color: #6B7280;
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        .simple-step {
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: #F9FAFB;
-            border-radius: 1rem;
-            border: 1px solid #E5E7EB;
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            background: #F59E0B;
-            color: white;
-            border-radius: 50%;
-            font-weight: bold;
-            margin-right: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .step-header h3 {
-            margin: 0;
-            color: #1F2937;
-            flex: 1;
-        }
-
-        .step-header small {
-            color: #6B7280;
-            font-style: italic;
-            margin-left: 1rem;
-        }
-
-        /* 타겟 입력 그룹 */
-        .target-input-group {
-            margin-bottom: 1rem;
-        }
-
-        .simple-input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .simple-input:focus {
-            outline: none;
-            border-color: #F59E0B;
-            box-shadow: 0 0 0 3px #F59E0B20;
-        }
-
-        .target-examples {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .example-tag {
-            background: #F3F4F6;
-            color: #374151;
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #D1D5DB;
-        }
-
-        .example-tag:hover {
-            background: #F59E0B;
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        /* 스토리 입력 */
-        .story-input-container {
-            margin-bottom: 2rem;
-        }
-
-        .story-line {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            gap: 1rem;
-        }
-
-        .line-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2rem;
-            height: 2rem;
-            background: #E5E7EB;
-            color: #6B7280;
-            border-radius: 50%;
-            font-weight: 500;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-
-        .story-input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #D1D5DB;
-            border-radius: 0.5rem;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-
-        .story-input:focus {
-            outline: none;
-            border-color: #F59E0B;
-            box-shadow: 0 0 0 2px #F59E0B20;
-        }
-
-        .story-input:not(:placeholder-shown) {
-            border-color: #10B981;
-            background: #F0FDF4;
-        }
-
-        .story-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #E5E7EB;
-        }
-
-        .add-line-btn, .remove-line-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid #D1D5DB;
-            border-radius: 0.5rem;
-            background: white;
-            color: #6B7280;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .add-line-btn:hover {
-            background: #10B981;
-            color: white;
-            border-color: #10B981;
-        }
-
-        .remove-line-btn:hover {
-            background: #EF4444;
-            color: white;
-            border-color: #EF4444;
-        }
-
-        .line-counter {
-            margin-left: auto;
-            color: #6B7280;
-            font-size: 0.9rem;
-        }
-
-        /* 템플릿 예시 */
-        .story-templates {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #E5E7EB;
-        }
-
-        .story-templates h4 {
-            color: #374151;
-            margin-bottom: 1rem;
-        }
-
-        .template-examples {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .template-card {
-            background: white;
-            border: 1px solid #E5E7EB;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .template-card:hover {
-            border-color: #F59E0B;
-            box-shadow: 0 4px 12px #F59E0B20;
-            transform: translateY(-2px);
-        }
-
-        .template-card h5 {
-            color: #F59E0B;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .template-card ul {
-            margin: 0;
-            padding-left: 1rem;
-            color: #6B7280;
-            font-size: 0.85rem;
-        }
-
-        .template-card li {
-            margin-bottom: 0.25rem;
-        }
-
-        /* 생성 버튼 */
-        .generate-section {
-            text-align: center;
-        }
-
-        .generate-simple-btn {
-            background: linear-gradient(135deg, #F59E0B, #EC4899);
-            color: white;
-            border: none;
-            border-radius: 1rem;
-            padding: 1.5rem 3rem;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            min-width: 250px;
-        }
-
-        .generate-simple-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-icon {
-            font-size: 1.5rem;
-        }
-
-        .btn-text {
-            font-weight: 600;
-        }
-
-        .btn-description {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        /* 로딩 애니메이션 */
-        .simple-loader {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .loader-animation {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .loader-circle {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            background: #F59E0B;
-            animation: bounce 1.4s ease-in-out infinite both;
-        }
-
-        .loader-circle:nth-child(1) { animation-delay: -0.32s; }
-        .loader-circle:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
-            }
-            40% {
-                transform: scale(1);
-            }
-        }
-
-        .loader-steps {
-            margin-top: 1rem;
-        }
-
-        .loader-step {
-            padding: 0.5rem;
-            color: #6B7280;
-            transition: color 0.3s;
-        }
-
-        .loader-step.active {
-            color: #F59E0B;
-            font-weight: 500;
-        }
-
-        /* 결과 미리보기 */
-        .simple-result {
-            margin-top: 2rem;
-            padding: 2rem;
-            background: white;
-            border-radius: 1rem;
-            border: 2px solid #10B981;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #E5E7EB;
-        }
-
-        .result-header h3 {
-            color: #10B981;
-            margin: 0;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .result-content {
-            margin-bottom: 1.5rem;
-        }
-
-        .result-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .meta-label {
-            font-size: 0.9rem;
-            color: #6B7280;
-            font-weight: 500;
-        }
-
-        .meta-value {
-            color: #1F2937;
-            font-weight: 600;
-        }
-
-        .content-preview {
-            background: #F9FAFB;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            border: 1px solid #E5E7EB;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .result-seo {
-            border-top: 1px solid #E5E7EB;
-            padding-top: 1.5rem;
-        }
-
-        .result-seo h4 {
-            color: #374151;
-            margin-bottom: 1rem;
-        }
-
-        .seo-item {
-            margin-bottom: 1rem;
-        }
-
-        .seo-label {
-            display: block;
-            font-size: 0.9rem;
-            color: #6B7280;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .seo-value {
-            color: #1F2937;
-        }
-
-        .keyword-tags, .tag-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .keyword-tag, .tag-item {
-            background: #EFF6FF;
-            color: #1E40AF;
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
-            border: 1px solid #BFDBFE;
-        }
         
         /* 반응형 */
         @media (max-width: 1200px) {
@@ -987,70 +563,6 @@
             .sidebar {
                 position: static;
             }
-            
-            .brand-features {
-                gap: 1rem;
-            }
-            
-            .feature-badge {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            .simple-writer-container {
-                padding: 1rem;
-            }
-
-            .simple-step {
-                padding: 1rem;
-            }
-
-            .template-examples {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .header {
-                padding: 1.5rem 1rem;
-            }
-            
-            .brand-logo {
-                font-size: 2rem;
-            }
-            
-            .brand-tagline {
-                font-size: 1rem;
-            }
-            
-            .container {
-                padding: 0 0.5rem;
-            }
-            
-            .tab-content {
-                padding: 1rem;
-            }
-            
-            .modal-content {
-                margin: 10% auto;
-                padding: 1.5rem;
-                width: 95%;
-            }
-
-            .story-line {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.5rem;
-            }
-
-            .line-number {
-                align-self: flex-start;
-            }
-
-            .result-actions {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
         }
         
         /* 유틸리티 클래스 */
@@ -1061,15 +573,6 @@
         .text-center {
             text-align: center;
         }
-        
-        .text-right {
-            text-align: right;
-        }
-        
-        .mt-1 { margin-top: 0.5rem; }
-        .mt-2 { margin-top: 1rem; }
-        .mb-1 { margin-bottom: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
         
         .flex {
             display: flex;
@@ -1091,42 +594,10 @@
             gap: 1rem;
         }
         
-        /* 다크 모드 */
-        body.dark-mode {
-            --bg-color: #1f2937;
-            --bg-light: #111827;
-            --text-color: #f9fafb;
-            --text-light: #d1d5db;
-            --border-color: #374151;
-        }
-        
-        body.dark-mode .form-input,
-        body.dark-mode .form-textarea,
-        body.dark-mode .form-select {
-            background: var(--bg-color);
-            color: var(--text-color);
-        }
-        
-        body.dark-mode .notification,
-        body.dark-mode .modal-content {
-            background: var(--bg-color);
-            color: var(--text-color);
-        }
-
-        body.dark-mode .simple-step {
-            background: var(--bg-color);
-            border-color: var(--border-color);
-        }
-
-        body.dark-mode .template-card {
-            background: var(--bg-color);
-            border-color: var(--border-color);
-        }
-
-        body.dark-mode .content-preview {
-            background: var(--bg-light);
-            border-color: var(--border-color);
-        }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
     </style>
 </head>
 <body>
@@ -1138,8 +609,7 @@
             <div class="feature-badge">🤖 AI 콘텐츠 생성</div>
             <div class="feature-badge">📊 네이버 SEO 최적화</div>
             <div class="feature-badge">⚡ 실시간 품질 검사</div>
-            <div class="feature-badge">📅 자동화 스케줄링</div>
-            <div class="feature-badge">✨ 간편 작성</div>
+            <div class="feature-badge">📅 글감 큐 시스템</div>
         </div>
     </div>
 
@@ -1147,61 +617,54 @@
     <div class="container">
         <!-- 왼쪽 사이드바 -->
         <div class="sidebar">
-            <!-- 타겟 독자 선택 -->
-            <section class="target-section">
-                <h3>🎯 타겟 독자</h3>
+            <!-- 글감 큐 상태 -->
+            <section class="queue-status-section">
+                <h3>📝 글감 큐</h3>
+                <div class="flex justify-between items-center mb-2">
+                    <span>대기중: <strong id="queueWaiting">0</strong></span>
+                    <span>완료: <strong id="queueCompleted">0</strong></span>
+                </div>
+                <div class="flex gap-1">
+                    <button class="btn btn-primary" onclick="processNextInQueue()">
+                        🤖 다음 글 작성
+                    </button>
+                    <button class="btn btn-secondary" onclick="showQueueManager()">
+                        📋 글감 관리
+                    </button>
+                </div>
+            </section>
+
+            <!-- 빠른 글감 추가 -->
+            <section class="quick-add-section mt-2">
+                <h3>➕ 빠른 추가</h3>
                 <div class="form-group">
-                    <select id="primaryTarget" class="form-select">
-                        <option value="hair_professionals">헤어 전문가</option>
-                        <option value="beauty_enthusiasts">뷰티 애호가</option>
-                        <option value="salon_owners">살롱 운영자</option>
-                        <option value="general_consumers">일반 소비자</option>
-                        <option value="custom_simple">기타 (간편 작성)</option>
+                    <input type="text" id="quickTarget" class="form-input" placeholder="타겟 독자 (예: 30대 직장인 여성들)">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="quickTitle" class="form-input" placeholder="글 제목">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="quickKeywords" class="form-input" placeholder="키워드 (쉼표로 구분)">
+                </div>
+                <div class="form-group">
+                    <select id="quickTone" class="form-select">
+                        <option value="친근하고 실용적">친근하고 실용적</option>
+                        <option value="전문적이면서 비즈니스 중심">전문적이면서 비즈니스 중심</option>
+                        <option value="트렌디하고 캐주얼">트렌디하고 캐주얼</option>
+                        <option value="신뢰감 있고 전문적">신뢰감 있고 전문적</option>
+                        <option value="실무적이고 구체적">실무적이고 구체적</option>
                     </select>
                 </div>
-                
-                <div id="customTarget" class="form-group hidden">
-                    <input type="text" id="customTargetInput" class="form-input" placeholder="예: 카페 사장들, 펜션 운영자들">
-                </div>
-                
-                <div id="targetDescription" class="mt-2">
-                    <p><strong>헤어 전문가</strong>를 위한 전문 콘텐츠를 작성합니다.</p>
-                    <ul>
-                        <li>• 최신 헤어케어 트렌드 정보</li>
-                        <li>• 전문 기술과 제품 리뷰</li>
-                        <li>• 고객 상담 노하우</li>
-                    </ul>
-                </div>
+                <button class="btn btn-success" onclick="addQuickContent()">
+                    ⚡ 큐에 추가
+                </button>
             </section>
 
-            <!-- 주제 카테고리 -->
-            <section class="category-section mt-2">
-                <h3>📂 주제 카테고리</h3>
-                <div class="category-tabs">
-                    <button class="tab-btn active" data-category="all">전체</button>
-                    <button class="tab-btn" data-category="basic">기초케어</button>
-                    <button class="tab-btn" data-category="styling">스타일링</button>
-                    <button class="tab-btn" data-category="treatment">트리트먼트</button>
-                    <button class="tab-btn" data-category="trend">트렌드</button>
-                </div>
-            </section>
-
-            <!-- 주제 목록 -->
-            <section class="topics-section mt-2">
-                <div class="flex items-center justify-between">
-                    <h3>📝 헤어케어 주제</h3>
-                    <button class="btn btn-secondary" onclick="showTopicModal()">추가</button>
-                </div>
-                <div id="topicList" class="topic-list">
-                    <!-- 주제들이 여기에 동적으로 로드됩니다 -->
-                </div>
-            </section>
-
-            <!-- 선택된 주제 정보 -->
-            <section class="selected-topic mt-2">
-                <h3>✨ 선택된 주제</h3>
-                <div id="selectedTopic">
-                    <p class="text-center" style="color: #6b7280; font-style: italic;">주제를 선택해주세요</p>
+            <!-- 다음 처리 예정 글감 -->
+            <section class="next-item-section mt-2">
+                <h3>⏳ 다음 예정</h3>
+                <div id="nextItemPreview">
+                    <p class="text-center" style="color: #6b7280; font-style: italic;">큐가 비어있습니다</p>
                 </div>
             </section>
         </div>
@@ -1211,261 +674,74 @@
             <!-- 에디터 탭 네비게이션 -->
             <div class="tab-nav">
                 <button class="editor-tab active" data-tab="write">✍️ 글쓰기</button>
-                <button class="editor-tab" data-tab="simple">✨ 간편 작성</button>
+                <button class="editor-tab" data-tab="queue">📝 글감 큐</button>
                 <button class="editor-tab" data-tab="seo">🔍 SEO</button>
                 <button class="editor-tab" data-tab="image">🖼️ 이미지</button>
-                <button class="editor-tab" data-tab="preview">👁️ 미리보기</button>
             </div>
 
             <!-- 글쓰기 탭 -->
             <div id="writeTab" class="tab-content active">
                 <div class="form-group">
                     <label for="postTitle" class="form-label">제목</label>
-                    <input type="text" id="postTitle" class="form-input" placeholder="매력적인 헤어케어 글 제목을 입력하세요">
-                    <div id="titleCounter" class="char-counter">0/100자</div>
+                    <input type="text" id="postTitle" class="form-input" placeholder="AI가 생성한 제목이 여기에 표시됩니다">
                 </div>
 
                 <div class="form-group">
                     <label for="postContent" class="form-label">본문</label>
-                    <textarea id="postContent" class="form-textarea" placeholder="## 헤어케어 전문 콘텐츠를 작성해보세요
-
-### 소제목 예시
-- 중요한 포인트들을 정리하세요
-- **굵은 글씨**로 강조하세요
-- *기울임꼴*로 부연 설명하세요
-
-헤어게이터의 전문적인 노하우를 공유해주세요!"></textarea>
+                    <textarea id="postContent" class="form-textarea" placeholder="AI가 생성한 콘텐츠가 여기에 표시됩니다..."></textarea>
                 </div>
 
                 <div class="form-group">
                     <div class="flex gap-2">
+                        <input type="text" id="postTags" class="form-input" placeholder="태그 (쉼표로 구분)">
                         <select id="postCategory" class="form-select">
                             <option value="basic">기초 케어</option>
                             <option value="styling">스타일링</option>
                             <option value="treatment">트리트먼트</option>
                             <option value="trend">트렌드</option>
                         </select>
-                        <input type="text" id="postTags" class="form-input" placeholder="태그 (쉼표로 구분)">
                     </div>
-                </div>
-
-                <!-- 액션 버튼들 -->
-                <div class="flex gap-2 mt-2">
-                    <button class="btn btn-primary" onclick="generateContent()">
-                        <span class="btn-text">🤖 AI 콘텐츠 생성</span>
-                        <div class="btn-loader"></div>
-                    </button>
-                    <button class="btn btn-secondary" onclick="checkQuality()">📊 품질 검사</button>
-                    <button class="btn btn-secondary" onclick="previewContent()">👁️ 미리보기</button>
-                    <button class="btn btn-success" id="publishBtn" onclick="publishContent()">
-                        <span class="btn-text">🚀 발행하기</span>
-                        <div class="btn-loader"></div>
-                    </button>
                 </div>
 
                 <!-- 생성 진행 상태 -->
                 <div id="generationProgress" class="hidden mt-2">
                     <div style="background: #f3f4f6; padding: 1rem; border-radius: 8px; text-align: center;">
                         <div class="btn-loader" style="display: inline-block; margin-right: 0.5rem;"></div>
-                        AI가 헤어케어 전문 콘텐츠를 생성하고 있습니다...
+                        <span id="progressText">AI가 헤어케어 전문 콘텐츠를 생성하고 있습니다...</span>
                     </div>
+                </div>
+
+                <!-- 액션 버튼들 -->
+                <div class="flex gap-2 mt-2">
+                    <button class="btn btn-primary" onclick="processAllQueue()">
+                        🚀 전체 처리
+                    </button>
+                    <button class="btn btn-secondary" onclick="checkQuality()">📊 품질 검사</button>
+                    <button class="btn btn-success" onclick="publishContent()">
+                        📤 발행하기
+                    </button>
                 </div>
             </div>
 
-            <!-- 🆕 간편 작성 탭 -->
-            <div id="simpleTab" class="tab-content">
-                <div class="simple-writer-container">
-                    <!-- 헤더 -->
-                    <div class="simple-header">
-                        <h2>✨ 간편 작성 모드</h2>
-                        <p>타겟과 간단한 스토리만 입력하면 AI가 완성된 블로그 글로 만들어드려요!</p>
+            <!-- 글감 큐 탭 -->
+            <div id="queueTab" class="tab-content">
+                <div class="flex justify-between items-center mb-2">
+                    <h3>📋 글감 큐 관리</h3>
+                    <div class="flex gap-1">
+                        <button class="btn btn-secondary" onclick="filterQueue('all')">전체</button>
+                        <button class="btn btn-secondary" onclick="filterQueue('waiting')">대기중</button>
+                        <button class="btn btn-secondary" onclick="filterQueue('completed')">완료</button>
+                        <button class="btn btn-secondary" onclick="filterQueue('failed')">실패</button>
                     </div>
-                    
-                    <!-- Step 1: 타겟 독자 설정 -->
-                    <div class="simple-step">
-                        <div class="step-header">
-                            <span class="step-number">1</span>
-                            <h3>🎯 누구를 위한 글인가요?</h3>
-                        </div>
-                        <div class="target-input-group">
-                            <input type="text" 
-                                   id="simpleTargetInput" 
-                                   class="simple-input" 
-                                   placeholder="예: 30대 직장인 여성들, 카페 사장님들, 펜션 운영자들, 헤어샵 사장님들">
-                            <div class="target-examples">
-                                <span class="example-tag" onclick="setSimpleTarget('30대 직장인 여성들')">30대 직장인 여성들</span>
-                                <span class="example-tag" onclick="setSimpleTarget('카페 사장님들')">카페 사장님들</span>
-                                <span class="example-tag" onclick="setSimpleTarget('펜션 운영자들')">펜션 운영자들</span>
-                                <span class="example-tag" onclick="setSimpleTarget('헤어샵 사장님들')">헤어샵 사장님들</span>
-                                <span class="example-tag" onclick="setSimpleTarget('대학생들')">대학생들</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 2: 스토리 입력 -->
-                    <div class="simple-step">
-                        <div class="step-header">
-                            <span class="step-number">2</span>
-                            <h3>📝 어떤 내용으로 쓸까요?</h3>
-                            <small>간단하게 5줄 정도로 적어주세요</small>
-                        </div>
-                        
-                        <div class="story-input-container">
-                            <div class="story-line" data-line="1">
-                                <span class="line-number">1</span>
-                                <input type="text" 
-                                       class="story-input" 
-                                       placeholder="예: 겨울철에 머리가 너무 건조해져서 고민이에요">
-                            </div>
-                            <div class="story-line" data-line="2">
-                                <span class="line-number">2</span>
-                                <input type="text" 
-                                       class="story-input" 
-                                       placeholder="예: 집에서 쉽게 할 수 있는 헤어케어 방법이 있을까요?">
-                            </div>
-                            <div class="story-line" data-line="3">
-                                <span class="line-number">3</span>
-                                <input type="text" 
-                                       class="story-input" 
-                                       placeholder="예: 비싼 제품 말고 가정에서 만들 수 있는 팩 같은 것도 좋고요">
-                            </div>
-                            <div class="story-line" data-line="4">
-                                <span class="line-number">4</span>
-                                <input type="text" 
-                                       class="story-input" 
-                                       placeholder="예: 직장에서도 간단하게 관리할 수 있는 팁이 있으면 좋겠어요">
-                            </div>
-                            <div class="story-line" data-line="5">
-                                <span class="line-number">5</span>
-                                <input type="text" 
-                                       class="story-input" 
-                                       placeholder="예: 주변 사람들도 같은 고민을 하는 것 같아요">
-                            </div>
-                            
-                            <!-- 줄 추가/삭제 버튼 -->
-                            <div class="story-controls">
-                                <button class="add-line-btn" onclick="addStoryLine()">➕ 줄 추가</button>
-                                <button class="remove-line-btn" onclick="removeStoryLine()">➖ 줄 삭제</button>
-                                <span class="line-counter">5/10 줄</span>
-                            </div>
-                        </div>
-                        
-                        <!-- 예시 템플릿 -->
-                        <div class="story-templates">
-                            <h4>💡 이런 식으로 적어보세요</h4>
-                            <div class="template-examples">
-                                <div class="template-card" onclick="loadTemplate('winter_hair')">
-                                    <h5>겨울철 헤어케어</h5>
-                                    <ul>
-                                        <li>겨울에 머리가 너무 건조해져요</li>
-                                        <li>집에서 쉽게 할 수 있는 관리법 알고 싶어요</li>
-                                        <li>비싸지 않은 방법으로요</li>
-                                        <li>직장에서도 간단하게 할 수 있으면 좋겠어요</li>
-                                        <li>주변 친구들도 같은 고민을 해요</li>
-                                    </ul>
-                                </div>
-                                <div class="template-card" onclick="loadTemplate('salon_management')">
-                                    <h5>헤어샵 운영 고민</h5>
-                                    <ul>
-                                        <li>요즘 손님이 많이 줄어들어서 걱정이에요</li>
-                                        <li>SNS 마케팅을 해보고 싶은데 어떻게 시작할지 모르겠어요</li>
-                                        <li>다른 샵들은 어떤 이벤트를 하는지 궁금해요</li>
-                                        <li>단골 고객들을 더 늘리고 싶어요</li>
-                                        <li>작은 샵도 할 수 있는 마케팅이 있을까요?</li>
-                                    </ul>
-                                </div>
-                                <div class="template-card" onclick="loadTemplate('diy_care')">
-                                    <h5>홈케어 DIY</h5>
-                                    <ul>
-                                        <li>헤어팩을 직접 만들어보고 싶어요</li>
-                                        <li>집에 있는 재료로 만들 수 있으면 좋겠어요</li>
-                                        <li>효과는 확실했으면 해요</li>
-                                        <li>시간은 많이 걸리지 않았으면 좋겠고요</li>
-                                        <li>아이들도 같이 사용할 수 있으면 더 좋겠어요</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 3: 생성 버튼 -->
-                    <div class="simple-step">
-                        <div class="step-header">
-                            <span class="step-number">3</span>
-                            <h3>🚀 AI가 완성해드려요!</h3>
-                        </div>
-                        
-                        <div class="generate-section">
-                            <button class="generate-simple-btn" onclick="generateSimpleContent()">
-                                <span class="btn-icon">🤖</span>
-                                <span class="btn-text">AI 블로그 글 생성하기</span>
-                                <span class="btn-description">30초면 완성돼요!</span>
-                            </button>
-                            
-                            <!-- 생성 중 로딩 -->
-                            <div id="simpleGeneratingLoader" class="simple-loader hidden">
-                                <div class="loader-animation">
-                                    <div class="loader-circle"></div>
-                                    <div class="loader-circle"></div>
-                                    <div class="loader-circle"></div>
-                                </div>
-                                <p>AI가 열심히 글을 쓰고 있어요... ✍️</p>
-                                <div class="loader-steps">
-                                    <div class="loader-step active">📝 스토리 분석 중...</div>
-                                    <div class="loader-step">🎯 타겟 맞춤 조정 중...</div>
-                                    <div class="loader-step">✨ 완성된 글 생성 중...</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 결과 미리보기 -->
-                    <div id="simpleResultPreview" class="simple-result hidden">
-                        <div class="result-header">
-                            <h3>🎉 완성된 블로그 글</h3>
-                            <div class="result-actions">
-                                <button class="btn btn-secondary" onclick="editSimpleResult()">✏️ 수정하기</button>
-                                <button class="btn btn-primary" onclick="useSimpleResult()">✅ 이 글 사용하기</button>
-                            </div>
-                        </div>
-                        
-                        <div class="result-content">
-                            <div class="result-meta">
-                                <div class="meta-item">
-                                    <span class="meta-label">제목</span>
-                                    <span id="simpleResultTitle" class="meta-value"></span>
-                                </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">예상 읽기 시간</span>
-                                    <span id="simpleResultReadTime" class="meta-value"></span>
-                                </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">글자 수</span>
-                                    <span id="simpleResultWordCount" class="meta-value"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="result-preview">
-                                <div id="simpleResultContent" class="content-preview"></div>
-                            </div>
-                            
-                            <div class="result-seo">
-                                <h4>🔍 SEO 정보</h4>
-                                <div class="seo-item">
-                                    <span class="seo-label">메타 설명</span>
-                                    <span id="simpleResultMeta" class="seo-value"></span>
-                                </div>
-                                <div class="seo-item">
-                                    <span class="seo-label">키워드</span>
-                                    <div id="simpleResultKeywords" class="keyword-tags"></div>
-                                </div>
-                                <div class="seo-item">
-                                    <span class="seo-label">태그</span>
-                                    <div id="simpleResultTags" class="tag-list"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                
+                <div id="queueContainer">
+                    <!-- 글감 큐 아이템들이 여기에 표시됩니다 -->
+                </div>
+
+                <div class="flex gap-2 mt-2">
+                    <button class="btn btn-success" onclick="showAddContentModal()">➕ 새 글감 추가</button>
+                    <button class="btn btn-warning" onclick="clearCompletedQueue()">🗑️ 완료된 항목 삭제</button>
                 </div>
             </div>
 
@@ -1474,25 +750,16 @@
                 <div class="form-group">
                     <label for="seoTitle" class="form-label">SEO 제목</label>
                     <input type="text" id="seoTitle" class="form-input" placeholder="검색 최적화된 제목">
-                    <div id="seoTitleCounter" class="char-counter">0/60자</div>
-                    <button class="btn btn-secondary mt-1" onclick="generateSEOTitle()">🎯 SEO 제목 생성</button>
                 </div>
 
                 <div class="form-group">
                     <label for="metaDescription" class="form-label">메타 설명</label>
                     <textarea id="metaDescription" class="form-input" rows="3" placeholder="검색 결과에 표시될 설명"></textarea>
-                    <div id="metaDescCounter" class="char-counter">0/150자</div>
-                    <button class="btn btn-secondary mt-1" onclick="generateMetaDescription()">📝 메타 설명 생성</button>
                 </div>
 
                 <div class="form-group">
                     <label for="primaryKeywords" class="form-label">주요 키워드</label>
                     <input type="text" id="primaryKeywords" class="form-input" placeholder="헤어케어, 샴푸, 트리트먼트">
-                    <button class="btn btn-secondary mt-1" onclick="suggestKeywords()">💡 키워드 제안</button>
-                </div>
-
-                <div id="keywordSuggestions" class="mt-2">
-                    <!-- 키워드 제안들이 여기에 표시됩니다 -->
                 </div>
 
                 <div class="flex gap-2 mt-2">
@@ -1511,33 +778,15 @@
                 <div id="generatedImages" class="mt-2">
                     <!-- 생성된 이미지들이 여기에 표시됩니다 -->
                 </div>
-
-                <div class="form-group mt-2">
-                    <label class="form-label">추천 이미지 프롬프트</label>
-                    <div class="flex gap-1" style="flex-wrap: wrap;">
-                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='아름다운 헤어케어 제품들이 정렬된 모습'">제품 진열</button>
-                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='전문 헤어 스타일리스트가 고객을 케어하는 모습'">전문가 케어</button>
-                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='건강하고 윤기나는 머리카락 클로즈업'">건강한 모발</button>
-                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='모던한 헤어살롱 인테리어'">살롱 인테리어</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 미리보기 탭 -->
-            <div id="previewTab" class="tab-content">
-                <div id="previewContainer">
-                    <p class="text-center" style="color: #6b7280; font-style: italic;">미리보기할 내용을 작성해주세요</p>
-                </div>
             </div>
         </div>
 
         <!-- 오른쪽 사이드바 -->
         <div class="sidebar">
-            <!-- AI 연결 상태 (API 키 입력 폼 제거) -->
+            <!-- AI 연결 상태 -->
             <section class="ai-section">
                 <h3>🤖 AI 서비스</h3>
                 
-                <!-- Claude 상태 표시만 -->
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
                     <div>
                         <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
@@ -1546,23 +795,12 @@
                     <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
                 </div>
                 
-                <!-- OpenAI 상태 표시만 -->
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
                     <div>
                         <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
                         <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
                     </div>
                     <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
-                </div>
-                
-                <!-- API 상태 정보 -->
-                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
-                    <div style="font-size: 0.9rem; color: #166534; font-weight: 500; margin-bottom: 0.5rem;">🔑 API 키 상태</div>
-                    <div style="font-size: 0.8rem; color: #15803d;">
-                        • Claude & OpenAI API 키가 안전하게 연결되었습니다<br>
-                        • 즉시 AI 콘텐츠 생성이 가능합니다<br>
-                        • 별도 설정이 필요하지 않습니다
-                    </div>
                 </div>
             </section>
 
@@ -1611,20 +849,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="metric-item">
-                        <span>전문성</span>
-                        <div class="flex items-center gap-1">
-                            <span id="expertiseScore">--</span>
-                            <div class="metric-bar">
-                                <div id="expertiseScoreBar" class="metric-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="qualityRecommendations" class="mt-2">
-                    <!-- 품질 개선 추천사항들이 여기에 표시됩니다 -->
                 </div>
             </section>
 
@@ -1634,126 +858,58 @@
                 <div class="form-group">
                     <label class="flex items-center gap-1">
                         <input type="checkbox" id="automationEnabled" onchange="toggleAutomation()">
-                        자동 포스팅 활성화
+                        자동 처리 활성화
                     </label>
                 </div>
                 
                 <div class="form-group">
-                    <label for="publishFrequency" class="form-label">발행 주기</label>
-                    <select id="publishFrequency" class="form-select">
-                        <option value="daily">매일</option>
-                        <option value="weekly">매주</option>
-                        <option value="biweekly">격주</option>
+                    <label for="processInterval" class="form-label">처리 간격 (분)</label>
+                    <select id="processInterval" class="form-select">
+                        <option value="30">30분</option>
+                        <option value="60">1시간</option>
+                        <option value="120">2시간</option>
+                        <option value="240">4시간</option>
                     </select>
                 </div>
                 
-                <div class="form-group">
-                    <label for="publishTime" class="form-label">발행 시간</label>
-                    <input type="time" id="publishTime" class="form-input" value="09:00">
-                </div>
-                
-                <div class="form-group">
-                    <label for="publishDate" class="form-label">예약 발행</label>
-                    <input type="datetime-local" id="publishDate" class="form-input">
-                    <button class="btn btn-secondary mt-1" onclick="schedulePublish()">📅 예약하기</button>
-                </div>
-            </section>
-
-            <!-- 시스템 상태 -->
-            <section class="status-section mt-2">
-                <h3>📈 시스템 상태</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span>생성된 글</span>
-                        <span id="totalPosts">0</span>
-                    </div>
-                    <div class="status-item">
-                        <span>발행된 글</span>
-                        <span id="publishedPosts">0</span>
-                    </div>
-                    <div class="status-item">
-                        <span>평균 품질</span>
-                        <span id="qualityScore">--</span>
-                    </div>
-                    <div class="status-item">
-                        <span>시스템 상태</span>
-                        <span id="systemStatus">대기중</span>
-                    </div>
-                </div>
+                <button class="btn btn-success" onclick="startAutomation()">🚀 자동화 시작</button>
             </section>
         </div>
     </div>
 
     <!-- 모달들 -->
-    <!-- 미리보기 모달 -->
-    <div id="previewModal" class="modal">
+    <!-- 글감 추가 모달 -->
+    <div id="addContentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">📄 콘텐츠 미리보기</h2>
-                <button class="modal-close" onclick="closeModal('previewModal')">&times;</button>
-            </div>
-            <div id="previewContainer">
-                <!-- 미리보기 내용이 여기에 표시됩니다 -->
-            </div>
-        </div>
-    </div>
-
-    <!-- 주제 추가 모달 -->
-    <div id="topicModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">➕ 새 주제 추가</h2>
-                <button class="modal-close" onclick="closeModal('topicModal')">&times;</button>
+                <h2 class="modal-title">➕ 새 글감 추가</h2>
+                <button class="modal-close" onclick="closeModal('addContentModal')">&times;</button>
             </div>
             <div class="form-group">
-                <label for="newTopicTitle" class="form-label">주제 제목</label>
-                <input type="text" id="newTopicTitle" class="form-input" placeholder="예: 겨울철 헤어케어 방법">
+                <label for="newTargetAudience" class="form-label">타겟 독자</label>
+                <input type="text" id="newTargetAudience" class="form-input" placeholder="예: 30대 직장인 여성들">
             </div>
             <div class="form-group">
-                <label for="newTopicCategory" class="form-label">카테고리</label>
-                <select id="newTopicCategory" class="form-select">
-                    <option value="basic">기초 케어</option>
-                    <option value="styling">스타일링</option>
-                    <option value="treatment">트리트먼트</option>
-                    <option value="trend">트렌드</option>
-                </select>
+                <label for="newTitle" class="form-label">글 제목</label>
+                <input type="text" id="newTitle" class="form-input" placeholder="예: 겨울철 건조한 모발 완벽 관리법">
             </div>
             <div class="form-group">
-                <label for="newTopicKeywords" class="form-label">키워드 (쉼표로 구분)</label>
-                <input type="text" id="newTopicKeywords" class="form-input" placeholder="예: 겨울, 헤어케어, 건조, 보습">
+                <label for="newKeywords" class="form-label">키워드 (쉼표로 구분)</label>
+                <input type="text" id="newKeywords" class="form-input" placeholder="예: 겨울, 건조, 헤어케어, 보습">
             </div>
             <div class="form-group">
-                <label for="newTopicTarget" class="form-label">타겟 독자</label>
-                <select id="newTopicTarget" class="form-select">
-                    <option value="beginner">초보자</option>
-                    <option value="intermediate">일반인</option>
-                    <option value="expert">전문가</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="newTopicDifficulty" class="form-label">난이도</label>
-                <select id="newTopicDifficulty" class="form-select">
-                    <option value="beginner">초급</option>
-                    <option value="intermediate">중급</option>
-                    <option value="expert">고급</option>
+                <label for="newTone" class="form-label">톤 앤 매너</label>
+                <select id="newTone" class="form-select">
+                    <option value="친근하고 실용적">친근하고 실용적</option>
+                    <option value="전문적이면서 비즈니스 중심">전문적이면서 비즈니스 중심</option>
+                    <option value="트렌디하고 캐주얼">트렌디하고 캐주얼</option>
+                    <option value="신뢰감 있고 전문적">신뢰감 있고 전문적</option>
+                    <option value="실무적이고 구체적">실무적이고 구체적</option>
                 </select>
             </div>
             <div class="flex gap-2">
-                <button class="btn btn-primary" onclick="addNewTopic()">추가</button>
-                <button class="btn btn-secondary" onclick="closeModal('topicModal')">취소</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 활동 로그 모달 -->
-    <div id="logModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">📋 활동 로그</h2>
-                <button class="modal-close" onclick="closeModal('logModal')">&times;</button>
-            </div>
-            <div id="activityLog" style="max-height: 400px; overflow-y: auto;">
-                <!-- 활동 로그들이 여기에 표시됩니다 -->
+                <button class="btn btn-primary" onclick="addNewContent()">추가</button>
+                <button class="btn btn-secondary" onclick="closeModal('addContentModal')">취소</button>
             </div>
         </div>
     </div>
@@ -1763,293 +919,89 @@
         <!-- 알림들이 여기에 동적으로 추가됩니다 -->
     </div>
 
-    <!-- 하단 액션 바 -->
-    <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100;">
-        <div class="flex gap-2">
-            <button class="btn btn-secondary" onclick="showModal('logModal')">📋 로그</button>
-            <button class="btn btn-secondary" onclick="location.reload()">🔄 새로고침</button>
-            <button class="btn btn-secondary" onclick="toggleDarkMode()">🌙 다크모드</button>
-        </div>
-    </div>
-
-    <!-- JavaScript 파일들 -->
-    <script type="module" src="js/utils.js"></script>
-    <script type="module" src="js/ai-service.js"></script>
-    <script type="module" src="js/app.js"></script>
-
-    <!-- 키보드 단축키 안내 -->
-    <div style="position: fixed; bottom: 80px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 8px; font-size: 0.8rem; z-index: 100;">
-        <div><strong>💡 키보드 단축키</strong></div>
-        <div>Ctrl+Enter: 콘텐츠 생성</div>
-        <div>Ctrl+S: 임시저장</div>
-        <div>Ctrl+P: 미리보기</div>
-        <div>F1: 도움말</div>
-    </div>
-
-    <!-- 간편 작성 모드 전용 스크립트 -->
+    <!-- JavaScript -->
     <script>
-        // 간편 작성 모드 함수들
-        function setSimpleTarget(target) {
-            document.getElementById('simpleTargetInput').value = target;
-        }
-
-        function addStoryLine() {
-            const container = document.querySelector('.story-input-container');
-            const lines = container.querySelectorAll('.story-line');
-            const currentCount = lines.length;
-            
-            if (currentCount >= 10) {
-                showNotification('warning', '줄 수 제한', '최대 10줄까지만 입력할 수 있습니다.');
-                return;
+        // ===== 전역 변수 =====
+        let contentQueue = [
+            {
+                id: 1,
+                targetAudience: "30대 직장인 여성들",
+                title: "겨울철 건조한 모발 완벽 관리법", 
+                keywords: ["겨울", "건조", "헤어케어", "보습"],
+                tone: "친근하고 실용적",
+                status: "waiting"
+            },
+            {
+                id: 2,
+                targetAudience: "헤어샵 사장님들",
+                title: "고객 재방문율 200% 높이는 상담 노하우",
+                keywords: ["고객상담", "매출증대", "서비스", "재방문"],
+                tone: "전문적이면서 비즈니스 중심",
+                status: "waiting"
+            },
+            {
+                id: 3,
+                targetAudience: "20대 뷰티 관심층", 
+                title: "2024 MZ세대가 열광하는 헤어 트렌드 TOP 10",
+                keywords: ["트렌드", "헤어스타일", "염색", "MZ세대"],
+                tone: "트렌디하고 캐주얼",
+                status: "waiting"
+            },
+            {
+                id: 4,
+                targetAudience: "40대 중년 여성들",
+                title: "40대부터 시작하는 탈모 예방 완벽 가이드", 
+                keywords: ["탈모예방", "볼륨", "안티에이징", "모발영양"],
+                tone: "신뢰감 있고 전문적",
+                status: "waiting"
+            },
+            {
+                id: 5,
+                targetAudience: "펜션 운영자들",
+                title: "펜션 어메니티로 헤어케어 용품 준비하는 법",
+                keywords: ["고객서비스", "어메니티", "헤어케어용품", "펜션관리"], 
+                tone: "실무적이고 구체적",
+                status: "waiting"
             }
-            
-            const newLine = document.createElement('div');
-            newLine.className = 'story-line';
-            newLine.dataset.line = currentCount + 1;
-            
-            newLine.innerHTML = `
-                <span class="line-number">${currentCount + 1}</span>
-                <input type="text" class="story-input" placeholder="추가 내용을 입력하세요">
-            `;
-            
-            const controls = container.querySelector('.story-controls');
-            container.insertBefore(newLine, controls);
-            
-            updateLineCounter();
-        }
+        ];
 
-        function removeStoryLine() {
-            const container = document.querySelector('.story-input-container');
-            const lines = container.querySelectorAll('.story-line');
-            const currentCount = lines.length;
-            
-            if (currentCount <= 1) {
-                showNotification('warning', '줄 수 제한', '최소 1줄은 있어야 합니다.');
-                return;
-            }
-            
-            lines[lines.length - 1].remove();
-            updateLineCounter();
-        }
+        let currentFilter = 'all';
+        let automationInterval = null;
+        let isProcessing = false;
 
-        function updateLineCounter() {
-            const lines = document.querySelectorAll('.story-line');
-            const counter = document.querySelector('.line-counter');
-            if (counter) {
-                counter.textContent = `${lines.length}/10 줄`;
-            }
-        }
+        // API 키 (하드코딩)
+        const API_KEYS = {
+            claude: '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',
+            openai: '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'
+        };
 
-        function loadTemplate(templateType) {
-            const templates = {
-                winter_hair: [
-                    "겨울에 머리가 너무 건조해져요",
-                    "집에서 쉽게 할 수 있는 관리법 알고 싶어요",
-                    "비싸지 않은 방법으로요",
-                    "직장에서도 간단하게 할 수 있으면 좋겠어요",
-                    "주변 친구들도 같은 고민을 해요"
-                ],
-                salon_management: [
-                    "요즘 손님이 많이 줄어들어서 걱정이에요",
-                    "SNS 마케팅을 해보고 싶은데 어떻게 시작할지 모르겠어요",
-                    "다른 샵들은 어떤 이벤트를 하는지 궁금해요",
-                    "단골 고객들을 더 늘리고 싶어요",
-                    "작은 샵도 할 수 있는 마케팅이 있을까요?"
-                ],
-                diy_care: [
-                    "헤어팩을 직접 만들어보고 싶어요",
-                    "집에 있는 재료로 만들 수 있으면 좋겠어요",
-                    "효과는 확실했으면 해요",
-                    "시간은 많이 걸리지 않았으면 좋겠고요",
-                    "아이들도 같이 사용할 수 있으면 더 좋겠어요"
-                ]
-            };
-
-            const template = templates[templateType];
-            if (!template) return;
-
-            const storyInputs = document.querySelectorAll('.story-input');
-            template.forEach((text, index) => {
-                if (storyInputs[index]) {
-                    storyInputs[index].value = text;
-                }
-            });
-
-            showNotification('success', '템플릿 적용', '예시 템플릿이 적용되었습니다.');
-        }
-
-        async function generateSimpleContent() {
-            const targetInput = document.getElementById('simpleTargetInput');
-            const storyInputs = document.querySelectorAll('.story-input');
-            
-            const target = targetInput.value.trim();
-            const storyLines = Array.from(storyInputs)
-                .map(input => input.value.trim())
-                .filter(line => line.length > 0);
-
-            // 입력 검증
-            if (!target) {
-                showNotification('warning', '입력 필요', '타겟 독자를 입력해주세요.');
-                targetInput.focus();
-                return;
-            }
-
-            if (storyLines.length === 0) {
-                showNotification('warning', '입력 필요', '최소 1줄 이상의 스토리를 입력해주세요.');
-                storyInputs[0].focus();
-                return;
-            }
-
-            // 로딩 시작
-            const generateBtn = document.querySelector('.generate-simple-btn');
-            const loader = document.getElementById('simpleGeneratingLoader');
-            const resultPreview = document.getElementById('simpleResultPreview');
-            
-            generateBtn.style.display = 'none';
-            loader.classList.remove('hidden');
-            resultPreview.classList.add('hidden');
-
-            try {
-                // 로딩 단계 애니메이션
-                await animateLoaderSteps();
-
-                // AI 서비스 호출
-                if (window.HairGatorAI) {
-                    const prompt = window.HairGatorUtils.generateSimpleWritingPrompt(target, storyLines);
-                    
-                    const result = await window.HairGatorAI.generateHaircareContent({
-                        title: "간편 작성 모드",
-                        keywords: extractKeywordsFromStory(storyLines),
-                        targetAudience: target,
-                        customPrompt: prompt
-                    });
-
-                    // 결과 표시
-                    displaySimpleResult(result);
-                    
-                } else {
-                    throw new Error('AI 서비스가 초기화되지 않았습니다.');
-                }
-
-            } catch (error) {
-                console.error('간편 작성 생성 실패:', error);
-                showNotification('error', '생성 실패', `AI 콘텐츠 생성에 실패했습니다: ${error.message}`);
-            } finally {
-                // 로딩 종료
-                generateBtn.style.display = 'inline-flex';
-                loader.classList.add('hidden');
-            }
-        }
-
-        async function animateLoaderSteps() {
-            const steps = document.querySelectorAll('.loader-step');
-            
-            for (let i = 0; i < steps.length; i++) {
-                // 이전 단계 비활성화
-                steps.forEach(step => step.classList.remove('active'));
-                
-                // 현재 단계 활성화
-                steps[i].classList.add('active');
-                
-                // 각 단계마다 대기
-                await new Promise(resolve => setTimeout(resolve, 2000));
-            }
-        }
-
-        function extractKeywordsFromStory(storyLines) {
-            // 스토리에서 키워드 추출 (간단한 로직)
-            const allText = storyLines.join(' ');
-            const commonWords = ['헤어케어', '관리', '방법', '팁', '케어', '모발', '머리'];
-            return commonWords.slice(0, 5); // 임시로 기본 키워드 반환
-        }
-
-        function displaySimpleResult(result) {
-            const resultPreview = document.getElementById('simpleResultPreview');
-            
-            // 메타 정보 업데이트
-            document.getElementById('simpleResultTitle').textContent = result.title || '생성된 제목';
-            document.getElementById('simpleResultReadTime').textContent = `${Math.ceil(result.content.length / 500)} 분`;
-            document.getElementById('simpleResultWordCount').textContent = `${result.content.length} 자`;
-            
-            // 본문 미리보기
-            document.getElementById('simpleResultContent').innerHTML = result.content.replace(/\n/g, '<br>');
-            
-            // SEO 정보
-            document.getElementById('simpleResultMeta').textContent = result.metaDescription || '메타 설명 생성됨';
-            
-            // 키워드 태그
-            const keywordContainer = document.getElementById('simpleResultKeywords');
-            keywordContainer.innerHTML = '';
-            (result.targetKeywords || []).forEach(keyword => {
-                const tag = document.createElement('span');
-                tag.className = 'keyword-tag';
-                tag.textContent = keyword;
-                keywordContainer.appendChild(tag);
-            });
-            
-            // 태그 목록
-            const tagContainer = document.getElementById('simpleResultTags');
-            tagContainer.innerHTML = '';
-            (result.tags || []).forEach(tag => {
-                const tagElement = document.createElement('span');
-                tagElement.className = 'tag-item';
-                tagElement.textContent = tag;
-                tagContainer.appendChild(tagElement);
-            });
-            
-            // 결과 표시
-            resultPreview.classList.remove('hidden');
-            
-            // 성공 알림
-            showNotification('success', '생성 완료', '🎉 AI가 블로그 글을 성공적으로 생성했습니다!');
-        }
-
-        function editSimpleResult() {
-            // 글쓰기 탭으로 이동하여 편집
-            const result = {
-                title: document.getElementById('simpleResultTitle').textContent,
-                content: document.getElementById('simpleResultContent').textContent,
-                meta: document.getElementById('simpleResultMeta').textContent
-            };
-            
-            // 글쓰기 탭의 입력 필드에 값 설정
-            document.getElementById('postTitle').value = result.title;
-            document.getElementById('postContent').value = result.content;
-            document.getElementById('metaDescription').value = result.meta;
-            
-            // 글쓰기 탭으로 전환
-            document.querySelector('[data-tab="write"]').click();
-            
-            showNotification('info', '편집 모드', '생성된 글이 편집 모드로 이동되었습니다.');
-        }
-
-        function useSimpleResult() {
-            // 결과를 그대로 사용 (발행 준비)
-            editSimpleResult(); // 먼저 편집 탭으로 이동
-            
-            // 자동으로 품질 검사 실행
-            setTimeout(() => {
-                if (typeof checkQuality === 'function') {
-                    checkQuality();
-                }
-            }, 500);
-            
-            showNotification('success', '글 준비 완료', '🚀 발행할 준비가 되었습니다!');
-        }
-
-        // 탭 전환 기능 (기존 코드와 통합)
+        // ===== 초기화 =====
         document.addEventListener('DOMContentLoaded', function() {
-            // 탭 전환 이벤트 리스너
-            const editorTabs = document.querySelectorAll('.editor-tab');
-            editorTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.dataset.tab;
-                    switchEditorTab(targetTab);
-                });
-            });
+            initializeApp();
         });
 
-        function switchEditorTab(tabName) {
+        function initializeApp() {
+            setupTabs();
+            updateQueueStats();
+            updateNextItemPreview();
+            updateQueueManagerContent();
+            showNotification('success', '시스템 준비 완료', 'HAIRGATOR 시스템이 성공적으로 초기화되었습니다.');
+            
+            // localStorage에서 큐 로드
+            loadQueueFromStorage();
+        }
+
+        // ===== 탭 관리 =====
+        function setupTabs() {
+            document.querySelectorAll('.editor-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+                    switchTab(targetTab);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
             // 모든 탭 비활성화
             document.querySelectorAll('.editor-tab').forEach(tab => {
                 tab.classList.remove('active');
@@ -2060,21 +1012,915 @@
             
             // 선택된 탭 활성화
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}Tab`).classList.add('active');
+        }
+
+        // ===== 글감 큐 관리 =====
+        function updateQueueStats() {
+            const waiting = contentQueue.filter(item => item.status === 'waiting').length;
+            const completed = contentQueue.filter(item => item.status === 'completed').length;
             
-            // 해당 탭 콘텐츠 표시
-            const tabContentMap = {
-                'write': 'writeTab',
-                'simple': 'simpleTab',
-                'seo': 'seoTab',
-                'image': 'imageTab',
-                'preview': 'previewTab'
-            };
+            document.getElementById('queueWaiting').textContent = waiting;
+            document.getElementById('queueCompleted').textContent = completed;
+        }
+
+        function updateNextItemPreview() {
+            const nextItem = contentQueue.find(item => item.status === 'waiting');
+            const preview = document.getElementById('nextItemPreview');
             
-            const contentId = tabContentMap[tabName];
-            if (contentId) {
-                document.getElementById(contentId).classList.add('active');
+            if (nextItem) {
+                preview.innerHTML = `
+                    <div class="queue-item">
+                        <div class="queue-title">${nextItem.title}</div>
+                        <div class="queue-meta">
+                            <span>${nextItem.targetAudience}</span>
+                            <span class="queue-status waiting">대기중</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                preview.innerHTML = '<p class="text-center" style="color: #6b7280; font-style: italic;">큐가 비어있습니다</p>';
             }
         }
+
+        function updateQueueManagerContent() {
+            const container = document.getElementById('queueContainer');
+            const filteredQueue = currentFilter === 'all' 
+                ? contentQueue 
+                : contentQueue.filter(item => item.status === currentFilter);
+
+            if (filteredQueue.length === 0) {
+                container.innerHTML = '<p class="text-center" style="color: #6b7280;">해당하는 글감이 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = filteredQueue.map(item => `
+                <div class="queue-item ${item.status}" data-id="${item.id}">
+                    <div class="queue-title">${item.title}</div>
+                    <div class="queue-meta">
+                        <span>${item.targetAudience}</span>
+                        <div class="flex items-center gap-1">
+                            <span class="queue-status ${item.status}">${getStatusText(item.status)}</span>
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="editQueueItem(${item.id})">수정</button>
+                            <button class="btn btn-error" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="deleteQueueItem(${item.id})">삭제</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">
+                        키워드: ${item.keywords.join(', ')} | 톤: ${item.tone}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'waiting': '대기중',
+                'processing': '작성중',
+                'completed': '완료',
+                'failed': '실패'
+            };
+            return statusMap[status] || status;
+        }
+
+        // ===== 빠른 추가 =====
+        function addQuickContent() {
+            const target = document.getElementById('quickTarget').value.trim();
+            const title = document.getElementById('quickTitle').value.trim();
+            const keywords = document.getElementById('quickKeywords').value.trim();
+            const tone = document.getElementById('quickTone').value;
+
+            if (!target || !title || !keywords) {
+                showNotification('warning', '입력 필요', '모든 필드를 입력해주세요.');
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                targetAudience: target,
+                title: title,
+                keywords: keywords.split(',').map(k => k.trim()),
+                tone: tone,
+                status: 'waiting'
+            };
+
+            contentQueue.push(newItem);
+            saveQueueToStorage();
+            updateQueueStats();
+            updateNextItemPreview();
+            updateQueueManagerContent();
+
+            // 폼 초기화
+            document.getElementById('quickTarget').value = '';
+            document.getElementById('quickTitle').value = '';
+            document.getElementById('quickKeywords').value = '';
+            
+            showNotification('success', '글감 추가', '새 글감이 큐에 추가되었습니다.');
+        }
+
+        // ===== AI 콘텐츠 생성 =====
+        async function processNextInQueue() {
+            if (isProcessing) {
+                showNotification('warning', '처리 중', '이미 다른 작업이 진행 중입니다.');
+                return;
+            }
+
+            const nextItem = contentQueue.find(item => item.status === 'waiting');
+            if (!nextItem) {
+                showNotification('info', '큐 없음', '처리할 글감이 없습니다.');
+                return;
+            }
+
+            try {
+                isProcessing = true;
+                await generateFromQueueItem(nextItem);
+            } catch (error) {
+                console.error('처리 오류:', error);
+                showNotification('error', '처리 실패', error.message);
+            } finally {
+                isProcessing = false;
+            }
+        }
+
+        async function generateFromQueueItem(item) {
+            // 상태 업데이트
+            item.status = 'processing';
+            updateQueueStats();
+            updateNextItemPreview();
+            updateQueueManagerContent();
+            
+            showGenerationProgress();
+            updateProgressText('AI가 콘텐츠를 생성하고 있습니다...');
+
+            try {
+                // Claude API 호출
+                const content = await callClaudeAPI(item);
+                
+                // 결과 적용
+                displayGeneratedContent(content, item);
+                
+                // 상태 완료로 변경
+                item.status = 'completed';
+                item.generatedContent = content;
+                
+                updateQueueStats();
+                updateNextItemPreview();
+                updateQueueManagerContent();
+                saveQueueToStorage();
+                
+                showNotification('success', '생성 완료', `"${item.title}" 글이 생성되었습니다.`);
+                
+                // 글쓰기 탭으로 전환
+                switchTab('write');
+                
+            } catch (error) {
+                item.status = 'failed';
+                updateQueueStats();
+                updateQueueManagerContent();
+                throw error;
+            } finally {
+                hideGenerationProgress();
+            }
+        }
+
+        async function callClaudeAPI(item) {
+            const prompt = `당신은 헤어케어 전문 블로그 작성자입니다. 다음 조건에 맞는 헤어케어 블로그 글을 작성해주세요.
+
+타겟 독자: ${item.targetAudience}
+글 제목: ${item.title}
+키워드: ${item.keywords.join(', ')}
+톤 앤 매너: ${item.tone}
+
+요구사항:
+1. 1500-2500자 분량의 완성된 블로그 글을 작성하세요
+2. 마크다운 형식으로 작성하세요 (제목은 ## 사용)
+3. 실용적이고 구체적인 정보를 포함하세요
+4. 헤어케어 전문 용어를 적절히 사용하되 이해하기 쉽게 설명하세요
+5. 키워드를 자연스럽게 본문에 포함하세요
+6. SEO에 최적화된 구조로 작성하세요
+
+블로그 글만 출력하세요 (다른 설명이나 주석은 포함하지 마세요):`;
+
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': API_KEYS.claude,
+                    'anthropic-version': '2023-06-01'
+                },
+                body: JSON.stringify({
+                    model: 'claude-3-5-sonnet-20241022',
+                    max_tokens: 4000,
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Claude API 오류: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return {
+                title: item.title,
+                content: data.content[0].text,
+                keywords: item.keywords,
+                targetAudience: item.targetAudience,
+                tone: item.tone
+            };
+        }
+
+        function displayGeneratedContent(content, item) {
+            document.getElementById('postTitle').value = content.title;
+            document.getElementById('postContent').value = content.content;
+            document.getElementById('postTags').value = content.keywords.join(', ');
+            document.getElementById('seoTitle').value = content.title;
+            document.getElementById('primaryKeywords').value = content.keywords.join(', ');
+            
+            // 품질 검사 자동 실행
+            checkQuality();
+        }
+
+        // ===== 전체 처리 =====
+        async function processAllQueue() {
+            const waitingItems = contentQueue.filter(item => item.status === 'waiting');
+            
+            if (waitingItems.length === 0) {
+                showNotification('info', '큐 없음', '처리할 글감이 없습니다.');
+                return;
+            }
+
+            if (isProcessing) {
+                showNotification('warning', '처리 중', '이미 다른 작업이 진행 중입니다.');
+                return;
+            }
+
+            if (!confirm(`${waitingItems.length}개의 글감을 모두 처리하시겠습니까?`)) {
+                return;
+            }
+
+            isProcessing = true;
+            showGenerationProgress();
+
+            try {
+                for (let i = 0; i < waitingItems.length; i++) {
+                    const item = waitingItems[i];
+                    updateProgressText(`(${i+1}/${waitingItems.length}) "${item.title}" 처리 중...`);
+                    
+                    try {
+                        await generateFromQueueItem(item);
+                        // 각 요청 사이에 2초 대기 (API 레이트 리밋 방지)
+                        if (i < waitingItems.length - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                        }
+                    } catch (error) {
+                        console.error(`아이템 ${item.id} 처리 실패:`, error);
+                        item.status = 'failed';
+                    }
+                }
+
+                showNotification('success', '전체 처리 완료', `${waitingItems.length}개 글감 처리가 완료되었습니다.`);
+                
+            } catch (error) {
+                showNotification('error', '처리 실패', error.message);
+            } finally {
+                isProcessing = false;
+                hideGenerationProgress();
+                updateQueueStats();
+                updateQueueManagerContent();
+            }
+        }
+
+        // ===== 진행상태 표시 =====
+        function showGenerationProgress() {
+            document.getElementById('generationProgress').classList.remove('hidden');
+            document.querySelector('#generationProgress .btn-loader').style.display = 'inline-block';
+        }
+
+        function hideGenerationProgress() {
+            document.getElementById('generationProgress').classList.add('hidden');
+            document.querySelector('#generationProgress .btn-loader').style.display = 'none';
+        }
+
+        function updateProgressText(text) {
+            document.getElementById('progressText').textContent = text;
+        }
+
+        // ===== 큐 관리 =====
+        function filterQueue(status) {
+            currentFilter = status;
+            updateQueueManagerContent();
+            
+            // 버튼 활성화 상태 업데이트
+            document.querySelectorAll('[onclick^="filterQueue"]').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            });
+            event.target.classList.remove('btn-secondary');
+            event.target.classList.add('btn-primary');
+        }
+
+        function showQueueManager() {
+            switchTab('queue');
+        }
+
+        function showAddContentModal() {
+            document.getElementById('addContentModal').style.display = 'block';
+        }
+
+        function addNewContent() {
+            const target = document.getElementById('newTargetAudience').value.trim();
+            const title = document.getElementById('newTitle').value.trim();
+            const keywords = document.getElementById('newKeywords').value.trim();
+            const tone = document.getElementById('newTone').value;
+
+            if (!target || !title || !keywords) {
+                showNotification('warning', '입력 필요', '모든 필드를 입력해주세요.');
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                targetAudience: target,
+                title: title,
+                keywords: keywords.split(',').map(k => k.trim()),
+                tone: tone,
+                status: 'waiting'
+            };
+
+            contentQueue.push(newItem);
+            saveQueueToStorage();
+            updateQueueStats();
+            updateNextItemPreview();
+            updateQueueManagerContent();
+
+            closeModal('addContentModal');
+            showNotification('success', '글감 추가', '새 글감이 큐에 추가되었습니다.');
+        }
+
+        function deleteQueueItem(id) {
+            if (!confirm('이 글감을 삭제하시겠습니까?')) return;
+            
+            contentQueue = contentQueue.filter(item => item.id !== id);
+            saveQueueToStorage();
+            updateQueueStats();
+            updateNextItemPreview();
+            updateQueueManagerContent();
+            
+            showNotification('success', '삭제 완료', '글감이 삭제되었습니다.');
+        }
+
+        function clearCompletedQueue() {
+            const completed = contentQueue.filter(item => item.status === 'completed');
+            if (completed.length === 0) {
+                showNotification('info', '삭제할 항목 없음', '완료된 글감이 없습니다.');
+                return;
+            }
+
+            if (!confirm(`${completed.length}개의 완료된 글감을 삭제하시겠습니까?`)) return;
+
+            contentQueue = contentQueue.filter(item => item.status !== 'completed');
+            saveQueueToStorage();
+            updateQueueStats();
+            updateNextItemPreview();
+            updateQueueManagerContent();
+            
+            showNotification('success', '삭제 완료', `${completed.length}개 글감이 삭제되었습니다.`);
+        }
+
+        // ===== 품질 검사 =====
+        function checkQuality() {
+            const content = document.getElementById('postContent').value;
+            const title = document.getElementById('postTitle').value;
+            
+            if (!content || !title) {
+                showNotification('warning', '내용 필요', '제목과 본문을 입력해주세요.');
+                return;
+            }
+
+            const quality = analyzeQuality(content, title);
+            displayQualityResults(quality);
+        }
+
+        function analyzeQuality(content, title) {
+            const wordCount = content.length;
+            const sentences = content.split(/[.!?]/).filter(s => s.trim().length > 0);
+            const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            const headings = (content.match(/^#+\s/gm) || []).length;
+            
+            // 점수 계산
+            let wordCountScore = 0;
+            if (wordCount >= 1500 && wordCount <= 2500) wordCountScore = 100;
+            else if (wordCount >= 1000) wordCountScore = 80;
+            else if (wordCount >= 500) wordCountScore = 60;
+            else wordCountScore = 30;
+
+            let readabilityScore = 100;
+            if (sentences.length > 0) {
+                const avgWordsPerSentence = wordCount / sentences.length;
+                if (avgWordsPerSentence > 30) readabilityScore = 60;
+                else if (avgWordsPerSentence > 20) readabilityScore = 80;
+            }
+
+            let structureScore = 0;
+            if (headings >= 3) structureScore += 40;
+            if (paragraphs >= 5) structureScore += 30;
+            if (content.includes('**')) structureScore += 20;
+            if (content.includes('- ')) structureScore += 10;
+
+            const overallScore = Math.round((wordCountScore * 0.3 + readabilityScore * 0.3 + structureScore * 0.4));
+
+            return {
+                overall: overallScore,
+                wordCount: wordCountScore,
+                readability: readabilityScore,
+                structure: structureScore,
+                details: {
+                    wordCount: wordCount,
+                    sentences: sentences.length,
+                    paragraphs: paragraphs.length,
+                    headings: headings
+                }
+            };
+        }
+
+        function displayQualityResults(quality) {
+            const overallElement = document.getElementById('overallQuality');
+            overallElement.textContent = `${quality.overall}점`;
+            
+            if (quality.overall >= 90) {
+                overallElement.className = 'quality-score excellent';
+            } else if (quality.overall >= 80) {
+                overallElement.className = 'quality-score good';
+            } else if (quality.overall >= 70) {
+                overallElement.className = 'quality-score fair';
+            } else {
+                overallElement.className = 'quality-score poor';
+            }
+
+            // 개별 메트릭 업데이트
+            updateMetric('wordCount', quality.details.wordCount, quality.wordCount);
+            updateMetric('readability', `${quality.readability}점`, quality.readability);
+            updateMetric('structureScore', `${quality.structure}점`, quality.structure);
+        }
+
+        function updateMetric(id, value, score) {
+            document.getElementById(id).textContent = value;
+            const bar = document.getElementById(id + 'Bar');
+            bar.style.width = `${score}%`;
+            
+            if (score >= 90) {
+                bar.className = 'metric-fill excellent';
+            } else if (score >= 80) {
+                bar.className = 'metric-fill good';
+            } else if (score >= 70) {
+                bar.className = 'metric-fill fair';
+            } else {
+                bar.className = 'metric-fill poor';
+            }
+        }
+
+        // ===== 저장/로드 =====
+        function saveQueueToStorage() {
+            localStorage.setItem('hairgator_queue', JSON.stringify(contentQueue));
+        }
+
+        function loadQueueFromStorage() {
+            const saved = localStorage.getItem('hairgator_queue');
+            if (saved) {
+                contentQueue = JSON.parse(saved);
+                updateQueueStats();
+                updateNextItemPreview();
+                updateQueueManagerContent();
+            }
+        }
+
+        // ===== 자동화 =====
+        function toggleAutomation() {
+            const enabled = document.getElementById('automationEnabled').checked;
+            if (enabled) {
+                startAutomation();
+            } else {
+                stopAutomation();
+            }
+        }
+
+        function startAutomation() {
+            if (automationInterval) {
+                clearInterval(automationInterval);
+            }
+
+            const interval = parseInt(document.getElementById('processInterval').value) * 60 * 1000;
+            
+            automationInterval = setInterval(async () => {
+                const waitingItems = contentQueue.filter(item => item.status === 'waiting');
+                if (waitingItems.length > 0 && !isProcessing) {
+                    console.log('자동화: 다음 글감 처리 시작');
+                    await processNextInQueue();
+                }
+            }, interval);
+
+            document.getElementById('automationEnabled').checked = true;
+            showNotification('success', '자동화 시작', `${interval/60000}분마다 자동으로 글감을 처리합니다.`);
+        }
+
+        function stopAutomation() {
+            if (automationInterval) {
+                clearInterval(automationInterval);
+                automationInterval = null;
+            }
+            document.getElementById('automationEnabled').checked = false;
+            showNotification('info', '자동화 중지', '자동 처리가 중지되었습니다.');
+        }
+
+        // ===== AI 연결 테스트 =====
+        async function testClaudeConnection() {
+            try {
+                document.getElementById('claudeStatus').innerHTML = '🔄 테스트 중...';
+                
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEYS.claude,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-3-5-sonnet-20241022',
+                        max_tokens: 100,
+                        messages: [{
+                            role: 'user',
+                            content: '안녕하세요'
+                        }]
+                    })
+                });
+
+                if (response.ok) {
+                    document.getElementById('claudeStatus').innerHTML = '✅ 연결됨';
+                    showNotification('success', 'Claude 연결 성공', 'API가 정상적으로 작동합니다.');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                document.getElementById('claudeStatus').innerHTML = '❌ 연결 실패';
+                showNotification('error', 'Claude 연결 실패', error.message);
+            }
+        }
+
+        async function testOpenAIConnection() {
+            try {
+                document.getElementById('openaiStatus').innerHTML = '🔄 테스트 중...';
+                
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEYS.openai}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: [{
+                            role: 'user',
+                            content: '안녕하세요'
+                        }],
+                        max_tokens: 50
+                    })
+                });
+
+                if (response.ok) {
+                    document.getElementById('openaiStatus').innerHTML = '✅ 연결됨';
+                    showNotification('success', 'OpenAI 연결 성공', 'API가 정상적으로 작동합니다.');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                document.getElementById('openaiStatus').innerHTML = '❌ 연결 실패';
+                showNotification('error', 'OpenAI 연결 실패', error.message);
+            }
+        }
+
+        // ===== 이미지 생성 =====
+        async function generateImage() {
+            const prompt = document.getElementById('imagePrompt').value.trim();
+            if (!prompt) {
+                showNotification('warning', '프롬프트 필요', '이미지 설명을 입력해주세요.');
+                return;
+            }
+
+            try {
+                showNotification('info', '이미지 생성 중', 'AI가 이미지를 생성하고 있습니다...');
+                
+                const response = await fetch('https://api.openai.com/v1/images/generations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEYS.openai}`
+                    },
+                    body: JSON.stringify({
+                        prompt: `Professional haircare related image: ${prompt}. High quality, clean background, professional lighting.`,
+                        n: 1,
+                        size: "1024x1024"
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`이미지 생성 실패: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const imageUrl = data.data[0].url;
+                
+                document.getElementById('generatedImages').innerHTML = `
+                    <div style="text-align: center; margin: 1rem 0;">
+                        <img src="${imageUrl}" alt="${prompt}" style="max-width: 100%; border-radius: 8px; box-shadow: var(--shadow);">
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">${prompt}</p>
+                        <button class="btn btn-secondary mt-1" onclick="downloadImage('${imageUrl}')">💾 이미지 저장</button>
+                    </div>
+                `;
+                
+                showNotification('success', '이미지 생성 완료', '이미지가 성공적으로 생성되었습니다.');
+                
+            } catch (error) {
+                showNotification('error', '이미지 생성 실패', error.message);
+            }
+        }
+
+        function downloadImage(url) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `hairgator_image_${Date.now()}.jpg`;
+            link.click();
+        }
+
+        // ===== SEO 기능 =====
+        function checkSEOScore() {
+            const title = document.getElementById('seoTitle').value || document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            const keywords = document.getElementById('primaryKeywords').value;
+            
+            if (!title || !content) {
+                showNotification('warning', '내용 필요', '제목과 본문을 입력해주세요.');
+                return;
+            }
+
+            let score = 0;
+            let feedback = [];
+
+            // 제목 길이 검사
+            if (title.length >= 30 && title.length <= 60) {
+                score += 20;
+                feedback.push('✅ 제목 길이가 적절합니다.');
+            } else {
+                feedback.push('❌ 제목 길이를 30-60자로 조정하세요.');
+            }
+
+            // 키워드 밀도 검사
+            if (keywords) {
+                const keywordList = keywords.split(',').map(k => k.trim());
+                let keywordCount = 0;
+                keywordList.forEach(keyword => {
+                    const regex = new RegExp(keyword, 'gi');
+                    keywordCount += (content.match(regex) || []).length;
+                });
+                
+                const density = (keywordCount / content.length) * 100;
+                if (density >= 1 && density <= 3) {
+                    score += 30;
+                    feedback.push('✅ 키워드 밀도가 적절합니다.');
+                } else {
+                    feedback.push('❌ 키워드 밀도를 1-3%로 조정하세요.');
+                }
+            }
+
+            // 구조 검사
+            const hasHeadings = /^#+\s/gm.test(content);
+            const hasList = /^[-*+]\s/gm.test(content);
+            
+            if (hasHeadings) {
+                score += 25;
+                feedback.push('✅ 제목 구조가 좋습니다.');
+            } else {
+                feedback.push('❌ 소제목(## 또는 ###)을 추가하세요.');
+            }
+
+            if (hasList) {
+                score += 25;
+                feedback.push('✅ 목록 구조가 포함되어 있습니다.');
+            } else {
+                feedback.push('❌ 불릿 포인트나 번호 목록을 추가하세요.');
+            }
+
+            // 결과 표시
+            showNotification('info', `SEO 점수: ${score}/100`, feedback.join('\n'));
+        }
+
+        // ===== 발행 기능 =====
+        function publishContent() {
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            
+            if (!title || !content) {
+                showNotification('warning', '내용 필요', '제목과 본문을 입력해주세요.');
+                return;
+            }
+
+            // 실제 블로그 발행 로직 (여기서는 시뮬레이션)
+            showNotification('success', '발행 완료', '블로그 글이 성공적으로 발행되었습니다.');
+            
+            // 발행 후 폼 초기화
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+            document.getElementById('postTags').value = '';
+        }
+
+        // ===== 모달 관리 =====
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 모달 외부 클릭시 닫기
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // ===== 알림 시스템 =====
+        function showNotification(type, title, message) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <div class="notification-title">${title}</div>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                </div>
+                <div class="notification-body">${message}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // 5초 후 자동 제거
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // ===== 키보드 단축키 =====
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        processNextInQueue();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        saveQueueToStorage();
+                        showNotification('success', '저장 완료', '데이터가 저장되었습니다.');
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        checkQuality();
+                        break;
+                }
+            }
+            
+            if (e.key === 'F1') {
+                e.preventDefault();
+                showNotification('info', '키보드 단축키', 
+                    'Ctrl+Enter: 다음 글 작성\nCtrl+S: 저장\nCtrl+P: 품질 검사\nF1: 도움말');
+            }
+        });
+
+        // ===== 추가 유틸리티 함수들 =====
+        function editQueueItem(id) {
+            const item = contentQueue.find(i => i.id === id);
+            if (!item) return;
+            
+            document.getElementById('newTargetAudience').value = item.targetAudience;
+            document.getElementById('newTitle').value = item.title;
+            document.getElementById('newKeywords').value = item.keywords.join(', ');
+            document.getElementById('newTone').value = item.tone;
+            
+            showAddContentModal();
+            
+            // 수정 모드 표시
+            document.querySelector('#addContentModal .modal-title').textContent = '✏️ 글감 수정';
+            document.querySelector('#addContentModal .btn-primary').textContent = '수정';
+            document.querySelector('#addContentModal .btn-primary').onclick = () => updateQueueItem(id);
+        }
+
+        function updateQueueItem(id) {
+            const target = document.getElementById('newTargetAudience').value.trim();
+            const title = document.getElementById('newTitle').value.trim();
+            const keywords = document.getElementById('newKeywords').value.trim();
+            const tone = document.getElementById('newTone').value;
+
+            if (!target || !title || !keywords) {
+                showNotification('warning', '입력 필요', '모든 필드를 입력해주세요.');
+                return;
+            }
+
+            const item = contentQueue.find(i => i.id === id);
+            if (item) {
+                item.targetAudience = target;
+                item.title = title;
+                item.keywords = keywords.split(',').map(k => k.trim());
+                item.tone = tone;
+                
+                saveQueueToStorage();
+                updateQueueStats();
+                updateNextItemPreview();
+                updateQueueManagerContent();
+            }
+
+            closeModal('addContentModal');
+            showNotification('success', '수정 완료', '글감이 수정되었습니다.');
+            
+            // 모달 초기화
+            document.querySelector('#addContentModal .modal-title').textContent = '➕ 새 글감 추가';
+            document.querySelector('#addContentModal .btn-primary').textContent = '추가';
+            document.querySelector('#addContentModal .btn-primary').onclick = addNewContent;
+        }
+
+        // ===== 데이터 내보내기/가져오기 =====
+        function exportQueue() {
+            const dataStr = JSON.stringify(contentQueue, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `hairgator_queue_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('success', '내보내기 완료', '글감 큐가 파일로 저장되었습니다.');
+        }
+
+        function importQueue() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedQueue = JSON.parse(e.target.result);
+                            if (Array.isArray(importedQueue)) {
+                                contentQueue = importedQueue;
+                                saveQueueToStorage();
+                                updateQueueStats();
+                                updateNextItemPreview();
+                                updateQueueManagerContent();
+                                showNotification('success', '가져오기 완료', '글감 큐가 성공적으로 가져와졌습니다.');
+                            } else {
+                                throw new Error('올바르지 않은 파일 형식입니다.');
+                            }
+                        } catch (error) {
+                            showNotification('error', '가져오기 실패', error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // ===== 성능 모니터링 =====
+        function getSystemStatus() {
+            const total = contentQueue.length;
+            const waiting = contentQueue.filter(item => item.status === 'waiting').length;
+            const completed = contentQueue.filter(item => item.status === 'completed').length;
+            const failed = contentQueue.filter(item => item.status === 'failed').length;
+            
+            return {
+                total,
+                waiting,
+                completed,
+                failed,
+                successRate: total > 0 ? Math.round((completed / (completed + failed)) * 100) || 0 : 0,
+                isProcessing
+            };
+        }
+
+        // 시스템 상태를 주기적으로 업데이트
+        setInterval(() => {
+            const status = getSystemStatus();
+            console.log('시스템 상태:', status);
+        }, 30000); // 30초마다
+
+        // ===== 초기화 완료 메시지 =====
+        console.log('🎉 HAIRGATOR 시스템이 완전히 로드되었습니다!');
+        console.log('📋 기본 글감 5개가 준비되어 있습니다.');
+        console.log('🤖 AI API가 연결되어 즉시 사용 가능합니다.');
+        console.log('⚡ "다음 글 작성" 버튼을 클릭하여 시작하세요!');
     </script>
 </body>
 </html>
