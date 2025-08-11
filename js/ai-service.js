@@ -1,4 +1,20 @@
-// HAIRGATOR - ai-service.js
+// ===== 콘텐츠 생성 프롬프트 (고품질 실무형) =====
+    createContentPrompt(queueItem) {
+        let styleInstructions = '';
+        
+        // 학습된 말투가 있으면 적용
+        if (this.writingStyle.samples.length >= 3) {
+            const style = this.writingStyle.analyzedStyle;
+            styleInstructions = `
+
+**학습된 말투 적용:**
+- 문장 길이: ${style.sentenceLength === 'long' ? '긴 문장 선호 (50자 이상)' : 
+                style.sentenceLength === 'short' ? '짧은 문장 선호 (25자 이하)' : '적당한 길이 문장 (25-50자)'}
+- 톤: ${style.tone === 'friendly' ? '친근하고 따뜻한 톤' : '전문적이고 신뢰감 있는 톤'}
+- 어휘: ${style.vocabulary === 'professional' ? '전문적인 용어 적극 사용' : '쉬운 일상 용어 위주'}
+- 구조: ${style.structure === 'organized' ? '체계적인 소제목과 목록 구조' : '자연스러운 흐름'}
+
+**참// HAIRGATOR - ai-service.js
 // 실제 AI API 호출 (사용자 키 입력 방식) + 말투 학습 시스템
 
 class HairGatorAIService {
@@ -411,9 +427,11 @@ class HairGatorAIService {
         return this.formatResponse(generatedText, queueItem);
     }
     
-    // ===== 콘텐츠 생성 프롬프트 (말투 학습 적용) =====
+    // ===== 콘텐츠 생성 프롬프트 (전문가급 참고자료 기반) =====
     createContentPrompt(queueItem) {
         let styleInstructions = '';
+        let referenceSection = '';
+        let experienceSection = '';
         
         // 학습된 말투가 있으면 적용
         if (this.writingStyle.samples.length >= 3) {
@@ -433,37 +451,118 @@ ${this.writingStyle.samples.slice(-3).map(s => `"${s.content.substring(0, 200)}.
 위 스타일을 참고하여 일관성 있는 톤으로 작성해주세요.`;
         }
         
-        return `당신은 헤어케어 전문 블로그 작성자입니다. 다음 조건에 맞는 전문적인 헤어케어 블로그 글을 작성해주세요.
+        // 참고 자료 섹션
+        if (queueItem.referenceUrls && queueItem.referenceUrls.length > 0) {
+            referenceSection = `
+
+**📚 참고 자료 (반드시 활용):**
+${queueItem.referenceUrls.map((url, index) => `${index + 1}. ${url}`).join('\n')}
+
+**참고자료 활용 지침:**
+- 위 자료들의 핵심 내용을 분석하여 글에 반영하세요
+- 직접 인용할 때는 반드시 출처를 명시하세요: [출처: 사이트명 또는 연구명]
+- 데이터나 통계는 정확한 수치와 함께 출처를 밝히세요
+- 상반된 의견이 있다면 객관적으로 비교 분석하세요
+- 참고자료를 바탕으로 한 추가 인사이트를 제공하세요`;
+        }
+        
+        // 개인 경험 섹션
+        if (queueItem.personalExperience && queueItem.personalExperience.trim()) {
+            experienceSection = `
+
+**💡 작성자의 실제 경험 및 노하우 (핵심 활용):**
+"${queueItem.personalExperience}"
+
+**경험 활용 지침:**
+- 위 실제 경험을 글의 핵심 근거로 활용하세요
+- 구체적인 수치나 사례는 그대로 인용하되, 자연스럽게 녹여내세요
+- "실제로 경험해본 결과..." "저희 샵에서 적용한 방법은..." 등으로 표현
+- 성공/실패 사례는 객관적인 분석과 함께 제시하세요
+- 개인 경험을 일반화할 수 있는 원리나 법칙을 도출하세요`;
+        }
+        
+        // PDF 파일 정보
+        let pdfSection = '';
+        if (queueItem.pdfFiles && queueItem.pdfFiles.length > 0) {
+            pdfSection = `
+
+**📄 첨부된 PDF 참고자료:**
+${queueItem.pdfFiles.map((pdf, index) => `${index + 1}. ${pdf.name} (${this.formatFileSize(pdf.size)})`).join('\n')}
+
+**PDF 활용 안내:**
+- 첨부된 PDF는 논문이나 전문 자료일 가능성이 높습니다
+- 학술적 근거나 연구 결과를 인용할 때 [연구명, 연도] 형식으로 출처 표기
+- 전문 용어나 기술적 내용은 일반인도 이해할 수 있게 설명 추가`;
+        }
+        
+        return `당신은 헤어케어 분야의 최고 전문가이자 경험 많은 디자이너입니다. 단순한 정보 제공이 아닌, 실무에서 바로 적용할 수 있는 깊이 있고 전문적인 헤어케어 콘텐츠를 작성해주세요.
 
 **글 정보:**
 - 타겟 독자: ${queueItem.targetAudience}
 - 글 제목: ${queueItem.title}
 - 핵심 키워드: ${queueItem.keywords.join(', ')}
-- 톤 앤 매너: ${queueItem.tone}${styleInstructions}
+- 톤 앤 매너: ${queueItem.tone}${styleInstructions}${referenceSection}${experienceSection}${pdfSection}
 
-**작성 요구사항:**
-1. **분량**: 1500-2500자의 완성된 블로그 글
-2. **형식**: 마크다운 형식 (## 제목, ### 소제목 사용)
-3. **구조**: 
-   - 흥미로운 도입부 (문제 제기 또는 독자 공감)
-   - 체계적인 본문 (3-5개 소제목으로 구성)
-   - 실행 가능한 결론 및 요약
-4. **내용**: 
-   - 실용적이고 구체적인 헤어케어 정보
-   - 전문 용어를 적절히 사용하되 쉽게 설명
-   - 키워드를 자연스럽게 본문에 포함 (키워드 밀도 2-3%)
-   - 타겟 독자의 고민과 니즈 반영
-   - 단계별 방법이나 팁 제시
-5. **SEO 최적화**: 
-   - 네이버 검색에 최적화된 구조
-   - 불릿 포인트와 번호 목록 활용
-   - 굵은 글씨(**텍스트**)로 중요 포인트 강조
-   - 소제목에 키워드 포함
+**전문가급 작성 요구사항:**
 
-**톤 앤 매너**: ${queueItem.tone}
-**타겟 독자**: "${queueItem.targetAudience}"에게 직접 말하는 듯한 친근하고 전문적인 어조
+1. **깊이와 전문성**
+   - 표면적인 정보가 아닌 업계 인사이더만 아는 노하우 포함
+   - 실제 수치, 데이터, 사례를 구체적으로 제시
+   - 일반적인 상식을 넘어선 전문적 관점 제공
+   - 현장에서 검증된 실무 팁과 주의사항
+
+2. **근거 기반 작성**
+   - 모든 주장은 참고자료나 실제 경험으로 뒷받침
+   - 출처가 있는 정보는 반드시 [출처: XX] 형식으로 명시
+   - 개인 경험은 "실제 경험 결과..." 형태로 자연스럽게 삽입
+   - 통계나 수치는 정확한 출처와 함께 제시
+
+3. **실무 적용성**
+   - 독자가 바로 실행할 수 있는 구체적 방법 제시
+   - 단계별 실행 가이드 포함
+   - 예상되는 문제점과 해결책 미리 제시
+   - 비용, 시간, 효과 등 현실적 고려사항 포함
+
+4. **차별화된 인사이트**
+   - 일반 블로그에서 찾기 어려운 독창적 관점
+   - 업계 트렌드에 대한 심층 분석
+   - 성공/실패 사례의 원인 분석
+   - 미래 전망과 대응 방안
+
+5. **글 구조 (2000-3000자)**
+   - ## 도입부: 문제 제기와 글의 가치 제시
+   - ### 본문 1: 이론적 배경과 전문 지식
+   - ### 본문 2: 실제 경험과 사례 분석  
+   - ### 본문 3: 구체적 실행 방법과 팁
+   - ### 본문 4: 주의사항과 고급 노하우
+   - ## 결론: 핵심 요약과 실행 로드맵
+
+6. **SEO와 가독성**
+   - 키워드는 자연스럽게 본문에 녹여서 포함 (밀도 2-3%)
+   - 중요한 포인트는 **굵은 글씨**로 강조
+   - 번호나 불릿 포인트로 정보 정리
+   - 소제목에는 검색 키워드 포함
+
+7. **신뢰성과 윤리성**
+   - 과장된 표현 금지 (예: "100% 보장", "완벽한 해결")
+   - 개인차가 있을 수 있음을 명시
+   - 전문가 상담이 필요한 경우 안내
+   - 광고성 내용 최소화
+
+**최종 목표**: ${queueItem.targetAudience}가 읽고 나서 "이 정보는 정말 전문적이고 실용적이다. 바로 적용해봐야겠다"라고 생각할 수 있는 수준의 콘텐츠
+
+**중요**: 참고자료와 개인 경험을 최대한 활용하여 일반적인 AI 글과 차별화된 전문성을 보여주세요. 단순 정보 나열이 아닌, 독자에게 진정한 가치를 제공하는 인사이트 중심의 글을 작성해주세요.
 
 헤어케어 전문 블로그 글만 작성해주세요 (다른 설명이나 주석은 제외):`;
+    }
+    
+    // 파일 크기 포맷팅 헬퍼 함수
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
     }
     
     // ===== 응답 포맷팅 =====
