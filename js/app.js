@@ -2670,7 +2670,7 @@ console.log('🦄 HAIRGATOR 메인 애플리케이션 로드 완료');
 console.log('🔧 디버그 도구: window.HAIRGATOR_DEBUG');
 console.log('⚡ 키보드 단축키: Ctrl+S(저장), Ctrl+Enter(생성), Ctrl+P(미리보기)');
 
-export { HairGatorApp };
+// export { HairGatorApp };
 }
 
 // 애플리케이션 인스턴스 생성 및 초기화
@@ -2943,3 +2943,4 @@ console.log('🧪 테스트: window.HAIRGATOR_GLOBAL_DEBUG.testAllFunctions()');
 
 // export 문 주석 처리 (중요!)
 // export { HairGatorApp };
+
