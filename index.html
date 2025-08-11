@@ -99,6 +99,7 @@
                 <button class="editor-tab" data-tab="queue" onclick="switchTab('queue')">📝 글감 큐</button>
                 <button class="editor-tab" data-tab="seo" onclick="switchTab('seo')">🔍 SEO</button>
                 <button class="editor-tab" data-tab="image" onclick="switchTab('image')">🖼️ 이미지</button>
+                <button class="editor-tab" data-tab="settings" onclick="switchTab('settings')">⚙️ 설정</button>
             </div>
 
             <!-- 글쓰기 탭 -->
@@ -219,43 +220,98 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 설정 탭 -->
+            <div id="settingsTab" class="tab-content">
+                <div class="settings-grid">
+                    <!-- API 키 설정 -->
+                    <section class="settings-card">
+                        <h3>🔑 AI API 키 설정</h3>
+                        <p class="settings-description">Claude 또는 OpenAI API 키 중 하나만 입력하면 됩니다.</p>
+                        
+                        <div class="api-key-group">
+                            <label for="claudeApiKey">Claude API 키</label>
+                            <div class="input-group">
+                                <input type="password" id="claudeApiKey" placeholder="sk-ant-api03-..." class="api-key-input">
+                                <button onclick="setAPIKey('claude')" class="set-key-btn">설정</button>
+                            </div>
+                            <div class="api-key-status">
+                                상태: <span id="claudeKeyStatus" class="key-status">미설정</span>
+                            </div>
+                        </div>
+                        
+                        <div class="api-key-group">
+                            <label for="openaiApiKey">OpenAI API 키</label>
+                            <div class="input-group">
+                                <input type="password" id="openaiApiKey" placeholder="sk-proj-..." class="api-key-input">
+                                <button onclick="setAPIKey('openai')" class="set-key-btn">설정</button>
+                            </div>
+                            <div class="api-key-status">
+                                상태: <span id="openaiKeyStatus" class="key-status">미설정</span>
+                            </div>
+                        </div>
+                        
+                        <div class="api-help">
+                            <p><strong>API 키 발급 방법:</strong></p>
+                            <ul>
+                                <li><strong>Claude:</strong> <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</li>
+                                <li><strong>OpenAI:</strong> <a href="https://platform.openai.com" target="_blank">platform.openai.com</a> → API Keys</li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
 
         <!-- 오른쪽 사이드바 -->
         <div class="sidebar">
-            <!-- AI 연결 상태 -->
-            <section class="ai-section">
-                <h3>🤖 AI 서비스</h3>
+            <!-- AI 서비스 설정 -->
+            <section class="card">
+                <h3 class="flex items-center justify-between">
+                    🤖 AI 서비스
+                    <button id="addWritingSampleBtn" class="add-sample-btn" onclick="showWritingSampleModal()" title="말투 학습용 텍스트 추가">
+                        <span class="plus-icon">+</span>
+                    </button>
+                </h3>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
-                    <div>
-                        <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
-                        <div id="claudeStatus" style="font-size: 0.9rem; color: var(--success-color);">🔄 확인 중...</div>
+                <div class="ai-service-item">
+                    <div class="service-info">
+                        <span class="service-name">📝 Claude (글 작성)</span>
+                        <span id="claudeStatus" class="status-badge" style="color: #dc2626;">연결안됨</span>
                     </div>
-                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
-                    <div>
-                        <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
-                        <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">🔄 확인 중...</div>
+                <div class="ai-service-item">
+                    <div class="service-info">
+                        <span class="service-name">🎨 OpenAI (이미지)</span>
+                        <span id="openaiStatus" class="status-badge" style="color: #dc2626;">연결안됨</span>
                     </div>
-                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
+                </div>
+                
+                <!-- 말투 학습 상태 -->
+                <div class="writing-style-info">
+                    <div class="style-header">
+                        <span class="style-title">🎯 말투 학습 상태</span>
+                        <span id="learningSampleCount" class="sample-count">0개 샘플</span>
+                    </div>
+                    <div id="learnedStyleSummary" class="style-summary">
+                        말투 학습을 위해 샘플을 추가해주세요
+                    </div>
                 </div>
             </section>
 
             <!-- 품질 메트릭 -->
             <section class="quality-section mt-2">
                 <h3>📊 콘텐츠 품질</h3>
-                <div id="overallQuality" class="quality-score">--</div>
+                <div id="overallQuality" class="quality-score">76점</div>
                 
                 <div class="quality-metrics">
                     <div class="metric-item">
                         <span>글자 수</span>
                         <div class="flex items-center gap-1">
-                            <span id="wordCount">--</span>
+                            <span id="wordCount">2395</span>
                             <div class="metric-bar">
-                                <div id="wordCountBar" class="metric-fill" style="width: 0%"></div>
+                                <div id="wordCountBar" class="metric-fill" style="width: 85%"></div>
                             </div>
                         </div>
                     </div>
@@ -263,9 +319,9 @@
                     <div class="metric-item">
                         <span>가독성</span>
                         <div class="flex items-center gap-1">
-                            <span id="readability">--</span>
+                            <span id="readability">82</span>
                             <div class="metric-bar">
-                                <div id="readabilityBar" class="metric-fill" style="width: 0%"></div>
+                                <div id="readabilityBar" class="metric-fill" style="width: 82%"></div>
                             </div>
                         </div>
                     </div>
@@ -273,9 +329,9 @@
                     <div class="metric-item">
                         <span>키워드 밀도</span>
                         <div class="flex items-center gap-1">
-                            <span id="keywordDensity">--%</span>
+                            <span id="keywordDensity">2.1%</span>
                             <div class="metric-bar">
-                                <div id="keywordDensityBar" class="metric-fill" style="width: 0%"></div>
+                                <div id="keywordDensityBar" class="metric-fill" style="width: 70%"></div>
                             </div>
                         </div>
                     </div>
@@ -283,9 +339,9 @@
                     <div class="metric-item">
                         <span>구조 점수</span>
                         <div class="flex items-center gap-1">
-                            <span id="structureScore">--</span>
+                            <span id="structureScore">75</span>
                             <div class="metric-bar">
-                                <div id="structureScoreBar" class="metric-fill" style="width: 0%"></div>
+                                <div id="structureScoreBar" class="metric-fill" style="width: 75%"></div>
                             </div>
                         </div>
                     </div>
@@ -379,6 +435,55 @@
         </div>
     </div>
 
+    <!-- 말투 학습 모달 -->
+    <div id="writingSampleModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📚 말투 학습용 텍스트 추가</h3>
+                <button class="modal-close" onclick="closeWritingSampleModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="sampleTitle">글 제목</label>
+                    <input type="text" id="sampleTitle" placeholder="예: 겨울철 헤어케어 가이드">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sampleContent">내용 (내 말투가 담긴 글)</label>
+                    <textarea id="sampleContent" rows="10" placeholder="내가 평소에 쓰는 말투와 스타일이 담긴 글을 붙여넣어주세요. Claude가 이 글을 분석해서 비슷한 톤으로 새로운 글을 작성합니다.
+
+예:
+안녕하세요! 오늘은 겨울철 모발 관리에 대해 이야기해볼게요. 
+추운 날씨 때문에 모발이 건조해져서 고민이신 분들 많으실 텐데요..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sampleCategory">카테고리</label>
+                    <select id="sampleCategory">
+                        <option value="haircare">헤어케어</option>
+                        <option value="beauty">뷰티</option>
+                        <option value="lifestyle">라이프스타일</option>
+                        <option value="general">일반</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button onclick="closeWritingSampleModal()" class="cancel-btn">취소</button>
+                <button onclick="addWritingSample()" class="add-sample-btn">학습 샘플 추가</button>
+            </div>
+            
+            <!-- 기존 학습 샘플 목록 -->
+            <div class="existing-samples">
+                <h4>📋 기존 학습 샘플</h4>
+                <div id="writingSamplesList" class="samples-list">
+                    <!-- 동적으로 추가됨 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 알림 컨테이너 -->
     <div id="notificationContainer" class="notification-container">
         <!-- 알림들이 여기에 동적으로 추가됩니다 -->
@@ -389,6 +494,133 @@
         💡 단축키: Ctrl+Enter (다음 글), Ctrl+S (저장), Ctrl+P (품질검사), F1 (도움말)
     </div>
 
+    <script>
+        // ===== API 키 설정 함수 =====
+        function setAPIKey(service) {
+            const input = document.getElementById(`${service}ApiKey`);
+            const statusSpan = document.getElementById(`${service}KeyStatus`);
+            
+            if (!input.value.trim()) {
+                alert(`${service.toUpperCase()} API 키를 입력해주세요.`);
+                return;
+            }
+            
+            // AI 서비스에 키 설정
+            if (window.AIService) {
+                window.AIService.setAPIKey(service, input.value);
+                statusSpan.textContent = '설정됨';
+                statusSpan.style.color = '#16a34a';
+                
+                // 입력 필드 초기화
+                input.value = '';
+                
+                showNotification('success', 'API 키 설정', `${service.toUpperCase()} API 키가 설정되었습니다.`);
+            }
+        }
+        
+        // ===== 말투 학습 관련 함수 =====
+        function showWritingSampleModal() {
+            document.getElementById('writingSampleModal').style.display = 'flex';
+            
+            // 기존 샘플 목록 업데이트
+            if (window.AIService) {
+                window.AIService.updateWritingSamplesUI();
+                updateLearningSummary();
+            }
+        }
+        
+        function closeWritingSampleModal() {
+            document.getElementById('writingSampleModal').style.display = 'none';
+            
+            // 입력 필드 초기화
+            document.getElementById('sampleTitle').value = '';
+            document.getElementById('sampleContent').value = '';
+            document.getElementById('sampleCategory').value = 'haircare';
+        }
+        
+        function addWritingSample() {
+            const title = document.getElementById('sampleTitle').value.trim();
+            const content = document.getElementById('sampleContent').value.trim();
+            const category = document.getElementById('sampleCategory').value;
+            
+            if (!title || !content) {
+                alert('제목과 내용을 모두 입력해주세요.');
+                return;
+            }
+            
+            if (content.length < 100) {
+                alert('학습 효과를 위해 최소 100자 이상의 내용을 입력해주세요.');
+                return;
+            }
+            
+            // AI 서비스에 샘플 추가
+            if (window.AIService) {
+                const sample = window.AIService.addWritingSample(title, content, category);
+                
+                if (sample) {
+                    showNotification('success', '말투 학습', '새로운 말투 샘플이 추가되었습니다.');
+                    updateLearningSummary();
+                    
+                    // 입력 필드 초기화
+                    document.getElementById('sampleTitle').value = '';
+                    document.getElementById('sampleContent').value = '';
+                }
+            }
+        }
+        
+        function updateLearningSummary() {
+            if (!window.AIService) return;
+            
+            const sampleCount = window.AIService.writingStyle.samples.length;
+            const countElement = document.getElementById('learningSampleCount');
+            const summaryElement = document.getElementById('learnedStyleSummary');
+            
+            if (countElement) {
+                countElement.textContent = `${sampleCount}개 샘플`;
+            }
+            
+            if (summaryElement) {
+                if (sampleCount === 0) {
+                    summaryElement.textContent = '말투 학습을 위해 샘플을 추가해주세요';
+                } else if (sampleCount < 3) {
+                    summaryElement.textContent = `${sampleCount}개 샘플 추가됨. 정확한 분석을 위해 ${3 - sampleCount}개 더 추가해주세요.`;
+                } else {
+                    const style = window.AIService.writingStyle.analyzedStyle;
+                    summaryElement.innerHTML = `
+                        <strong>학습 완료!</strong><br>
+                        • 문장 길이: ${style.sentenceLength === 'long' ? '긴 문장 선호' : style.sentenceLength === 'short' ? '짧은 문장 선호' : '적당한 길이'}<br>
+                        • 톤: ${style.tone === 'friendly' ? '친근한 톤' : '전문적인 톤'}<br>
+                        • 어휘: ${style.vocabulary === 'professional' ? '전문적 어휘' : '일상적 어휘'}
+                    `;
+                }
+            }
+        }
+        
+        // ===== 페이지 로드 시 초기화 =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // 말투 학습 요약 업데이트
+            setTimeout(() => {
+                updateLearningSummary();
+            }, 1000);
+            
+            // API 연결 상태 초기화
+            if (window.AIService) {
+                // 연결 상태 초기화
+                document.getElementById('claudeStatus').textContent = '연결안됨';
+                document.getElementById('claudeStatus').style.color = '#dc2626';
+                document.getElementById('openaiStatus').textContent = '연결안됨';
+                document.getElementById('openaiStatus').style.color = '#dc2626';
+            }
+        });
+        
+        // 모달 외부 클릭시 닫기
+        document.getElementById('writingSampleModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeWritingSampleModal();
+            }
+        });
+    </script>
+    
     <!-- JavaScript 파일들 연결 -->
     <script src="js/utils.js"></script>
     <script src="js/ai-service.js"></script>
