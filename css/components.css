@@ -884,9 +884,37 @@ body {
     width: 90%;
     max-width: 500px;
     max-height: 90vh;
-    overflow: hidden;
+    overflow-y: auto;
     transform: scale(0.95);
     animation: scaleIn 0.2s ease forwards;
+    font-family: var(--font-sans);
+}
+
+.modal-content h3,
+.modal-content h4,
+.modal-content label {
+    font-family: var(--font-sans) !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    font-family: var(--font-sans) !important;
+}
+
+.modal-content .form-input,
+.modal-content .form-textarea,
+.modal-content .form-select {
+    font-family: var(--font-sans) !important;
+    color: var(--text-primary) !important;
+    background: var(--white) !important;
+}
+
+.modal-content .form-input::placeholder,
+.modal-content .form-textarea::placeholder {
+    color: var(--text-muted) !important;
+    font-family: var(--font-sans) !important;
 }
 
 .modal-header {
