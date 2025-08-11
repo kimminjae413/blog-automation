@@ -1,5 +1,5 @@
 // HAIRGATOR - ai-service.js
-// 실제 AI API 호출 (사용자 키 입력 방식)
+// 실제 AI API 호출 (사용자 키 입력 방식) + 말투 학습 시스템
 
 class HairGatorAIService {
     constructor() {
