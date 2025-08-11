@@ -168,6 +168,107 @@ body {
 }
 
 /* AI 설정 패널 */
+.target-audience-config {
+    margin-bottom: 32px;
+    padding: 24px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.target-audience-config h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.target-audience-config h3::before {
+    content: "🎯";
+    font-size: 1.2rem;
+}
+
+.target-selection label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.target-selection select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.target-selection select:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.custom-target {
+    margin-bottom: 16px;
+}
+
+.custom-target input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--text-primary);
+}
+
+.custom-target input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.target-description {
+    padding: 16px 20px;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-color);
+}
+
+.target-description p {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.target-description ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.target-description li {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    padding-left: 4px;
+}
+
+.target-description li:last-child {
+    margin-bottom: 0;
+}
+
 .connection-status {
     padding: 4px 12px;
     border-radius: var(--radius-sm);
@@ -819,7 +920,242 @@ body {
     border-color: var(--error-color);
 }
 
-/* 품질 분석 패널 */
+/* 품질 분석 패널 - 네이버 SEO 강화 */
+.seo-summary {
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-color);
+}
+
+.seo-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.status-icon {
+    font-size: 1.2rem;
+}
+
+.status-text {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.seo-impact {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    font-style: italic;
+}
+
+.seo-recommendations {
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--warning-color);
+}
+
+.seo-recommendations h4 {
+    color: var(--warning-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.seo-recommendations .recommendation {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    position: relative;
+    padding-left: 16px;
+}
+
+.seo-recommendations .recommendation::before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.seo-recommendations .priority-high {
+    border-left: 3px solid var(--error-color);
+    padding-left: 12px;
+    background: rgba(220, 38, 38, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+
+.seo-recommendations .priority-medium {
+    border-left: 3px solid var(--warning-color);
+    padding-left: 12px;
+    background: rgba(217, 119, 6, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+
+.seo-recommendations .priority-low {
+    border-left: 3px solid var(--success-color);
+    padding-left: 12px;
+    background: rgba(5, 150, 105, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+
+/* 메타정보 탭 강화 */
+.char-counter {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 4px;
+}
+
+.char-counter.warning {
+    color: var(--warning-color);
+}
+
+.char-counter.error {
+    color: var(--error-color);
+}
+
+.char-counter.success {
+    color: var(--success-color);
+}
+
+.keyword-suggestions {
+    margin-top: 8px;
+    padding: 8px 0;
+}
+
+.keyword-suggestion {
+    display: inline-block;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-color);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    margin: 2px 4px 2px 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.keyword-suggestion:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.seo-optimization {
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.seo-optimization h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.seo-optimization h4::before {
+    content: "🎯";
+    font-size: 1rem;
+}
+
+.seo-tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.tool-btn {
+    padding: 12px 16px;
+    background: var(--bg-primary);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tool-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.tool-btn:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* 네이버 SEO 특화 스타일 */
+.naver-optimized {
+    background: linear-gradient(135deg, #03c75a 0%, #029846 100%);
+    color: white;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.naver-optimized::before {
+    content: "✅";
+    font-size: 0.9rem;
+}
+
+.keyword-density-optimal {
+    background: rgba(5, 150, 105, 0.1);
+    color: var(--success-color);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.keyword-density-low {
+    background: rgba(217, 119, 6, 0.1);
+    color: var(--warning-color);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.keyword-density-high {
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--error-color);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
 .quality-score {
     padding: 8px 16px;
     border-radius: var(--radius-md);
