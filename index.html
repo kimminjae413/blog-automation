@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAIRGATOR -Blog Auto- | 헤어케어 전문 블로그 자동화 시스템</title>
+    <title>HAIRGATOR Blog Auto | 헤어케어 전문 블로그 자동화 시스템</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,14 +12,16 @@
 <body>
     <!-- 헤더 -->
     <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <h1>💇‍♀️ HAIRGATOR <span class="subtitle">-Blog Auto-</span></h1>
-                <p class="tagline">AI 기반 헤어케어 전문 블로그 자동화 시스템</p>
-            </div>
-            <div class="header-info">
-                <div class="system-status" id="systemStatus">준비됨</div>
-                <div class="current-time" id="currentTime"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>💇‍♀️ HAIRGATOR <span class="subtitle">-Blog Auto-</span></h1>
+                    <p class="tagline">AI 기반 헤어케어 전문 블로그 자동화 시스템</p>
+                </div>
+                <div class="header-info">
+                    <div class="system-status" id="systemStatus">준비됨</div>
+                    <div class="current-time" id="currentTime"></div>
+                </div>
             </div>
         </div>
     </header>
@@ -43,85 +45,109 @@
         <div id="ai-settings" class="tab-content active">
             <div class="panel">
                 <h2>🤖 AI 서비스 설정</h2>
-                <div class="form-section">
-                    <div class="form-group">
-                        <label for="aiProvider">AI 제공자</label>
-                        <select id="aiProvider" class="form-control">
-                            <option value="claude">Claude (Anthropic)</option>
-                            <option value="openai">OpenAI GPT</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="targetAudience">이 시스템이 작성해 주는 타겟은 누구인가요?</label>
-                        <select id="targetAudience" class="form-control">
-                            <optgroup label="🎨 뷰티 전문가">
-                                <option value="hair-designer">헤어 디자이너 & 헤어 관련 종사자</option>
-                                <option value="beauty-expert">뷰티 전문가 & 미용사</option>
-                                <option value="nail-artist">네일 아티스트 & 관련 종사자</option>
-                            </optgroup>
-                            <optgroup label="💪 헬스/피트니스">
-                                <option value="personal-trainer">퍼스널 트레이너 & 피트니스 전문가</option>
-                                <option value="yoga-instructor">요가 강사 & 필라테스 전문가</option>
-                                <option value="nutritionist">영양사 & 다이어트 코치</option>
-                            </optgroup>
-                            <optgroup label="🍳 요리/식음료">
-                                <option value="chef">셰프 & 요리사</option>
-                                <option value="barista">바리스타 & 카페 운영자</option>
-                                <option value="baker">베이커 & 제빵사</option>
-                            </optgroup>
-                            <optgroup label="💻 IT/테크">
-                                <option value="developer">개발자 & IT 전문가</option>
-                                <option value="designer">UI/UX 디자이너</option>
-                                <option value="marketer">디지털 마케터</option>
-                            </optgroup>
-                            <optgroup label="🏢 비즈니스">
-                                <option value="entrepreneur">창업자 & 사업가</option>
-                                <option value="consultant">컨설턴트 & 전문가</option>
-                                <option value="educator">교육자 & 강사</option>
-                            </optgroup>
-                            <optgroup label="🎯 기타 전문분야">
-                                <option value="medical">의료진 & 간호사</option>
-                                <option value="finance">재정 관리사 & 투자 전문가</option>
-                                <option value="real-estate">부동산 전문가</option>
-                                <option value="custom">사용자 정의 타겟</option>
-                            </optgroup>
-                        </select>
-                    </div>
-
-                    <div class="form-group" id="customTargetGroup" style="display: none;">
-                        <label for="customTarget">사용자 정의 타겟</label>
-                        <input type="text" id="customTarget" class="form-control" placeholder="예: 카페 사장들, 펜션 운영자들">
-                    </div>
-                </div>
-
-                <div class="connection-status-panel">
-                    <h3>🔗 연결 상태</h3>
-                    <div class="status-grid">
-                        <div class="status-item">
-                            <span class="status-label">Claude API</span>
-                            <span class="status" id="claudeStatus">연결 안됨</span>
+                <div class="panel-content">
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="aiProvider">AI 제공자</label>
+                            <select id="aiProvider" class="form-control">
+                                <option value="claude">Claude (Anthropic)</option>
+                                <option value="openai">OpenAI GPT</option>
+                            </select>
                         </div>
-                        <div class="status-item">
-                            <span class="status-label">OpenAI API</span>
-                            <span class="status" id="openaiStatus">연결 안됨</span>
+                        
+                        <div class="form-group">
+                            <label for="targetAudience">타겟 독자</label>
+                            <select id="targetAudience" class="form-control">
+                                <optgroup label="🎨 뷰티 전문가">
+                                    <option value="hair-designer">헤어 디자이너 & 헤어 관련 종사자</option>
+                                    <option value="beauty-expert">뷰티 전문가 & 미용사</option>
+                                    <option value="nail-artist">네일 아티스트 & 관련 종사자</option>
+                                </optgroup>
+                                <optgroup label="💪 헬스/피트니스">
+                                    <option value="personal-trainer">퍼스널 트레이너 & 피트니스 전문가</option>
+                                    <option value="yoga-instructor">요가 강사 & 필라테스 전문가</option>
+                                    <option value="nutritionist">영양사 & 다이어트 코치</option>
+                                </optgroup>
+                                <optgroup label="🍳 요리/식음료">
+                                    <option value="chef">셰프 & 요리사</option>
+                                    <option value="barista">바리스타 & 카페 운영자</option>
+                                    <option value="baker">베이커 & 제빵사</option>
+                                </optgroup>
+                                <optgroup label="💻 IT/테크">
+                                    <option value="developer">개발자 & IT 전문가</option>
+                                    <option value="designer">UI/UX 디자이너</option>
+                                    <option value="marketer">디지털 마케터</option>
+                                </optgroup>
+                                <optgroup label="🏢 비즈니스">
+                                    <option value="entrepreneur">창업자 & 사업가</option>
+                                    <option value="consultant">컨설턴트 & 전문가</option>
+                                    <option value="educator">교육자 & 강사</option>
+                                </optgroup>
+                                <optgroup label="🎯 기타 전문분야">
+                                    <option value="medical">의료진 & 간호사</option>
+                                    <option value="finance">재정 관리사 & 투자 전문가</option>
+                                    <option value="real-estate">부동산 전문가</option>
+                                    <option value="custom">사용자 정의 타겟</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-group hidden" id="customTargetGroup">
+                            <label for="customTarget">사용자 정의 타겟</label>
+                            <input type="text" id="customTarget" class="form-control" placeholder="예: 카페 사장들, 펜션 운영자들">
                         </div>
                     </div>
-                    <button id="aiTestBtn" class="btn btn-primary">🧪 AI 연결 테스트</button>
-                </div>
 
-                <div class="api-keys-section">
-                    <h3>🔐 API 키 설정</h3>
-                    <p class="warning-text">⚠️ 보안을 위해 API 키는 서버에서 관리하는 것을 권장합니다</p>
-                    <div class="form-group">
-                        <label for="claudeKey">Claude API 키</label>
-                        <input type="password" id="claudeKey" class="form-control" placeholder="sk-ant-api03-...">
+                    <div class="connection-status-panel">
+                        <h3>🔗 연결 상태</h3>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <span class="status-label">Claude API</span>
+                                <span class="status" id="claudeStatus">연결 안됨</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">OpenAI API</span>
+                                <span class="status" id="openaiStatus">연결 안됨</span>
+                            </div>
+                        </div>
+                        <button id="aiTestBtn" class="btn btn-primary">🧪 AI 연결 테스트</button>
                     </div>
-                    <div class="form-group">
-                        <label for="openaiKey">OpenAI API 키</label>
-                        <input type="password" id="openaiKey" class="form-control" placeholder="sk-...">
+
+                    <div class="api-keys-section">
+                        <h3>🔐 API 키 설정</h3>
+                        <p class="warning-text">⚠️ 보안을 위해 API 키는 서버에서 관리하는 것을 권장합니다</p>
+                        <div class="form-group">
+                            <label for="claudeKey">Claude API 키</label>
+                            <input type="password" id="claudeKey" class="form-control" placeholder="sk-ant-api03-...">
+                        </div>
+                        <div class="form-group">
+                            <label for="openaiKey">OpenAI API 키</label>
+                            <input type="password" id="openaiKey" class="form-control" placeholder="sk-...">
+                        </div>
+                        <button onclick="saveAPIKeys()" class="btn btn-secondary">💾 API 키 저장</button>
                     </div>
-                    <button onclick="saveAPIKeys()" class="btn btn-secondary">💾 API 키 저장</button>
+
+                    <div class="publish-stats">
+                        <h3>📊 발행 통계</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalPublished">0</span>
+                                <span class="stat-label">총 발행</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="successRate">0%</span>
+                                <span class="stat-label">성공률</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="lastPublish">-</span>
+                                <span class="stat-label">최근 발행</span>
+                            </div>
+                        </div>
+                        
+                        <div id="publishHistoryList" class="publish-list">
+                            <p class="status-indicator">발행 이력이 없습니다.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,27 +156,47 @@
         <div id="topic-management" class="tab-content">
             <div class="panel">
                 <h2>📝 주제 관리</h2>
-                
-                <div class="topic-categories">
-                    <h3>전문 분야별 주제</h3>
-                    <div class="categories-grid" id="categoriesGrid">
-                        <!-- 동적으로 생성됨 -->
+                <div class="panel-content">
+                    <div class="topic-categories">
+                        <h3>🎯 헤어케어 전문 카테고리</h3>
+                        <div class="categories-grid">
+                            <div class="category-card" data-category="basic">
+                                <div class="category-icon">🧴</div>
+                                <div class="category-name">헤어케어 기초</div>
+                                <div class="category-count">5개 주제</div>
+                            </div>
+                            <div class="category-card" data-category="styling">
+                                <div class="category-icon">✂️</div>
+                                <div class="category-name">헤어 스타일링</div>
+                                <div class="category-count">7개 주제</div>
+                            </div>
+                            <div class="category-card" data-category="treatment">
+                                <div class="category-icon">💊</div>
+                                <div class="category-name">모발 트리트먼트</div>
+                                <div class="category-count">4개 주제</div>
+                            </div>
+                            <div class="category-card" data-category="trend">
+                                <div class="category-icon">🌟</div>
+                                <div class="category-name">헤어 트렌드</div>
+                                <div class="category-count">6개 주제</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="custom-topics">
-                    <h3>커스텀 주제 추가</h3>
-                    <div class="form-row">
-                        <input type="text" id="customTopicTitle" class="form-control" placeholder="주제 제목">
-                        <input type="text" id="customTopicKeywords" class="form-control" placeholder="키워드 (쉼표로 구분)">
-                        <button onclick="addCustomTopic()" class="btn btn-primary">➕ 추가</button>
+                    <div class="custom-topics">
+                        <h3>➕ 커스텀 주제 추가</h3>
+                        <div class="form-row">
+                            <input type="text" id="customTopicTitle" class="form-control" placeholder="주제 제목">
+                            <input type="text" id="customTopicKeywords" class="form-control" placeholder="키워드 (쉼표로 구분)">
+                            <button onclick="addCustomTopic()" class="btn btn-primary">추가</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="topics-list">
-                    <h3>저장된 주제 목록</h3>
-                    <div id="topicsList" class="topics-container">
-                        <!-- 동적으로 생성됨 -->
+                    <div class="topics-list">
+                        <h3>📋 저장된 주제 목록</h3>
+                        <div id="topicsList" class="topics-container">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -160,83 +206,84 @@
         <div id="content-generation" class="tab-content">
             <div class="panel">
                 <h2>✨ 콘텐츠 생성</h2>
+                <div class="panel-content">
+                    <div class="generation-options">
+                        <div class="form-section">
+                            <h3>🎯 생성 설정</h3>
+                            <div class="form-group">
+                                <label for="selectedTopic">주제 선택</label>
+                                <select id="selectedTopic" class="form-control">
+                                    <option value="">주제를 선택하세요</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contentLength">글 길이</label>
+                                <select id="contentLength" class="form-control">
+                                    <option value="short">짧은 글 (800-1200자)</option>
+                                    <option value="medium" selected>보통 글 (1500-2500자)</option>
+                                    <option value="long">긴 글 (2500-4000자)</option>
+                                </select>
+                            </div>
 
-                <div class="generation-options">
-                    <div class="form-section">
-                        <h3>🎯 생성 설정</h3>
-                        <div class="form-group">
-                            <label for="selectedTopic">주제 선택</label>
-                            <select id="selectedTopic" class="form-control">
-                                <option value="">주제를 선택하세요</option>
-                            </select>
+                            <div class="form-group">
+                                <label for="writingStyle">글쓰기 스타일</label>
+                                <select id="writingStyle" class="form-control">
+                                    <option value="professional">전문적이고 신뢰감 있는</option>
+                                    <option value="friendly" selected>친근하고 접근하기 쉬운</option>
+                                    <option value="authoritative">권위 있고 학술적인</option>
+                                    <option value="conversational">대화형이고 편안한</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="generation-actions">
+                            <button id="generateBtn" class="btn btn-primary btn-large">
+                                🎨 AI 콘텐츠 생성
+                            </button>
+                            <button id="regenerateBtn" class="btn btn-secondary">
+                                🔄 다시 생성
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bulk-generation">
+                        <h3>📦 일괄 생성</h3>
+                        <div class="bulk-options">
+                            <div class="form-group">
+                                <label for="bulkCount">생성 개수</label>
+                                <select id="bulkCount" class="form-control">
+                                    <option value="3">3개</option>
+                                    <option value="5" selected>5개</option>
+                                    <option value="10">10개</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bulkCategory">카테고리</label>
+                                <select id="bulkCategory" class="form-control">
+                                    <option value="all">전체 카테고리</option>
+                                    <option value="basic">헤어케어 기초</option>
+                                    <option value="styling">헤어 스타일링</option>
+                                    <option value="treatment">모발 트리트먼트</option>
+                                    <option value="trend">헤어 트렌드</option>
+                                </select>
+                            </div>
+                            <button id="bulkGenerateBtn" class="btn btn-primary">🚀 일괄 생성</button>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="contentLength">글 길이</label>
-                            <select id="contentLength" class="form-control">
-                                <option value="short">짧은 글 (800-1200자)</option>
-                                <option value="medium" selected>보통 글 (1500-2500자)</option>
-                                <option value="long">긴 글 (2500-4000자)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="writingStyle">글쓰기 스타일</label>
-                            <select id="writingStyle" class="form-control">
-                                <option value="professional">전문적이고 신뢰감 있는</option>
-                                <option value="friendly" selected>친근하고 접근하기 쉬운</option>
-                                <option value="authoritative">권위 있고 학술적인</option>
-                                <option value="conversational">대화형이고 편안한</option>
-                            </select>
+                        <div class="progress-container hidden" id="progressContainer">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressBar"></div>
+                            </div>
+                            <div class="progress-text" id="progressText">0/0 완료</div>
                         </div>
                     </div>
 
-                    <div class="generation-actions">
-                        <button id="generateBtn" class="btn btn-primary btn-large">
-                            🎨 AI 콘텐츠 생성
-                        </button>
-                        <button id="regenerateBtn" class="btn btn-secondary">
-                            🔄 다시 생성
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bulk-generation">
-                    <h3>📦 일괄 생성</h3>
-                    <div class="bulk-options">
-                        <div class="form-group">
-                            <label for="bulkCount">생성 개수</label>
-                            <select id="bulkCount" class="form-control">
-                                <option value="3">3개</option>
-                                <option value="5" selected>5개</option>
-                                <option value="10">10개</option>
-                            </select>
+                    <div class="generation-history">
+                        <h3>📚 최근 생성 이력</h3>
+                        <div id="contentHistory" class="content-history">
+                            <p class="status-indicator">생성된 콘텐츠가 없습니다.</p>
                         </div>
-                        <div class="form-group">
-                            <label for="bulkCategory">카테고리</label>
-                            <select id="bulkCategory" class="form-control">
-                                <option value="all">전체 카테고리</option>
-                                <option value="haircare-basic">헤어케어 기초</option>
-                                <option value="haircare-styling">헤어 스타일링</option>
-                                <option value="haircare-treatment">헤어 트리트먼트</option>
-                                <option value="haircare-trend">헤어 트렌드</option>
-                            </select>
-                        </div>
-                        <button id="bulkGenerateBtn" class="btn btn-primary">🚀 일괄 생성</button>
-                    </div>
-                    
-                    <div class="progress-container" id="progressContainer" style="display: none;">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressBar"></div>
-                        </div>
-                        <div class="progress-text" id="progressText">0/0 완료</div>
-                    </div>
-                </div>
-
-                <div class="generation-history">
-                    <h3>📚 최근 생성 이력</h3>
-                    <div id="contentHistory" class="content-history">
-                        <!-- 동적으로 생성됨 -->
                     </div>
                 </div>
             </div>
@@ -246,33 +293,34 @@
         <div id="editor" class="tab-content">
             <div class="panel">
                 <h2>📄 콘텐츠 에디터</h2>
-                
-                <div class="editor-toolbar">
-                    <button onclick="saveContent()" class="btn btn-secondary">💾 임시저장</button>
-                    <button onclick="loadContent()" class="btn btn-secondary">📂 불러오기</button>
-                    <button onclick="clearEditor()" class="btn btn-outline">🗑️ 초기화</button>
-                    <div class="editor-stats">
-                        <span id="wordCount">0자</span>
-                        <span id="readingTime">예상 읽기 시간: 0분</span>
-                    </div>
-                </div>
-
-                <div class="editor-container">
-                    <div class="form-group">
-                        <label for="contentTitle">제목</label>
-                        <input type="text" id="contentTitle" class="form-control title-input" placeholder="매력적인 제목을 입력하세요">
-                        <div class="title-suggestions" id="titleSuggestions"></div>
+                <div class="panel-content">
+                    <div class="editor-toolbar">
+                        <button onclick="saveContent()" class="btn btn-secondary">💾 임시저장</button>
+                        <button onclick="loadContent()" class="btn btn-secondary">📂 불러오기</button>
+                        <button onclick="clearEditor()" class="btn btn-outline">🗑️ 초기화</button>
+                        <div class="editor-stats">
+                            <span id="wordCount">0자</span>
+                            <span id="readingTime">예상 읽기 시간: 0분</span>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="contentBody">본문</label>
-                        <textarea id="contentBody" class="form-control content-textarea" rows="20" placeholder="여기에 글 내용을 작성하거나 AI 생성 결과가 표시됩니다"></textarea>
-                    </div>
+                    <div class="editor-container">
+                        <div class="form-group">
+                            <label for="contentTitle">제목</label>
+                            <input type="text" id="contentTitle" class="form-control title-input" placeholder="매력적인 제목을 입력하세요">
+                            <div class="title-suggestions" id="titleSuggestions"></div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="keywords">키워드</label>
-                        <input type="text" id="keywords" class="form-control" placeholder="키워드를 쉼표로 구분하여 입력">
-                        <div class="keyword-suggestions" id="keywordSuggestions"></div>
+                        <div class="form-group">
+                            <label for="contentBody">본문</label>
+                            <textarea id="contentBody" class="form-control content-textarea" rows="20" placeholder="여기에 글 내용을 작성하거나 AI 생성 결과가 표시됩니다"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="keywords">키워드</label>
+                            <input type="text" id="keywords" class="form-control" placeholder="키워드를 쉼표로 구분하여 입력">
+                            <div class="keyword-suggestions" id="keywordSuggestions"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -282,81 +330,82 @@
         <div id="quality-analysis" class="tab-content">
             <div class="panel">
                 <h2>🔍 품질 분석</h2>
-
-                <div class="analysis-actions">
-                    <button id="analyzeBtn" class="btn btn-primary">🔍 품질 분석 실행</button>
-                    <button onclick="generateQualityReport()" class="btn btn-secondary">📊 상세 리포트</button>
-                </div>
-
-                <div class="quality-overview">
-                    <h3>📊 품질 점수 개요</h3>
-                    <div class="score-grid">
-                        <div class="score-item">
-                            <div class="score-label">종합 점수</div>
-                            <div class="score-value" id="overallScore">0</div>
-                            <div class="score-bar">
-                                <div class="score-fill" id="overallScoreFill"></div>
-                            </div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">SEO 점수</div>
-                            <div class="score-value" id="seoScore">0</div>
-                            <div class="score-bar">
-                                <div class="score-fill" id="seoScoreFill"></div>
-                            </div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">가독성</div>
-                            <div class="score-value" id="readabilityScore">0</div>
-                            <div class="score-bar">
-                                <div class="score-fill" id="readabilityScoreFill"></div>
-                            </div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">전문성</div>
-                            <div class="score-value" id="expertiseScore">0</div>
-                            <div class="score-bar">
-                                <div class="score-fill" id="expertiseScoreFill"></div>
-                            </div>
-                        </div>
+                <div class="panel-content">
+                    <div class="analysis-actions">
+                        <button id="analyzeBtn" class="btn btn-primary">🔍 품질 분석 실행</button>
+                        <button onclick="generateQualityReport()" class="btn btn-secondary">📊 상세 리포트</button>
                     </div>
-                </div>
 
-                <div class="detailed-analysis">
-                    <h3>🔬 상세 분석</h3>
-                    
-                    <div class="analysis-section">
-                        <h4>📝 기본 지표</h4>
-                        <div class="metrics-grid">
-                            <div class="metric-item">
-                                <span class="metric-label">글자 수</span>
-                                <span class="metric-value" id="charCount">0자</span>
-                                <span class="metric-status" id="charStatus">📊</span>
+                    <div class="quality-overview">
+                        <h3>📊 품질 점수 개요</h3>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <div class="score-label">종합 점수</div>
+                                <div class="score-value" id="overallScore">0</div>
+                                <div class="score-bar">
+                                    <div class="score-fill" id="overallScoreFill"></div>
+                                </div>
                             </div>
-                            <div class="metric-item">
-                                <span class="metric-label">문단 수</span>
-                                <span class="metric-value" id="paragraphCount">0개</span>
-                                <span class="metric-status" id="paragraphStatus">📊</span>
+                            <div class="score-item">
+                                <div class="score-label">SEO 점수</div>
+                                <div class="score-value" id="seoScore">0</div>
+                                <div class="score-bar">
+                                    <div class="score-fill" id="seoScoreFill"></div>
+                                </div>
                             </div>
-                            <div class="metric-item">
-                                <span class="metric-label">소제목 수</span>
-                                <span class="metric-value" id="headingCount">0개</span>
-                                <span class="metric-status" id="headingStatus">📊</span>
+                            <div class="score-item">
+                                <div class="score-label">가독성</div>
+                                <div class="score-value" id="readabilityScore">0</div>
+                                <div class="score-bar">
+                                    <div class="score-fill" id="readabilityScoreFill"></div>
+                                </div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-label">전문성</div>
+                                <div class="score-value" id="expertiseScore">0</div>
+                                <div class="score-bar">
+                                    <div class="score-fill" id="expertiseScoreFill"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="analysis-section">
-                        <h4>🎯 SEO 분석</h4>
-                        <div class="seo-checklist" id="seoChecklist">
-                            <!-- 동적으로 생성됨 -->
+                    <div class="detailed-analysis">
+                        <h3>🔬 상세 분석</h3>
+                        
+                        <div class="analysis-section">
+                            <h4>📝 기본 지표</h4>
+                            <div class="metrics-grid">
+                                <div class="metric-item">
+                                    <span class="metric-label">글자 수</span>
+                                    <span class="metric-value" id="charCount">0자</span>
+                                    <span class="metric-status" id="charStatus">📊</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">문단 수</span>
+                                    <span class="metric-value" id="paragraphCount">0개</span>
+                                    <span class="metric-status" id="paragraphStatus">📊</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">소제목 수</span>
+                                    <span class="metric-value" id="headingCount">0개</span>
+                                    <span class="metric-status" id="headingStatus">📊</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="analysis-section">
-                        <h4>💡 개선 제안</h4>
-                        <div class="suggestions" id="qualitySuggestions">
-                            <!-- 동적으로 생성됨 -->
+                        <div class="analysis-section">
+                            <h4>🎯 SEO 분석</h4>
+                            <div class="seo-checklist" id="seoChecklist">
+                                <p class="status-indicator">분석할 콘텐츠를 입력하세요.</p>
+                            </div>
+                        </div>
+
+                        <div class="analysis-section">
+                            <h4>💡 개선 제안</h4>
+                            <div class="suggestions" id="qualitySuggestions">
+                                <p class="status-indicator">품질 분석을 실행하면 개선 제안이 표시됩니다.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -367,60 +416,61 @@
         <div id="meta-seo" class="tab-content">
             <div class="panel">
                 <h2>🎯 메타정보 & SEO 최적화</h2>
-
-                <div class="seo-tools">
-                    <h3>🛠️ SEO 도구</h3>
-                    <div class="tools-grid">
-                        <button id="generateSeoTitle" class="btn btn-primary">🎯 SEO 제목 생성</button>
-                        <button id="generateSeoDesc" class="btn btn-primary">📝 메타 설명 생성</button>
-                        <button id="suggestKeywords" class="btn btn-primary">🔍 키워드 제안</button>
-                        <button id="checkSeoScore" class="btn btn-primary">📊 SEO 점수 체크</button>
-                    </div>
-                </div>
-
-                <div class="meta-form">
-                    <h3>📋 메타 정보</h3>
-                    
-                    <div class="form-group">
-                        <label for="seoTitle">SEO 제목</label>
-                        <input type="text" id="seoTitle" class="form-control" placeholder="클릭을 유도하는 SEO 최적화 제목">
-                        <div class="char-counter">
-                            <span id="seoTitleCount">0</span>/60자 
-                            <span class="status-indicator" id="seoTitleStatus">📊</span>
+                <div class="panel-content">
+                    <div class="seo-tools">
+                        <h3>🛠️ SEO 도구</h3>
+                        <div class="tools-grid">
+                            <button id="generateSeoTitle" class="btn btn-primary">🎯 SEO 제목 생성</button>
+                            <button id="generateSeoDesc" class="btn btn-primary">📝 메타 설명 생성</button>
+                            <button id="suggestKeywords" class="btn btn-primary">🔍 키워드 제안</button>
+                            <button id="checkSeoScore" class="btn btn-primary">📊 SEO 점수 체크</button>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="metaDescription">메타 설명</label>
-                        <textarea id="metaDescription" class="form-control" rows="3" placeholder="검색 결과에 표시될 설명 (120-150자 권장)"></textarea>
-                        <div class="char-counter">
-                            <span id="metaDescCount">0</span>/150자
-                            <span class="status-indicator" id="metaDescStatus">📊</span>
+                    <div class="meta-form">
+                        <h3>📋 메타 정보</h3>
+                        
+                        <div class="form-group">
+                            <label for="seoTitle">SEO 제목</label>
+                            <input type="text" id="seoTitle" class="form-control" placeholder="클릭을 유도하는 SEO 최적화 제목">
+                            <div class="char-counter">
+                                <span id="seoTitleCount">0</span>/60자 
+                                <span class="status-indicator" id="seoTitleStatus">📊</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="metaDescription">메타 설명</label>
+                            <textarea id="metaDescription" class="form-control" rows="3" placeholder="검색 결과에 표시될 설명 (120-150자 권장)"></textarea>
+                            <div class="char-counter">
+                                <span id="metaDescCount">0</span>/150자
+                                <span class="status-indicator" id="metaDescStatus">📊</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="focusKeyword">포커스 키워드</label>
+                            <input type="text" id="focusKeyword" class="form-control" placeholder="주요 타겟 키워드">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags">태그</label>
+                            <input type="text" id="tags" class="form-control" placeholder="태그를 쉼표로 구분하여 입력">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="focusKeyword">포커스 키워드</label>
-                        <input type="text" id="focusKeyword" class="form-control" placeholder="주요 타겟 키워드">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tags">태그</label>
-                        <input type="text" id="tags" class="form-control" placeholder="태그를 쉼표로 구분하여 입력">
-                    </div>
-                </div>
-
-                <div class="seo-analysis">
-                    <h3>📊 실시간 SEO 분석</h3>
-                    <div class="seo-status" id="seoAnalysisResult">
-                        <div class="seo-indicator">
-                            <span class="indicator-icon">🔍</span>
-                            <span class="indicator-text">분석을 위해 콘텐츠를 입력하고 SEO 점수 체크를 실행하세요</span>
+                    <div class="seo-analysis">
+                        <h3>📊 실시간 SEO 분석</h3>
+                        <div class="seo-status" id="seoAnalysisResult">
+                            <div class="seo-indicator">
+                                <span class="indicator-icon">🔍</span>
+                                <span class="indicator-text">분석을 위해 콘텐츠를 입력하고 SEO 점수 체크를 실행하세요</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="keyword-analysis" id="keywordAnalysis">
-                        <!-- 동적으로 생성됨 -->
+                        
+                        <div class="keyword-analysis" id="keywordAnalysis">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -430,72 +480,69 @@
         <div id="publish-management" class="tab-content">
             <div class="panel">
                 <h2>🚀 발행 관리</h2>
+                <div class="panel-content">
+                    <div class="publish-options">
+                        <h3>📤 발행 설정</h3>
+                        
+                        <div class="platform-selection">
+                            <label>발행 플랫폼</label>
+                            <div class="platform-grid">
+                                <label class="platform-option">
+                                    <input type="checkbox" id="publishNaver" checked>
+                                    <span class="platform-icon">📗</span>
+                                    <span class="platform-name">네이버 블로그</span>
+                                </label>
+                                <label class="platform-option">
+                                    <input type="checkbox" id="publishTistory">
+                                    <span class="platform-icon">📘</span>
+                                    <span class="platform-name">티스토리</span>
+                                </label>
+                                <label class="platform-option">
+                                    <input type="checkbox" id="publishWordPress">
+                                    <span class="platform-icon">📙</span>
+                                    <span class="platform-name">워드프레스</span>
+                                </label>
+                            </div>
+                        </div>
 
-                <div class="publish-options">
-                    <h3>📤 발행 설정</h3>
-                    
-                    <div class="platform-selection">
-                        <label>발행 플랫폼</label>
-                        <div class="platform-grid">
-                            <label class="platform-option">
-                                <input type="checkbox" id="publishNaver" checked>
-                                <span class="platform-icon">📗</span>
-                                <span class="platform-name">네이버 블로그</span>
-                            </label>
-                            <label class="platform-option">
-                                <input type="checkbox" id="publishTistory">
-                                <span class="platform-icon">📘</span>
-                                <span class="platform-name">티스토리</span>
-                            </label>
-                            <label class="platform-option">
-                                <input type="checkbox" id="publishWordPress">
-                                <span class="platform-icon">📙</span>
-                                <span class="platform-name">워드프레스</span>
-                            </label>
+                        <div class="publish-schedule">
+                            <label for="publishTime">발행 시간</label>
+                            <div class="schedule-options">
+                                <label>
+                                    <input type="radio" name="publishSchedule" value="immediate" checked>
+                                    즉시 발행
+                                </label>
+                                <label>
+                                    <input type="radio" name="publishSchedule" value="scheduled">
+                                    예약 발행
+                                </label>
+                            </div>
+                            <input type="datetime-local" id="publishDateTime" class="form-control" disabled>
                         </div>
                     </div>
 
-                    <div class="publish-schedule">
-                        <label for="publishTime">발행 시간</label>
-                        <div class="schedule-options">
-                            <label>
-                                <input type="radio" name="publishSchedule" value="immediate" checked>
-                                즉시 발행
-                            </label>
-                            <label>
-                                <input type="radio" name="publishSchedule" value="scheduled">
-                                예약 발행
-                            </label>
-                        </div>
-                        <input type="datetime-local" id="publishDateTime" class="form-control" disabled>
+                    <div class="publish-actions">
+                        <button id="publishBtn" class="btn btn-primary btn-large">🚀 지금 발행</button>
+                        <button onclick="saveAsDraft()" class="btn btn-secondary">📝 임시저장</button>
+                        <button onclick="schedulePublish()" class="btn btn-outline">⏰ 예약 발행</button>
                     </div>
-                </div>
 
-                <div class="publish-actions">
-                    <button id="publishBtn" class="btn btn-primary btn-large">🚀 지금 발행</button>
-                    <button onclick="saveAsDraft()" class="btn btn-secondary">📝 임시저장</button>
-                    <button onclick="schedulePublish()" class="btn btn-outline">⏰ 예약 발행</button>
-                </div>
-
-                <div class="publish-history">
-                    <h3>📊 발행 이력</h3>
-                    <div class="history-stats">
-                        <div class="stat-item">
-                            <span class="stat-value" id="totalPublished">0</span>
-                            <span class="stat-label">총 발행</span>
+                    <div class="publish-history">
+                        <h3>📊 발행 이력</h3>
+                        <div class="history-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalPosts">0</span>
+                                <span class="stat-label">총 포스트</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="successPosts">0</span>
+                                <span class="stat-label">성공 발행</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="avgQuality">0</span>
+                                <span class="stat-label">평균 품질</span>
+                            </div>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="successRate">0%</span>
-                            <span class="stat-label">성공률</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="lastPublish">-</span>
-                            <span class="stat-label">최근 발행</span>
-                        </div>
-                    </div>
-                    
-                    <div id="publishHistoryList" class="publish-list">
-                        <!-- 동적으로 생성됨 -->
                     </div>
                 </div>
             </div>
@@ -505,88 +552,89 @@
         <div id="automation-scheduler" class="tab-content">
             <div class="panel">
                 <h2>⏰ 자동화 스케줄러</h2>
-
-                <div class="scheduler-settings">
-                    <h3>🎯 자동화 설정</h3>
-                    
-                    <div class="form-group">
-                        <label for="scheduleType">스케줄 타입</label>
-                        <select id="scheduleType" class="form-control">
-                            <option value="daily">매일</option>
-                            <option value="weekly">매주</option>
-                            <option value="monthly">매월</option>
-                            <option value="custom">사용자 정의</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="scheduleTime">실행 시간</label>
-                        <input type="time" id="scheduleTime" class="form-control" value="09:00">
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="scheduleEnabled">
-                            자동화 활성화
-                        </label>
-                    </div>
-
-                    <button id="scheduleBtn" class="btn btn-primary">⚙️ 스케줄 설정</button>
-                </div>
-
-                <div class="automation-rules">
-                    <h3>🤖 자동화 규칙</h3>
-                    
-                    <div class="rule-item">
-                        <label>
-                            <input type="checkbox" id="autoQualityCheck" checked>
-                            품질 검사 자동 실행 (70점 이상만 발행)
-                        </label>
-                    </div>
-                    
-                    <div class="rule-item">
-                        <label>
-                            <input type="checkbox" id="autoSeoOptimization" checked>
-                            SEO 자동 최적화
-                        </label>
-                    </div>
-                    
-                    <div class="rule-item">
-                        <label>
-                            <input type="checkbox" id="autoImageGeneration">
-                            이미지 자동 생성 및 삽입
-                        </label>
-                    </div>
-                    
-                    <div class="rule-item">
-                        <label>
-                            <input type="checkbox" id="autoNotification">
-                            발행 완료 알림
-                        </label>
-                    </div>
-                </div>
-
-                <div class="active-schedules">
-                    <h3>📅 활성 스케줄</h3>
-                    <div id="schedulesList" class="schedules-container">
-                        <!-- 동적으로 생성됨 -->
-                    </div>
-                </div>
-
-                <div class="automation-stats">
-                    <h3>📊 자동화 통계</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-value" id="totalGenerated">0</span>
-                            <span class="stat-label">총 생성</span>
+                <div class="panel-content">
+                    <div class="scheduler-settings">
+                        <h3>🎯 자동화 설정</h3>
+                        
+                        <div class="form-group">
+                            <label for="scheduleType">스케줄 타입</label>
+                            <select id="scheduleType" class="form-control">
+                                <option value="daily">매일</option>
+                                <option value="weekly">매주</option>
+                                <option value="monthly">매월</option>
+                                <option value="custom">사용자 정의</option>
+                            </select>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="autoPublished">0</span>
-                            <span class="stat-label">자동 발행</span>
+
+                        <div class="form-group">
+                            <label for="scheduleTime">실행 시간</label>
+                            <input type="time" id="scheduleTime" class="form-control" value="09:00">
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="averageQuality">0</span>
-                            <span class="stat-label">평균 품질</span>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="scheduleEnabled">
+                                자동화 활성화
+                            </label>
+                        </div>
+
+                        <button id="scheduleBtn" class="btn btn-primary">⚙️ 스케줄 설정</button>
+                    </div>
+
+                    <div class="automation-rules">
+                        <h3>🤖 자동화 규칙</h3>
+                        
+                        <div class="rule-item">
+                            <label>
+                                <input type="checkbox" id="autoQualityCheck" checked>
+                                품질 검사 자동 실행 (70점 이상만 발행)
+                            </label>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <label>
+                                <input type="checkbox" id="autoSeoOptimization" checked>
+                                SEO 자동 최적화
+                            </label>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <label>
+                                <input type="checkbox" id="autoImageGeneration">
+                                이미지 자동 생성 및 삽입
+                            </label>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <label>
+                                <input type="checkbox" id="autoNotification">
+                                발행 완료 알림
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="active-schedules">
+                        <h3>📅 활성 스케줄</h3>
+                        <div id="schedulesList" class="schedules-container">
+                            <p class="status-indicator">활성화된 스케줄이 없습니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="automation-stats">
+                        <h3>📊 자동화 통계</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalGenerated">0</span>
+                                <span class="stat-label">총 생성</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="autoPublished">0</span>
+                                <span class="stat-label">자동 발행</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="averageQuality">0</span>
+                                <span class="stat-label">평균 품질</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -597,30 +645,31 @@
         <div id="preview" class="tab-content">
             <div class="panel">
                 <h2>👁️ 콘텐츠 미리보기</h2>
-                
-                <div class="preview-toolbar">
-                    <button onclick="updatePreview()" class="btn btn-primary">🔄 미리보기 업데이트</button>
-                    <div class="preview-modes">
-                        <button class="preview-mode active" onclick="setPreviewMode('blog')">📝 블로그</button>
-                        <button class="preview-mode" onclick="setPreviewMode('mobile')">📱 모바일</button>
-                        <button class="preview-mode" onclick="setPreviewMode('seo')">🔍 SEO</button>
+                <div class="panel-content">
+                    <div class="preview-toolbar">
+                        <button onclick="updatePreview()" class="btn btn-primary">🔄 미리보기 업데이트</button>
+                        <div class="preview-modes">
+                            <button class="preview-mode active" onclick="setPreviewMode('blog')">📝 블로그</button>
+                            <button class="preview-mode" onclick="setPreviewMode('mobile')">📱 모바일</button>
+                            <button class="preview-mode" onclick="setPreviewMode('seo')">🔍 SEO</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="preview-container">
-                    <div id="blogPreview" class="preview-content">
-                        <div class="preview-header">
-                            <h1 id="previewTitle">제목이 여기에 표시됩니다</h1>
-                            <div class="preview-meta">
-                                <span class="preview-date" id="previewDate"></span>
-                                <span class="preview-category" id="previewCategory"></span>
+                    <div class="preview-container">
+                        <div id="blogPreview" class="preview-content">
+                            <div class="preview-header">
+                                <h1 id="previewTitle">제목이 여기에 표시됩니다</h1>
+                                <div class="preview-meta">
+                                    <span class="preview-date" id="previewDate"></span>
+                                    <span class="preview-category" id="previewCategory"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="preview-body" id="previewBody">
-                            <p>본문 내용이 여기에 표시됩니다...</p>
-                        </div>
-                        <div class="preview-footer">
-                            <div class="preview-tags" id="previewTags"></div>
+                            <div class="preview-body" id="previewBody">
+                                <p>본문 내용이 여기에 표시됩니다...</p>
+                            </div>
+                            <div class="preview-footer">
+                                <div class="preview-tags" id="previewTags"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -639,7 +688,7 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript 로드 -->
     <script src="script.js"></script>
 </body>
 </html>
