@@ -2688,4 +2688,258 @@ if (document.readyState === 'loading') {
 // 전역에서 접근 가능하도록 설정
 window.HairGatorApp = hairgatorApp;
 
+
 console.log('🦄 HAIRGATOR 메인 애플리케이션 로드 완료');
+
+// ============================================================================
+// 전역 함수들 (HTML onclick 핸들러용)
+// app.js 파일 맨 끝에 이 코드를 추가하세요
+// ============================================================================
+
+// 콘텐츠 생성 및 관리
+window.generateContent = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.generateContent();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.checkQuality = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.checkQuality();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.previewContent = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.previewContent();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.publishContent = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.publishContent();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// SEO 도구들
+window.generateSEOTitle = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.generateSEOTitle();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.generateMetaDescription = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.generateMetaDescription();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.suggestKeywords = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.suggestKeywords();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.checkSEOScore = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.checkSEOScore();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// 이미지 생성
+window.generateImage = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.generateImage();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// 주제 관리
+window.showTopicModal = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.showModal('topicModal');
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.addNewTopic = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.addNewTopic();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.selectTopic = function(element) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.selectTopic(element);
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.editTopic = function(element) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.editTopic(element);
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.deleteTopic = function(element) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.deleteTopic(element);
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// 모달 관리
+window.showModal = function(modalId) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.showModal(modalId);
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.closeModal = function(modalId) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.closeModal(modalId);
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// 유틸리티
+window.toggleDarkMode = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.toggleDarkMode();
+    } else {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('hairgator_dark_mode', isDark);
+        console.log('다크모드 토글:', isDark ? '활성화' : '비활성화');
+    }
+};
+
+// 스케줄링 및 자동화
+window.schedulePublish = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.schedulePublish();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.toggleAutomation = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.toggleAutomation();
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// API 연결 테스트 (HTML에서 사용하는 함수들)
+window.testClaudeConnection = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.testAIConnection('claude');
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+window.testOpenAIConnection = function() {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.testAIConnection('openai');
+    } else {
+        console.error('HairGatorApp이 로드되지 않았습니다.');
+    }
+};
+
+// 문자 카운터 업데이트
+window.updateCharCounter = function(inputId, counterId, maxLength) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.updateCharCounter(inputId, counterId, maxLength);
+    } else {
+        // 기본 구현
+        const input = document.getElementById(inputId);
+        const counter = document.getElementById(counterId);
+        
+        if (input && counter) {
+            const length = input.value.length;
+            if (maxLength) {
+                counter.textContent = `${length}/${maxLength}자`;
+                counter.style.color = length > maxLength ? '#ef4444' : '#6b7280';
+            } else {
+                counter.textContent = `${length}자`;
+            }
+        }
+    }
+};
+
+// 활동 로그 (HTML에서 직접 호출)
+window.logActivity = function(action, message, type = 'info') {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.logActivity(action, message, type);
+    } else {
+        console.log(`[${type.toUpperCase()}] ${action}: ${message}`);
+    }
+};
+
+// 알림 표시 (HTML에서 직접 호출)
+window.showNotification = function(type, title, message) {
+    if (window.HairGatorApp) {
+        window.HairGatorApp.showNotification(type, title, message);
+    } else {
+        console.log(`[${type.toUpperCase()}] ${title}: ${message}`);
+        alert(`${title}: ${message}`);
+    }
+};
+
+// 페이지 새로고침 (간단한 경우)
+window.refreshPage = function() {
+    if (confirm('페이지를 새로고침하시겠습니까?')) {
+        location.reload();
+    }
+};
+
+// 개발자 도구용 전역 함수들도 추가
+window.HAIRGATOR_GLOBAL_DEBUG = {
+    app: () => window.HairGatorApp,
+    testAllFunctions: () => {
+        console.log('🧪 전역 함수 테스트 시작...');
+        console.log('✅ generateContent:', typeof window.generateContent);
+        console.log('✅ showTopicModal:', typeof window.showTopicModal);
+        console.log('✅ toggleDarkMode:', typeof window.toggleDarkMode);
+        console.log('✅ showModal:', typeof window.showModal);
+        console.log('✅ closeModal:', typeof window.closeModal);
+        console.log('🎉 모든 전역 함수가 정상 등록되었습니다!');
+    }
+};
+
+// 초기화 완료 로그
+console.log('🔗 전역 함수들이 등록되었습니다.');
+console.log('🎯 onclick 핸들러들이 정상 작동할 예정입니다.');
+console.log('🧪 테스트: window.HAIRGATOR_GLOBAL_DEBUG.testAllFunctions()');
+
+// export 문 주석 처리 (중요!)
+// export { HairGatorApp };
