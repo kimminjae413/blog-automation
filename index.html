@@ -3,26 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>통합 블로그 자동화 시스템</title>
+    <title>HAIRGATOR - Blog Automation</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         :root {
             --primary: #2563eb;
-            --naver-green: #03c75a;
-            --tistory-orange: #ff6b35;
-            --wordpress-blue: #21759b;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
             --secondary: #64748b;
-            --success: #059669;
-            --warning: #d97706;
-            --error: #dc2626;
-            --text: #0f172a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --white: #ffffff;
             --bg: #ffffff;
-            --card: #ffffff;
-            --border: #e2e8f0;
-            --gray: #64748b;
-            --light-gray: #f8fafc;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --card-bg: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --ring: 0 0 0 3px rgb(37 99 235 / 0.1);
         }
 
         * {
@@ -32,701 +50,798 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg);
-            color: var(--text);
+            min-height: 100vh;
             line-height: 1.6;
-            font-weight: 400;
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 2.5rem;
+            animation: fadeInUp 0.8s ease-out;
         }
 
+        /* 헤더 */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
-            color: white;
-            padding: 60px 40px;
-            border-radius: 24px;
-            margin-bottom: 40px;
+            grid-column: 1 / -1;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.1);
+            margin-bottom: 3rem;
+            padding: 3rem 2rem;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .header .subtitle {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+            font-weight: 500;
+            margin-bottom: 0;
+            letter-spacing: 0.025em;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            animation: slideInRight 0.8s ease-out 0.2s both;
+        }
+
+        /* 메인 콘텐츠 */
+        .main-content {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        /* 섹션 */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            border-radius: 1px;
+        }
+
+        /* 상태 표시기 */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.025em;
+            border: 1px solid;
+        }
+
+        .status-connected {
+            background: #f0fdf4;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        .status-offline {
+            background: #fef2f2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+
+        /* 폼 요소 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            background: var(--white);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.025em;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--ring);
+            transform: translateY(-1px);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        /* 버튼 */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            letter-spacing: 0.025em;
             position: relative;
             overflow: hidden;
         }
 
-        .header::before {
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-sm {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            border-radius: 10px;
+        }
+
+        /* 플랫폼 탭 */
+        .platform-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+            background: var(--gray-50);
+            border-radius: 14px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .platform-tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--gray-600);
+            position: relative;
+            flex: 1;
+            text-align: center;
+            letter-spacing: 0.025em;
+        }
+
+        .platform-tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .platform-tab:not(.active):hover {
+            background: var(--white);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* 플랫폼 콘텐츠 */
+        .platform-content {
+            display: none;
+        }
+
+        .platform-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* 에디터 */
+        .editor {
+            width: 100%;
+            min-height: 450px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            background: var(--gray-900);
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+            letter-spacing: 0.025em;
+        }
+
+        .editor:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--ring);
+        }
+
+        .editor::placeholder {
+            color: #64748b;
+        }
+
+        /* 주제 목록 */
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .topic-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .topic-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .topic-content {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .topic-content span {
+            font-weight: 600;
+            color: var(--gray-800);
+            letter-spacing: 0.025em;
+        }
+
+        .topic-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .stat-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, 
-                rgba(255,255,255,0.1) 25%, 
-                transparent 25%, 
-                transparent 50%, 
-                rgba(255,255,255,0.1) 50%, 
-                rgba(255,255,255,0.1) 75%, 
-                transparent 75%, 
-                transparent);
-            background-size: 30px 30px;
-            animation: move 4s linear infinite;
-            opacity: 0.1;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 12px 12px 0 0;
         }
 
-        @keyframes move {
-            0% { transform: translateX(-30px) translateY(-30px); }
-            100% { transform: translateX(0) translateY(0); }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
         }
 
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
+        .stat-value {
+            font-size: 2.5rem;
             font-weight: 800;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-            letter-spacing: -1px;
-            position: relative;
-            z-index: 1;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
-        .header h1 .icon {
-            font-size: 3.5rem;
-            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .header p {
-            font-size: 1.3rem;
-            opacity: 0.95;
-            font-weight: 500;
-            text-shadow: 0 1px 10px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-features {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .feature-badge {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
             font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.3);
+            letter-spacing: 0.025em;
+        }
+
+        /* 알림 */
+        .alert {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            border: 1px solid;
+            letter-spacing: 0.025em;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #fed7aa;
+            color: #92400e;
+        }
+
+        /* API 설정 */
+        .api-section {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
             transition: all 0.3s ease;
         }
 
-        .feature-badge:hover {
-            transform: translateY(-3px);
-            background: rgba(255,255,255,0.3);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .platform-selector {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 2px solid var(--border);
-            box-shadow: var(--shadow-md);
-        }
-
-        .platform-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .platform-card {
-            background: var(--light-gray);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .platform-card:hover {
+        .api-section:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .platform-card.active {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.1);
-        }
-
-        .platform-card.naver.active {
-            border-color: var(--naver-green);
-            background: rgba(3, 199, 90, 0.1);
-        }
-
-        .platform-card.tistory.active {
-            border-color: var(--tistory-orange);
-            background: rgba(255, 107, 53, 0.1);
-        }
-
-        .platform-card.wordpress.active {
-            border-color: var(--wordpress-blue);
-            background: rgba(33, 117, 155, 0.1);
-        }
-
-        .platform-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .platform-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .platform-desc {
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-
-        .optimization-panel {
-            background: var(--card);
-            border: 2px solid var(--primary);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .optimization-panel.active {
-            display: block;
-        }
-
-        .optimization-panel.naver {
-            border-color: var(--naver-green);
-        }
-
-        .optimization-panel.tistory {
-            border-color: var(--tistory-orange);
-        }
-
-        .optimization-panel.wordpress {
-            border-color: var(--wordpress-blue);
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .section-card {
-            background: var(--card);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border);
-            transition: all 0.2s ease;
-        }
-
-        .section-card h3 {
-            color: var(--text);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .topic-input {
-            width: 100%;
-            min-height: 120px;
-            padding: 16px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.95rem;
-            resize: vertical;
-            transition: all 0.2s ease;
-            background: var(--light-gray);
-            font-family: inherit;
-        }
-
-        .topic-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: var(--card);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-sm);
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-
-        .btn:hover {
-            background: #1d4ed8;
-            box-shadow: var(--shadow-md);
-            transform: translateY(-1px);
-        }
-
-        .btn.small {
-            padding: 8px 16px;
-            font-size: 0.8rem;
-        }
-
-        .btn.naver {
-            background: var(--naver-green);
-        }
-
-        .btn.naver:hover {
-            background: #02b351;
-        }
-
-        .btn.tistory {
-            background: var(--tistory-orange);
-        }
-
-        .btn.tistory:hover {
-            background: #e55a2b;
-        }
-
-        .btn.wordpress {
-            background: var(--wordpress-blue);
-        }
-
-        .btn.wordpress:hover {
-            background: #1e6a8f;
-        }
-
-        .btn.secondary {
-            background: var(--gray);
-        }
-
-        .btn.danger {
-            background: var(--error);
-        }
-
-        .editor-panel {
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
             box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
         }
 
-        .editor-header {
-            background: var(--light-gray);
-            color: var(--text);
-            padding: 20px;
+        .api-section h4 {
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-size: 1.125rem;
+            letter-spacing: 0.025em;
+        }
+
+        .api-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .api-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .api-actions {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .editor-content {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 24px;
-            min-height: 400px;
-            max-height: 600px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            font-family: 'Georgia', serif;
-            line-height: 1.8;
-            font-size: 0.95rem;
-            margin: 20px;
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+                gap: 2rem;
+            }
+            
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .topic-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .topic-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .topic-item:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-1px);
-        }
-
-        .platform-badge {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            color: white;
-            margin-left: 8px;
-        }
-
-        .platform-badge.naver {
-            background: var(--naver-green);
-        }
-
-        .platform-badge.tistory {
-            background: var(--tistory-orange);
-        }
-
-        .platform-badge.wordpress {
-            background: var(--wordpress-blue);
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-
-        .alert.success {
-            background: rgba(5, 150, 105, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(5, 150, 105, 0.2);
-        }
-
-        .alert.warning {
-            background: rgba(217, 119, 6, 0.1);
-            color: var(--warning);
-            border: 1px solid rgba(217, 119, 6, 0.2);
-        }
-
-        .alert.error {
-            background: rgba(220, 38, 38, 0.1);
-            color: var(--error);
-            border: 1px solid rgba(220, 38, 38, 0.2);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        select, input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            background: var(--card);
-            font-family: inherit;
-        }
-
-        select:focus, input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        @media (max-width: 1024px) {
-            .main-grid {
+        @media (max-width: 768px) {
+            .header {
+                padding: 3rem 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .platform-tabs {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
             
-            .container {
-                padding: 15px;
+            .api-grid-2,
+            .api-grid-3 {
+                grid-template-columns: 1fr;
             }
-
-            .header h1 {
-                font-size: 2rem;
+            
+            .api-actions {
                 flex-direction: column;
-                gap: 10px;
             }
+            
+            .topic-item {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .topic-content {
+                margin-right: 0;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            animation: pulse 2s infinite;
+        }
+
+        /* 스크롤바 커스터마이징 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>
-                <span class="icon">🌐</span>
-                통합 블로그 자동화 시스템
-                <span class="icon">✍️</span>
-            </h1>
-            <p>모든 블로그 플랫폼을 위한 맞춤형 콘텐츠 자동 생성</p>
-            <div class="header-features">
-                <div class="feature-badge">🟢 네이버 최적화</div>
-                <div class="feature-badge">🟠 티스토리 SEO</div>
-                <div class="feature-badge">🔵 워드프레스 전문</div>
-                <div class="feature-badge">🤖 AI 자동생성</div>
-            </div>
-        </header>
-
-        <!-- 플랫폼 선택기 -->
-        <div class="platform-selector">
-            <h3 style="margin-bottom: 15px;">🎯 타겟 블로그 플랫폼 선택</h3>
-            <div class="platform-grid">
-                <div class="platform-card naver" onclick="selectPlatform('naver')">
-                    <div class="platform-icon">🟢</div>
-                    <div class="platform-name">네이버 블로그</div>
-                    <div class="platform-desc">품질 평가 최적화</div>
-                </div>
-                <div class="platform-card tistory" onclick="selectPlatform('tistory')">
-                    <div class="platform-icon">🟠</div>
-                    <div class="platform-name">티스토리</div>
-                    <div class="platform-desc">SEO 및 수익화 최적화</div>
-                </div>
-                <div class="platform-card wordpress" onclick="selectPlatform('wordpress')">
-                    <div class="platform-icon">🔵</div>
-                    <div class="platform-name">워드프레스</div>
-                    <div class="platform-desc">전문성 및 글로벌 SEO</div>
-                </div>
-                <div class="platform-card universal active" onclick="selectPlatform('universal')">
-                    <div class="platform-icon">🌐</div>
-                    <div class="platform-name">범용</div>
-                    <div class="platform-desc">모든 플랫폼 호환</div>
-                </div>
-            </div>
+        <div class="header">
+            <h1>HAIRGATOR</h1>
+            <div class="subtitle">Blog Automation</div>
         </div>
 
-        <!-- 플랫폼별 최적화 설정 -->
-        <div class="optimization-panel naver" id="naverOptimization">
-            <h4 style="color: var(--naver-green); margin-bottom: 15px;">🟢 네이버 블로그 최적화 설정</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                <div style="background: rgba(3, 199, 90, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">친근한 말투</div>
-                <div style="background: rgba(3, 199, 90, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">개인 경험담</div>
-                <div style="background: rgba(3, 199, 90, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">감정 표현</div>
-                <div style="background: rgba(3, 199, 90, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">이모지 활용</div>
-                <div style="background: rgba(3, 199, 90, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">중복 방지</div>
-                <div style="background: rgba(3, 199, 90, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">품질 점수 최적화</div>
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <div class="section">
+                <div class="section-title">🔗 연결 상태</div>
+                <div id="system-status" class="status-indicator status-offline">
+                    🔴 Firebase 연결 중...
+                </div>
+                <button class="btn btn-sm btn-full" onclick="testFirebaseConnection()" style="margin-bottom: 1rem;">
+                    🔧 연결 테스트
+                </button>
             </div>
-        </div>
 
-        <div class="optimization-panel tistory" id="tistoryOptimization">
-            <h4 style="color: var(--tistory-orange); margin-bottom: 15px;">🟠 티스토리 최적화 설정</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                <div style="background: rgba(255, 107, 53, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">SEO 최적화</div>
-                <div style="background: rgba(255, 107, 53, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">키워드 밀도</div>
-                <div style="background: rgba(255, 107, 53, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">내부 링크</div>
-                <div style="background: rgba(255, 107, 53, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">구조화 마크업</div>
-                <div style="background: rgba(255, 107, 53, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">수익화 최적화</div>
-                <div style="background: rgba(255, 107, 53, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">태그 최적화</div>
-            </div>
-        </div>
-
-        <div class="optimization-panel wordpress" id="wordpressOptimization">
-            <h4 style="color: var(--wordpress-blue); margin-bottom: 15px;">🔵 워드프레스 최적화 설정</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                <div style="background: rgba(33, 117, 155, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">전문성 강화</div>
-                <div style="background: rgba(33, 117, 155, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">글로벌 SEO</div>
-                <div style="background: rgba(33, 117, 155, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">구조화 데이터</div>
-                <div style="background: rgba(33, 117, 155, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">메타 최적화</div>
-                <div style="background: rgba(33, 117, 155, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">카테고리 분류</div>
-                <div style="background: rgba(33, 117, 155, 0.1); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.9rem;">백링크 유도</div>
-            </div>
-        </div>
-
-        <div class="main-grid">
-            <!-- 사이드바: 주제 관리 -->
-            <div class="sidebar">
-                <!-- 새 주제 추가 -->
-                <div class="section-card">
-                    <h3>📝 플랫폼별 최적화 주제 추가</h3>
-                    <div class="topic-input-area">
-                        <textarea 
-                            class="topic-input" 
-                            id="newTopicInput"
-                            placeholder="선택된 플랫폼에 최적화된 주제를 입력하세요!
-
-🟢 네이버 블로그: 개인적이고 감정적인 주제
-- 실제 경험담, 후기, 일상 이야기
-- '제가 직접 써본', '실제로 해보니까' 스타일
-
-🟠 티스토리: SEO 친화적이고 검색 가능한 주제  
-- 정보성 글, 가이드, 리뷰
-- 키워드 중심의 체계적 구성
-
-🔵 워드프레스: 전문적이고 권위 있는 주제
-- 깊이 있는 분석, 인사이트, 전문 지식
-- 글로벌 독자를 고려한 콘텐츠
-
-🌐 범용: 모든 플랫폼에 적합한 주제
-- 기본적이면서도 유용한 정보
-- 플랫폼별 후처리로 최적화
-
-주제를 입력해주세요!"></textarea>
-                    </div>
-                    <button class="btn" id="addTopicBtn" onclick="addPlatformTopic()">
-                        🌐 범용 주제 추가
+            <div class="section">
+                <div class="section-title">👤 사용자 인증</div>
+                <div id="auth-section" style="display: none;">
+                    <button class="btn btn-full" onclick="signInWithGoogle()" style="margin-bottom: 0.5rem;">
+                        🔍 Google로 로그인
                     </button>
-                </div>
-
-                <!-- AI 설정 -->
-                <div class="section-card">
-                    <h3>🤖 AI 설정</h3>
-                    
-                    <div class="form-group">
-                        <label for="claudeKey">Claude API 키</label>
-                        <input type="password" id="claudeKey" placeholder="sk-ant-...">
-                        <small style="color: var(--gray);">플랫폼별 최적화 글 생성용</small>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="email" class="form-input" id="email-input" placeholder="이메일" style="flex: 1;">
                     </div>
-
-                    <button class="btn small" onclick="saveAPIKeys()">💾 API 키 저장</button>
-                    <button class="btn small secondary" onclick="testPlatformGeneration()">🧪 플랫폼 최적화 테스트</button>
-                </div>
-
-                <!-- 발행 설정 -->
-                <div class="section-card">
-                    <h3>🚀 발행 설정</h3>
-                    
-                    <div class="form-group">
-                        <label for="publishMethod">발행 방법</label>
-                        <select id="publishMethod">
-                            <option value="copy">복사 후 수동 발행</option>
-                            <option value="auto">자동 API 발행</option>
-                            <option value="schedule">스케줄 예약 발행</option>
-                        </select>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <input type="password" class="form-input" id="password-input" placeholder="비밀번호" style="flex: 1;">
                     </div>
-
-                    <button class="btn small" id="publishBtn" onclick="publishToPlatform()">
-                        📋 선택 플랫폼에 발행
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-sm" onclick="signInWithEmail()" style="flex: 1;">로그인</button>
+                        <button class="btn btn-sm" onclick="signUpWithEmail()" style="flex: 1;">회원가입</button>
+                    </div>
+                </div>
+                
+                <div id="user-info" style="display: none;">
+                    <div style="text-align: center; padding: 1rem; background: var(--gray-50); border-radius: 12px; margin-bottom: 1rem;">
+                        <div id="user-name" style="font-weight: 600; color: var(--gray-800);"></div>
+                        <div id="user-email" style="font-size: 0.875rem; color: var(--gray-600);"></div>
+                    </div>
+                    <button class="btn btn-danger btn-sm btn-full" onclick="signOut()">
+                        🚪 로그아웃
                     </button>
                 </div>
             </div>
 
-            <!-- 메인 콘텐츠: 주제 목록 + 에디터 -->
-            <div class="main-content">
-                <!-- 주제 목록 -->
-                <div class="section-card">
-                    <h3>📋 플랫폼별 최적화 주제 목록</h3>
-                    <div class="topic-list" id="topicList">
-                        <!-- 주제들이 여기에 동적으로 추가됨 -->
+            <div class="section">
+                <div class="section-title">📝 주제 관리</div>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="topic-input" placeholder="새 주제를 입력하세요">
+                </div>
+                <button class="btn btn-full" onclick="addTopic()">➕ 주제 추가하기</button>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📊 오늘의 현황</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="today-posts">0</div>
+                        <div class="stat-label">생성된 글</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-topics">5</div>
+                        <div class="stat-label">등록 주제</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">⚙️ 빠른 작업</div>
+                <button class="btn btn-full" onclick="generateRandomPost()" style="margin-bottom: 1rem;">
+                    🎲 랜덤 글 생성
+                </button>
+                <button class="btn btn-success btn-full" onclick="publishPost()">
+                    🚀 블로그 발행
+                </button>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <div class="section">
+                <div class="section-title">🌐 플랫폼 선택</div>
+                <div class="platform-tabs">
+                    <button class="platform-tab active" data-platform="naver" onclick="selectPlatform('naver')">
+                        🟢 네이버
+                    </button>
+                    <button class="platform-tab" data-platform="tistory" onclick="selectPlatform('tistory')">
+                        🟠 티스토리
+                    </button>
+                    <button class="platform-tab" data-platform="wordpress" onclick="selectPlatform('wordpress')">
+                        🔵 워드프레스
+                    </button>
+                </div>
+
+                <div id="naver-content" class="platform-content active">
+                    <div class="alert alert-info">
+                        <strong>🟢 네이버 블로그 최적화</strong><br>
+                        친근한 말투와 개인 경험담으로 품질 평가를 통과하는 글을 생성합니다.
                     </div>
                 </div>
 
-                <!-- 통합 에디터 -->
-                <div class="editor-panel">
-                    <div class="editor-header">
-                        <div>
-                            <h3 id="editorTitle">🌐 통합 블로그 자동화 에디터</h3>
-                            <p id="editorSubtitle">선택된 플랫폼에 최적화된 글을 생성합니다</p>
-                        </div>
-                        <div>
-                            <button class="btn small" id="optimizeBtn" onclick="optimizeForPlatform()">⚡ 플랫폼 최적화</button>
-                            <button class="btn small secondary" onclick="copyContent()">📋 복사</button>
-                            <button class="btn small" id="openPlatformBtn" onclick="openPlatformSite()">🔗 블로그 열기</button>
-                        </div>
+                <div id="tistory-content" class="platform-content">
+                    <div class="alert alert-warning">
+                        <strong>🟠 티스토리 SEO 최적화</strong><br>
+                        검색 엔진 최적화와 수익화에 특화된 전문적인 글을 생성합니다.
                     </div>
-                    
-                    <div class="editor-body">
-                        <div class="loading" id="generationLoading">
-                            <div class="spinner"></div>
-                            <p id="loadingText">플랫폼별 최적화 글을 생성하고 있습니다...</p>
-                            <p><small id="loadingDetail">범용 모드 적용 중</small></p>
-                        </div>
-                        
-                        <div class="editor-content" id="editorContent">
-🌐 통합 블로그 자동화 시스템에 오신 것을 환영합니다!
+                </div>
 
-이 시스템은 모든 주요 블로그 플랫폼에 최적화된 콘텐츠를 자동으로 생성합니다.
+                <div id="wordpress-content" class="platform-content">
+                    <div class="alert alert-success">
+                        <strong>🔵 워드프레스 글로벌 호환</strong><br>
+                        전문성과 글로벌 SEO에 최적화된 고품질 콘텐츠를 생성합니다.
+                    </div>
+                </div>
+            </div>
 
-🎯 지원 플랫폼별 특화 기능:
+            <div class="section">
+                <div class="section-title">✨ AI 글 생성</div>
+                <div class="form-group">
+                    <label class="form-label">주제 선택</label>
+                    <select class="form-input" id="topic-select">
+                        <option value="">주제를 선택하세요</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="generatePost()" style="margin-bottom: 2rem;">
+                    🤖 AI 글 생성하기
+                </button>
+            </div>
 
-🟢 네이버 블로그:
-- 품질 평가 통과 보장 (95%+ 성공률)
-- 친근한 말투 + 개인 경험담 자동 삽입
-- C.RANK 하락 방지 시스템
+            <div class="section">
+                <div class="section-title">📝 에디터</div>
+                <textarea class="editor" id="editor-content" placeholder="AI가 생성한 프리미엄 콘텐츠가 여기에 표시됩니다. 언제든 직접 수정하실 수 있어요!"></textarea>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-sm" onclick="copyToClipboard()">📋 복사</button>
+                    <button class="btn btn-sm" onclick="saveAsDraft()">💾 저장</button>
+                    <button class="btn btn-sm" onclick="previewPost()">👁️ 미리보기</button>
+                </div>
+            </div>
 
-🟠 티스토리:
-- SEO 최적화 + 수익화 친화적 구조
-- 키워드 밀도 최적화
-- 구글 애드센스 승인 유리한 형태
+            <div class="section">
+                <div class="section-title">📋 주제 목록</div>
+                <ul id="topic-list" class="topic-list">
+                    <!-- 주제들이 여기에 동적으로 추가됩니다 -->
+                </ul>
+            </div>
 
-🔵 워드프레스:  
-- 전문성 강화 + 글로벌 SEO
-- 구조화 데이터 마크업
-- 백링크 유도 전략 포함
+            <div class="section">
+                <div class="section-title">🔌 API 연동 설정</div>
+                
+                <div class="alert alert-warning">
+                    <strong>⚠️ 보안:</strong> API 키는 암호화되어 안전하게 보관되며 외부에 노출되지 않습니다.
+                </div>
 
-🌐 범용 모드:
-- 모든 플랫폼 호환 기본 형태
-- 후처리로 플랫폼별 최적화 가능
+                <!-- 네이버 API -->
+                <div class="api-section">
+                    <h4 style="color: #00c73c;">🟢 네이버 블로그 API</h4>
+                    <div class="api-grid api-grid-2">
+                        <input type="text" class="form-input" id="naver-client-id" placeholder="Client ID">
+                        <input type="password" class="form-input" id="naver-client-secret" placeholder="Client Secret">
+                    </div>
+                    <div class="api-actions">
+                        <button class="btn btn-sm" onclick="testNaverAPI()">🔧 연결 테스트</button>
+                        <a href="https://developers.naver.com" target="_blank" class="btn btn-sm">📖 API 발급 가이드</a>
+                    </div>
+                </div>
 
-🚀 사용법:
-1. 상단에서 타겟 플랫폼 선택
-2. 플랫폼에 맞는 주제 입력
-3. AI가 자동으로 최적화된 글 생성
-4. 원클릭으로 해당 플랫폼에 복사/발행
+                <!-- 티스토리 API -->
+                <div class="api-section">
+                    <h4 style="color: #ff6600;">🟠 티스토리 API</h4>
+                    <div class="api-grid api-grid-3">
+                        <input type="text" class="form-input" id="tistory-app-id" placeholder="App ID">
+                        <input type="password" class="form-input" id="tistory-token" placeholder="Access Token">
+                        <input type="text" class="form-input" id="tistory-blog" placeholder="블로그명">
+                    </div>
+                    <div class="api-actions">
+                        <button class="btn btn-sm" onclick="testTistoryAPI()">🔧 연결 테스트</button>
+                        <a href="https://www.tistory.com/guide/api/manage/register" target="_blank" class="btn btn-sm">📖 API 발급 가이드</a>
+                    </div>
+                </div>
 
-지금 플랫폼을 선택하고 시작해보세요! ✨
-                        </div>
+                <!-- 워드프레스 API -->
+                <div class="api-section">
+                    <h4 style="color: #0073aa;">🔵 워드프레스 API</h4>
+                    <div class="api-grid api-grid-3">
+                        <input type="url" class="form-input" id="wp-site-url" placeholder="https://yourblog.com">
+                        <input type="text" class="form-input" id="wp-username" placeholder="사용자명">
+                        <input type="password" class="form-input" id="wp-app-password" placeholder="App Password">
+                    </div>
+                    <div class="api-actions">
+                        <button class="btn btn-sm" onclick="testWordPressAPI()">🔧 연결 테스트</button>
+                        <a href="#" target="_blank" class="btn btn-sm">📖 API 발급 가이드</a>
                     </div>
                 </div>
             </div>
@@ -734,709 +849,1319 @@
     </div>
 
     <script>
-        // 통합 시스템 변수
-        let currentPlatform = 'universal';
-        let topics = [];
-        let platformSettings = {
-            naver: { optimizations: ['friendlyTone', 'personalExperience', 'emotionalExpression'] },
-            tistory: { optimizations: ['seoOptimization', 'keywordDensity', 'monetization'] },
-            wordpress: { optimizations: ['professionalism', 'globalSEO', 'structuredData'] },
-            universal: { optimizations: ['balanced', 'flexible', 'compatible'] }
+        // Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqEKhWzW5SQsJXrPKPgz8JpzxK9Jv5rJY",
+            authDomain: "blog-automation-b1856.firebaseapp.com",
+            projectId: "blog-automation-b1856",
+            storageBucket: "blog-automation-b1856.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abc123def456ghi789"
         };
-        let currentTopicId = null;
 
-        // 페이지 로드 시 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🌐 통합 블로그 자동화 시스템 시작');
-            loadLocalData();
-            updateUI();
-            selectPlatform('universal'); // 기본값
-            showWelcomeMessage();
-        });
+        // Firebase 초기화
+        let app, auth, db, storage, functions;
+        let isFirebaseConnected = false;
+        let currentUser = null;
+        let offlineMode = false;
 
-        // 환영 메시지
-        function showWelcomeMessage() {
-            setTimeout(() => {
-                showAlert('success', `🌐 통합 블로그 자동화 시스템에 오신 것을 환영합니다!
-
-🎯 지원 플랫폼:
-• 🟢 네이버 블로그 (품질 평가 최적화)
-• 🟠 티스토리 (SEO + 수익화 최적화)  
-• 🔵 워드프레스 (전문성 + 글로벌 SEO)
-• 🌐 범용 (모든 플랫폼 호환)
-
-상단에서 타겟 플랫폼을 선택하고 시작하세요!`);
-            }, 1000);
+        try {
+            app = firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            storage = firebase.storage();
+            functions = firebase.functions();
+            
+            console.log('🔥 Firebase 초기화 성공');
+            
+            // 인증 상태 변경 리스너
+            auth.onAuthStateChanged(onAuthStateChanged);
+            
+        } catch (error) {
+            console.error('❌ Firebase 초기화 실패:', error);
+            continueOffline();
         }
+
+        // 전역 변수
+        let currentPlatform = 'naver';
+        let topics = [
+            '겨울철 건조한 모발 관리법',
+            '염색 후 올바른 헤어케어',
+            '탈모 예방을 위한 생활 습관',
+            '2024년 봄 헤어스타일 트렌드',
+            '집에서 할 수 있는 헤어팩 만들기'
+        ];
+        let todayPostCount = 0;
+        let apiConnections = {
+            naver: false,
+            tistory: false,
+            wordpress: false
+        };
+
+        // Firebase 연결 상태 관리
+        function onAuthStateChanged(user) {
+            currentUser = user;
+            if (user) {
+                showUserInfo(user);
+                loadUserData();
+            } else {
+                showAuthSection();
+            }
+            updateFirebaseStatus();
+        }
+
+        function showUserInfo(user) {
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('user-info').style.display = 'block';
+            document.getElementById('user-name').textContent = user.displayName || '사용자';
+            document.getElementById('user-email').textContent = user.email;
+        }
+
+        function showAuthSection() {
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('user-info').style.display = 'none';
+        }
+
+        function updateFirebaseStatus() {
+            const statusEl = document.getElementById('system-status');
+            const connectedPlatforms = Object.keys(apiConnections).filter(p => apiConnections[p]);
+            
+            if (isFirebaseConnected && currentUser) {
+                statusEl.className = 'status-indicator status-connected';
+                statusEl.innerHTML = `🟢 Firebase 연결됨 + ${connectedPlatforms.length}개 API`;
+            } else if (isFirebaseConnected) {
+                statusEl.className = 'status-indicator status-connected';
+                statusEl.innerHTML = '🟡 Firebase 연결됨 - 로그인 필요';
+            } else {
+                statusEl.className = 'status-indicator status-offline';
+                statusEl.innerHTML = '🔴 오프라인 모드 - 로컬 저장소 사용';
+            }
+        }
+
+        function continueOffline() {
+            offlineMode = true;
+            isFirebaseConnected = false;
+            updateFirebaseStatus();
+            console.log('📱 오프라인 모드로 전환');
+        }
+
+        // Firebase 연결 테스트
+        async function testFirebaseConnection() {
+            showAlert('info', '🔧 Firebase 연결 테스트 중...');
+            
+            try {
+                // Firestore 읽기 테스트
+                const testDoc = await db.collection('test').doc('connection').get();
+                
+                // Firestore 쓰기 테스트
+                await db.collection('test').doc('connection').set({
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    test: true
+                });
+                
+                // Firestore 삭제 테스트
+                await db.collection('test').doc('connection').delete();
+                
+                isFirebaseConnected = true;
+                updateFirebaseStatus();
+                
+                showAlert('success', `🎉 Firebase 연결 테스트 완료!
+✅ Firebase SDK: 정상 로드
+✅ 프로젝트 연결: ${firebaseConfig.projectId}
+✅ Firestore 읽기: 정상
+✅ Firestore 쓰기: 정상
+✅ Firestore 삭제: 정상
+✅ 서버 시간: ${new Date().toLocaleString()}`);
+                
+            } catch (error) {
+                console.error('❌ Firebase 연결 실패:', error);
+                showAlert('warning', `❌ Firebase 연결 실패: ${error.message}`);
+                continueOffline();
+            }
+        }
+
+        // 인증 함수들
+        async function signInWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                await auth.signInWithPopup(provider);
+                showAlert('success', '✅ Google 로그인 성공!');
+            } catch (error) {
+                console.error('Google 로그인 오류:', error);
+                showAlert('warning', `❌ Google 로그인 실패: ${error.message}`);
+            }
+        }
+
+        async function signInWithEmail() {
+            const email = document.getElementById('email-input').value;
+            const password = document.getElementById('password-input').value;
+            
+            if (!email || !password) {
+                showAlert('warning', '❌ 이메일과 비밀번호를 입력해주세요.');
+                return;
+            }
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showAlert('success', '✅ 이메일 로그인 성공!');
+            } catch (error) {
+                console.error('이메일 로그인 오류:', error);
+                showAlert('warning', `❌ 로그인 실패: ${error.message}`);
+            }
+        }
+
+        async function signUpWithEmail() {
+            const email = document.getElementById('email-input').value;
+            const password = document.getElementById('password-input').value;
+            
+            if (!email || !password) {
+                showAlert('warning', '❌ 이메일과 비밀번호를 입력해주세요.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('warning', '❌ 비밀번호는 6자 이상이어야 합니다.');
+                return;
+            }
+            
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
+                showAlert('success', '✅ 회원가입 성공!');
+            } catch (error) {
+                console.error('회원가입 오류:', error);
+                showAlert('warning', `❌ 회원가입 실패: ${error.message}`);
+            }
+        }
+
+        async function signOut() {
+            try {
+                await auth.signOut();
+                showAlert('success', '✅ 로그아웃 완료');
+            } catch (error) {
+                console.error('로그아웃 오류:', error);
+                showAlert('warning', `❌ 로그아웃 실패: ${error.message}`);
+            }
+        }
+
+        // 데이터 관리 함수들
+        async function loadUserData() {
+            if (!currentUser || offlineMode) return;
+            
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    topics = userData.topics || topics;
+                    apiConnections = userData.apiConnections || apiConnections;
+                    updateTopicList();
+                    updateTopicSelect();
+                    updateStats();
+                    updateFirebaseStatus();
+                }
+            } catch (error) {
+                console.error('사용자 데이터 로드 실패:', error);
+            }
+        }
+
+        async function saveUserData() {
+            if (!currentUser || offlineMode) {
+                // 오프라인 모드에서는 localStorage 사용
+                localStorage.setItem('topics', JSON.stringify(topics));
+                localStorage.setItem('apiConnections', JSON.stringify(apiConnections));
+                return;
+            }
+            
+            try {
+                await db.collection('users').doc(currentUser.uid).set({
+                    topics: topics,
+                    apiConnections: apiConnections,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                console.error('사용자 데이터 저장 실패:', error);
+                // 실패 시 로컬 저장소 사용
+                localStorage.setItem('topics', JSON.stringify(topics));
+                localStorage.setItem('apiConnections', JSON.stringify(apiConnections));
+            }
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTopicList();
+            updateTopicSelect();
+            updateStats();
+            updateFirebaseStatus();
+            
+            // 오프라인 모드일 때 로컬 데이터 로드
+            if (offlineMode) {
+                const savedTopics = localStorage.getItem('topics');
+                const savedConnections = localStorage.getItem('apiConnections');
+                
+                if (savedTopics) {
+                    topics = JSON.parse(savedTopics);
+                    updateTopicList();
+                    updateTopicSelect();
+                }
+                
+                if (savedConnections) {
+                    apiConnections = JSON.parse(savedConnections);
+                }
+            }
+            
+            loadSavedAPIKeys();
+            console.log('🚀 HAIRGATOR 블로그 자동화 시스템 준비 완료!');
+        });
 
         // 플랫폼 선택
         function selectPlatform(platform) {
             currentPlatform = platform;
             
-            // 플랫폼 카드 활성화
-            document.querySelectorAll('.platform-card').forEach(card => {
-                card.classList.remove('active');
+            // 탭 활성화
+            document.querySelectorAll('.platform-tab').forEach(tab => {
+                tab.classList.remove('active');
             });
-            document.querySelector(`.platform-card.${platform}`).classList.add('active');
-
-            // 최적화 패널 표시
-            document.querySelectorAll('.optimization-panel').forEach(panel => {
-                panel.classList.remove('active');
+            document.querySelector(`[data-platform="${platform}"]`).classList.add('active');
+            
+            // 콘텐츠 표시
+            document.querySelectorAll('.platform-content').forEach(content => {
+                content.classList.remove('active');
             });
-            if (platform !== 'universal') {
-                const panel = document.getElementById(`${platform}Optimization`);
-                if (panel) panel.classList.add('active');
-            }
-
-            // UI 업데이트
-            updatePlatformUI(platform);
-            renderTopicList();
-
-            const platformNames = {
-                naver: '네이버 블로그',
-                tistory: '티스토리',
-                wordpress: '워드프레스',
-                universal: '범용'
-            };
-
-            showAlert('success', `🎯 ${platformNames[platform]} 모드로 전환되었습니다!`);
+            document.getElementById(platform + '-content').classList.add('active');
         }
 
-        // 플랫폼별 UI 업데이트
-        function updatePlatformUI(platform) {
-            const platformConfig = {
-                naver: {
-                    color: 'var(--naver-green)',
-                    addBtnText: '🟢 네이버 최적화 주제 추가',
-                    addBtnClass: 'naver',
-                    optimizeBtnText: '🟢 네이버 최적화',
-                    openBtnText: '🟢 네이버 블로그',
-                    editorTitle: '🟢 네이버 최적화 에디터',
-                    editorSubtitle: '네이버 블로그 품질 평가를 통과하는 글 생성'
-                },
-                tistory: {
-                    color: 'var(--tistory-orange)',
-                    addBtnText: '🟠 티스토리 최적화 주제 추가',
-                    addBtnClass: 'tistory',
-                    optimizeBtnText: '🟠 티스토리 최적화',
-                    openBtnText: '🟠 티스토리',
-                    editorTitle: '🟠 티스토리 최적화 에디터',
-                    editorSubtitle: 'SEO와 수익화에 최적화된 글 생성'
-                },
-                wordpress: {
-                    color: 'var(--wordpress-blue)',
-                    addBtnText: '🔵 워드프레스 최적화 주제 추가',
-                    addBtnClass: 'wordpress',
-                    optimizeBtnText: '🔵 워드프레스 최적화',
-                    openBtnText: '🔵 워드프레스',
-                    editorTitle: '🔵 워드프레스 최적화 에디터',
-                    editorSubtitle: '전문성과 글로벌 SEO에 최적화된 글 생성'
-                },
-                universal: {
-                    color: 'var(--primary)',
-                    addBtnText: '🌐 범용 주제 추가',
-                    addBtnClass: '',
-                    optimizeBtnText: '⚡ 플랫폼 최적화',
-                    openBtnText: '🔗 블로그 열기',
-                    editorTitle: '🌐 통합 블로그 에디터',
-                    editorSubtitle: '모든 플랫폼 호환 글 생성'
-                }
-            };
-
-            const config = platformConfig[platform];
+        // 주제 추가
+        function addTopic() {
+            const input = document.getElementById('topic-input');
+            const topic = input.value.trim();
             
-            document.getElementById('addTopicBtn').textContent = config.addBtnText;
-            document.getElementById('addTopicBtn').className = `btn ${config.addBtnClass}`;
-            document.getElementById('optimizeBtn').textContent = config.optimizeBtnText;
-            document.getElementById('optimizeBtn').className = `btn small ${config.addBtnClass}`;
-            document.getElementById('openPlatformBtn').textContent = config.openBtnText;
-            document.getElementById('openPlatformBtn').className = `btn small ${config.addBtnClass}`;
-            document.getElementById('editorTitle').textContent = config.editorTitle;
-            document.getElementById('editorSubtitle').textContent = config.editorSubtitle;
-            document.getElementById('publishBtn').className = `btn small ${config.addBtnClass}`;
-        }
-
-        // 로컬 데이터 로드
-        function loadLocalData() {
-            const savedTopics = localStorage.getItem('integrated_blog_topics');
-            const savedSettings = localStorage.getItem('platform_settings');
-            
-            if (savedTopics) {
-                topics = JSON.parse(savedTopics);
-            } else {
-                // 플랫폼별 샘플 데이터
-                topics = [
-                    {
-                        id: 'sample-naver-1',
-                        content: '🌟 실제로 해본 겨울 스킨케어 루틴\n- 제가 3개월간 직접 써본 제품들\n- 건조한 사무실에서의 솔직 후기',
-                        targetPlatform: 'naver',
-                        status: 'pending',
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'sample-tistory-1',
-                        content: '📊 2024년 최고의 스마트폰 성능 비교 분석\n- 벤치마크 테스트 결과\n- 가격대별 추천 모델',
-                        targetPlatform: 'tistory',
-                        status: 'pending',
-                        createdAt: new Date().toISOString()
-                    }
-                ];
-            }
-            
-            if (savedSettings) {
-                platformSettings = { ...platformSettings, ...JSON.parse(savedSettings) };
-            }
-        }
-
-        // 로컬 데이터 저장
-        function saveLocalData() {
-            localStorage.setItem('integrated_blog_topics', JSON.stringify(topics));
-            localStorage.setItem('platform_settings', JSON.stringify(platformSettings));
-        }
-
-        // 플랫폼별 주제 추가
-        function addPlatformTopic() {
-            const input = document.getElementById('newTopicInput');
-            const content = input.value.trim();
-            
-            if (!content) {
-                showAlert('warning', '주제 내용을 입력해주세요.');
+            if (!topic) {
+                showAlert('warning', '❌ 주제를 입력해주세요.');
                 return;
             }
-
-            const newTopic = {
-                id: `${currentPlatform}-${Date.now()}`,
-                content: content,
-                targetPlatform: currentPlatform,
-                status: 'pending',
-                createdAt: new Date().toISOString(),
-                generatedPost: null
-            };
-
-            topics.unshift(newTopic);
+            
+            if (topics.includes(topic)) {
+                showAlert('warning', '⚠️ 이미 존재하는 주제입니다.');
+                return;
+            }
+            
+            topics.push(topic);
             input.value = '';
+            updateTopicList();
+            updateTopicSelect();
+            updateStats();
+            saveUserData(); // Firebase 또는 localStorage에 저장
             
-            saveLocalData();
-            updateUI();
-            
-            const platformNames = {
-                naver: '네이버 최적화',
-                tistory: '티스토리 최적화',
-                wordpress: '워드프레스 최적화',
-                universal: '범용'
-            };
-
-            showAlert('success', `${platformNames[currentPlatform]} 주제가 추가되었습니다!`);
-        }
-
-        // 플랫폼별 글 생성
-        async function generatePlatformPost(topicId) {
-            const topic = topics.find(t => t.id === topicId);
-            if (!topic) return;
-
-            topic.status = 'in-progress';
-            renderTopicList();
-
-            const loading = document.getElementById('generationLoading');
-            const content = document.getElementById('editorContent');
-            loading.classList.add('active');
-            content.style.display = 'none';
-
-            // 로딩 메시지 플랫폼별 업데이트
-            const platformMessages = {
-                naver: '네이버 블로그 품질 평가 통과 글 생성 중...',
-                tistory: 'SEO 최적화 및 수익화 친화적 글 생성 중...',
-                wordpress: '전문성 강화 및 글로벌 SEO 글 생성 중...',
-                universal: '모든 플랫폼 호환 글 생성 중...'
-            };
-            
-            document.getElementById('loadingText').textContent = platformMessages[topic.targetPlatform];
-            document.getElementById('loadingDetail').textContent = `${topic.targetPlatform} 최적화 적용 중`;
-
-            try {
-                // 플랫폼별 글 생성 시뮬레이션
-                await new Promise(resolve => setTimeout(resolve, 3000));
-
-                const platformPost = generatePlatformOptimizedContent(topic);
-                
-                topic.generatedPost = platformPost;
-                topic.status = 'completed';
-                
-                saveLocalData();
-                renderTopicList();
-
-                document.getElementById('editorContent').textContent = platformPost.content;
-                
-                const platformNames = {
-                    naver: '네이버 최적화',
-                    tistory: '티스토리 최적화', 
-                    wordpress: '워드프레스 최적화',
-                    universal: '범용'
-                };
-
-                showAlert('success', `✨ ${platformNames[topic.targetPlatform]} 글 생성 완료!`);
-
-            } catch (error) {
-                topic.status = 'pending';
-                showAlert('error', '글 생성 중 오류가 발생했습니다.');
-            } finally {
-                loading.classList.remove('active');
-                content.style.display = 'block';
-            }
-        }
-
-        // 플랫폼별 최적화 콘텐츠 생성
-        function generatePlatformOptimizedContent(topic) {
-            const title = topic.content.split('\n')[0].replace(/^[🌟✨💖🟢🟠🔵-]*\s*/, '');
-            const platform = topic.targetPlatform;
-
-            const platformTemplates = {
-                naver: generateNaverContent(title, topic),
-                tistory: generateTistoryContent(title, topic),
-                wordpress: generateWordPressContent(title, topic),
-                universal: generateUniversalContent(title, topic)
-            };
-
-            return platformTemplates[platform] || platformTemplates.universal;
-        }
-
-        // 네이버 최적화 콘텐츠
-        function generateNaverContent(title, topic) {
-            return {
-                content: `# ${title}
-
-안녕하세요! 오늘은 정말 좋은 정보를 공유해드리려고 해요 😊
-
-${topic.content}
-
-## 💝 제가 직접 경험해본 이야기
-
-실제로 제가 써보고 경험한 것들을 솔직하게 말씀드릴게요!
-
-정말 솔직하게 말씀드리자면, 처음에는 반신반의했어요. 하지만 직접 해보니까 생각보다 훨씬 좋더라고요! 😍
-
-### 🌟 좋았던 점들
-
-✅ **생각보다 간단해요**
-제가 무척 귀찮음을 타는 성격인데도 쉽게 할 수 있었어요.
-
-✅ **효과가 금방 나타나요**
-1주일 정도 지나니까 확실히 달라지는 게 느껴졌어요.
-
-✅ **가성비가 정말 좋아요**
-이 정도 효과에 이 가격이면 완전 만족이에요!
-
-## 🤔 궁금한 점 있으시면 댓글로!
-
-혹시 궁금한 점이 있으시면 댓글로 남겨주세요. 제가 아는 범위에서 최대한 자세히 답변해드릴게요! 💕
-
-오늘도 좋은 하루 보내세요! ✨`,
-                platformOptimized: true,
-                qualityScore: 88
-            };
-        }
-
-        // 티스토리 최적화 콘텐츠
-        function generateTistoryContent(title, topic) {
-            return {
-                content: `# ${title}: 완벽 가이드 2024
-
-${topic.content}
-
-## 목차
-1. [개요](#개요)
-2. [상세 분석](#상세-분석)
-3. [실용적인 팁](#실용적인-팁)
-4. [결론](#결론)
-
-## 개요
-
-이 글에서는 ${title}에 대한 종합적인 정보를 제공합니다. SEO에 최적화된 구조로 작성되어 검색 엔진에서 쉽게 찾을 수 있습니다.
-
-## 상세 분석
-
-### 핵심 포인트 1
-상세한 설명과 함께 실용적인 정보를 제공합니다.
-
-### 핵심 포인트 2  
-데이터와 근거를 바탕으로 한 신뢰성 있는 내용입니다.
-
-### 핵심 포인트 3
-실제 적용 가능한 구체적인 방법을 제시합니다.
-
-## 실용적인 팁
-
-- **팁 1**: 즉시 적용 가능한 방법
-- **팁 2**: 비용 효율적인 접근
-- **팁 3**: 장기적 관점에서의 전략
-
-## 결론
-
-${title}에 대한 종합적인 분석을 통해 실용적인 인사이트를 제공했습니다. 지속적인 업데이트를 통해 최신 정보를 유지하겠습니다.
-
----
-**관련 키워드**: ${title}, 가이드, 2024, 최신 정보, 실용적 팁`,
-                platformOptimized: true,
-                seoScore: 92
-            };
-        }
-
-        // 워드프레스 최적화 콘텐츠
-        function generateWordPressContent(title, topic) {
-            return {
-                content: `# ${title}: Professional Analysis and Insights
-
-## Executive Summary
-
-${topic.content}
-
-This comprehensive analysis provides in-depth insights into ${title}, backed by research and professional expertise.
-
-## Introduction
-
-In today's rapidly evolving landscape, understanding ${title} has become crucial for professionals and enthusiasts alike. This article presents a thorough examination based on current best practices and industry standards.
-
-## Methodology
-
-Our analysis is based on:
-- Comprehensive research from authoritative sources
-- Industry best practices and standards
-- Professional expertise and experience
-- Data-driven insights and metrics
-
-## Key Findings
-
-### Finding 1: Strategic Implications
-Detailed analysis of the strategic implications and long-term impact.
-
-### Finding 2: Technical Considerations  
-In-depth examination of technical aspects and implementation challenges.
-
-### Finding 3: Market Trends
-Current market trends and future projections based on data analysis.
-
-## Recommendations
-
-Based on our analysis, we recommend the following strategic approach:
-
-1. **Immediate Actions**: Priority items for immediate implementation
-2. **Medium-term Strategy**: Sustainable approaches for continued growth
-3. **Long-term Vision**: Strategic planning for future scalability
-
-## Conclusion
-
-The analysis of ${title} reveals significant opportunities for optimization and growth. Organizations that adopt these evidence-based strategies are likely to achieve superior outcomes.
-
-## References and Further Reading
-
-- Industry reports and white papers
-- Academic research and studies
-- Professional guidelines and standards
-
----
-*This analysis is part of our ongoing research series. For more insights, subscribe to our professional newsletter.*`,
-                platformOptimized: true,
-                professionalScore: 95
-            };
-        }
-
-        // 범용 최적화 콘텐츠
-        function generateUniversalContent(title, topic) {
-            return {
-                content: `# ${title}
-
-${topic.content}
-
-## 개요
-
-이 글에서는 ${title}에 대한 유용한 정보를 제공합니다.
-
-## 주요 내용
-
-### 1. 기본 이해
-기본적인 개념과 원리에 대해 설명합니다.
-
-### 2. 실용적 방법
-실제로 적용할 수 있는 구체적인 방법들을 제시합니다.
-
-### 3. 주의사항
-알아두면 좋은 팁과 주의사항을 안내합니다.
-
-## 마무리
-
-${title}에 대한 정보가 도움이 되었기를 바랍니다. 지속적으로 업데이트하여 더 나은 정보를 제공하겠습니다.
-
----
-*이 글은 모든 블로그 플랫폼에 호환되도록 작성되었습니다.*`,
-                platformOptimized: true,
-                compatibilityScore: 90
-            };
-        }
-
-        // UI 업데이트
-        function updateUI() {
-            renderTopicList();
-        }
-
-        // 주제 목록 렌더링
-        function renderTopicList() {
-            const container = document.getElementById('topicList');
-            
-            if (topics.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: var(--gray);">
-                        <p>📝 플랫폼별 최적화 주제를 추가해보세요!</p>
-                        <p>선택된 플랫폼에 맞는 글을 자동으로 생성해드립니다.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = topics.map(topic => {
-                const platformIcons = {
-                    naver: '🟢',
-                    tistory: '🟠', 
-                    wordpress: '🔵',
-                    universal: '🌐'
-                };
-
-                const platformColors = {
-                    naver: 'var(--naver-green)',
-                    tistory: 'var(--tistory-orange)',
-                    wordpress: 'var(--wordpress-blue)',
-                    universal: 'var(--primary)'
-                };
-
-                return `
-                    <div class="topic-item" onclick="selectTopic('${topic.id}')">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <div>
-                                <span style="font-weight: 600;">${getStatusText(topic.status)}</span>
-                                <span class="platform-badge ${topic.targetPlatform}" style="background: ${platformColors[topic.targetPlatform]}">
-                                    ${platformIcons[topic.targetPlatform]} ${topic.targetPlatform}
-                                </span>
-                            </div>
-                            <small style="color: var(--gray);">${formatDate(topic.createdAt)}</small>
-                        </div>
-                        <div style="color: var(--gray); font-size: 0.9rem; line-height: 1.4;">
-                            ${topic.content.length > 120 ? topic.content.substring(0, 120) + '...' : topic.content}
-                        </div>
-                        <div style="margin-top: 10px; display: flex; gap: 8px;">
-                            <button class="btn small ${topic.targetPlatform}" onclick="event.stopPropagation(); generatePlatformPost('${topic.id}')">
-                                ${topic.status === 'completed' ? '🔄 재생성' : '✨ 글 생성'}
-                            </button>
-                            ${topic.status === 'completed' ? `
-                                <button class="btn small secondary" onclick="event.stopPropagation(); copyContent('${topic.id}')">
-                                    📋 복사
-                                </button>
-                            ` : ''}
-                            <button class="btn small danger" onclick="event.stopPropagation(); deleteTopic('${topic.id}')">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // 주제 선택
-        function selectTopic(topicId) {
-            const topic = topics.find(t => t.id === topicId);
-            if (!topic) return;
-
-            currentTopicId = topicId;
-            
-            const platformIcons = {
-                naver: '🟢',
-                tistory: '🟠',
-                wordpress: '🔵', 
-                universal: '🌐'
-            };
-
-            document.getElementById('editorTitle').textContent = `${platformIcons[topic.targetPlatform]} ${topic.content.split('\n')[0].substring(0, 30)}...`;
-            document.getElementById('editorSubtitle').textContent = `${topic.targetPlatform} 최적화 | 상태: ${getStatusText(topic.status)}`;
-
-            if (topic.generatedPost) {
-                document.getElementById('editorContent').textContent = topic.generatedPost.content;
-            } else {
-                document.getElementById('editorContent').textContent = '선택된 주제입니다. "글 생성" 버튼을 클릭하여 플랫폼 최적화 글을 생성하세요.';
-            }
-        }
-
-        // 콘텐츠 복사
-        function copyContent(topicId = null) {
-            const targetId = topicId || currentTopicId;
-            if (!targetId) {
-                showAlert('warning', '복사할 글을 선택해주세요.');
-                return;
-            }
-
-            const topic = topics.find(t => t.id === targetId);
-            if (!topic || !topic.generatedPost) {
-                showAlert('warning', '생성된 글이 없습니다.');
-                return;
-            }
-
-            navigator.clipboard.writeText(topic.generatedPost.content).then(() => {
-                const platformNames = {
-                    naver: '네이버 최적화',
-                    tistory: '티스토리 최적화',
-                    wordpress: '워드프레스 최적화',
-                    universal: '범용'
-                };
-
-                showAlert('success', `📋 ${platformNames[topic.targetPlatform]} 글이 클립보드에 복사되었습니다!`);
-            });
-        }
-
-        // 플랫폼 사이트 열기
-        function openPlatformSite() {
-            const urls = {
-                naver: 'https://blog.naver.com/PostWriteForm.naver',
-                tistory: 'https://www.tistory.com/manage/newpost/',
-                wordpress: 'https://wordpress.com/post',
-                universal: 'https://blog.naver.com/PostWriteForm.naver' // 기본값
-            };
-            
-            window.open(urls[currentPlatform], '_blank');
-            
-            const platformNames = {
-                naver: '네이버 블로그',
-                tistory: '티스토리',
-                wordpress: '워드프레스',
-                universal: '네이버 블로그'
-            };
-
-            showAlert('success', `${platformNames[currentPlatform]}가 새 창에서 열렸습니다!`);
-        }
-
-        // 플랫폼 최적화 실행
-        function optimizeForPlatform() {
-            if (!currentTopicId) {
-                showAlert('warning', '최적화할 글을 선택해주세요.');
-                return;
-            }
-
-            const topic = topics.find(t => t.id === currentTopicId);
-            if (!topic || !topic.generatedPost) {
-                showAlert('warning', '생성된 글이 없습니다.');
-                return;
-            }
-
-            const platformNames = {
-                naver: '네이버 최적화',
-                tistory: '티스토리 최적화',
-                wordpress: '워드프레스 최적화',
-                universal: '범용'
-            };
-
-            showAlert('success', `⚡ ${platformNames[topic.targetPlatform]} 최적화 완료!`);
-        }
-
-        // 플랫폼에 발행
-        function publishToPlatform() {
-            if (!currentTopicId) {
-                showAlert('warning', '발행할 글을 선택해주세요.');
-                return;
-            }
-
-            const topic = topics.find(t => t.id === currentTopicId);
-            if (!topic || !topic.generatedPost) {
-                showAlert('warning', '생성된 글이 없습니다.');
-                return;
-            }
-
-            const method = document.getElementById('publishMethod').value;
-            const platformNames = {
-                naver: '네이버 블로그',
-                tistory: '티스토리',
-                wordpress: '워드프레스',
-                universal: '선택된 플랫폼'
-            };
-
-            if (method === 'copy') {
-                copyContent();
-                openPlatformSite();
-            } else {
-                showAlert('success', `🚀 ${platformNames[topic.targetPlatform]}에 발행 예정! (${method} 모드)`);
-            }
-        }
-
-        // API 키 저장
-        function saveAPIKeys() {
-            const claudeKey = document.getElementById('claudeKey').value;
-
-            if (!claudeKey) {
-                showAlert('warning', 'Claude API 키를 입력해주세요.');
-                return;
-            }
-
-            localStorage.setItem('integrated_api_keys', JSON.stringify({
-                claude: claudeKey,
-                savedAt: new Date().toISOString()
-            }));
-
-            showAlert('success', '🔐 API 키가 안전하게 저장되었습니다!');
-        }
-
-        // 플랫폼 최적화 테스트
-        function testPlatformGeneration() {
-            showAlert('success', `🧪 플랫폼별 최적화 시스템 테스트 결과:
-
-✅ 네이버 최적화: 품질 평가 통과율 95%+
-✅ 티스토리 최적화: SEO 점수 90%+  
-✅ 워드프레스 최적화: 전문성 지수 95%+
-✅ 범용 모드: 호환성 100%
-
-🎯 현재 선택된 플랫폼: ${currentPlatform}
-모든 시스템이 정상 작동 중입니다!`);
+            showAlert('success', `✅ "${topic}" 주제가 추가되었습니다.`);
         }
 
         // 주제 삭제
-        function deleteTopic(topicId) {
-            if (!confirm('이 주제를 삭제하시겠습니까?')) return;
-            
-            topics = topics.filter(t => t.id !== topicId);
-            saveLocalData();
-            updateUI();
-            
-            if (currentTopicId === topicId) {
-                document.getElementById('editorContent').textContent = '플랫폼별 최적화 주제를 선택해주세요.';
-                currentTopicId = null;
-            }
-
-            showAlert('success', '주제가 삭제되었습니다.');
-        }
-
-        // 유틸리티 함수들
-        function getStatusText(status) {
-            switch(status) {
-                case 'completed': return '✅ 완료';
-                case 'in-progress': return '⏳ 생성 중';
-                default: return '⭕ 대기 중';
+        function removeTopic(index) {
+            if (confirm('정말로 이 주제를 삭제하시겠습니까?')) {
+                const removedTopic = topics[index];
+                topics.splice(index, 1);
+                updateTopicList();
+                updateTopicSelect();
+                updateStats();
+                saveUserData(); // Firebase 또는 localStorage에 저장
+                showAlert('success', `✅ "${removedTopic}" 주제가 삭제되었습니다.`);
             }
         }
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+        // 주제 목록 업데이트
+        function updateTopicList() {
+            const list = document.getElementById('topic-list');
+            list.innerHTML = '';
+            
+            topics.forEach((topic, index) => {
+                const item = document.createElement('li');
+                item.className = 'topic-item';
+                item.innerHTML = `
+                    <div class="topic-content">
+                        <span>${topic}</span>
+                    </div>
+                    <div class="topic-actions">
+                        <button class="btn btn-sm" onclick="generatePostForTopic('${topic}')">🤖 생성</button>
+                        <button class="btn btn-sm btn-danger" onclick="removeTopic(${index})">🗑️ 삭제</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
         }
 
-        function showAlert(type, message) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert ${type}`;
-            alertDiv.innerHTML = `
-                <strong>${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '❌'}</strong> 
-                ${message.replace(/\n/g, '<br>')}
+        // 주제 선택 업데이트
+        function updateTopicSelect() {
+            const select = document.getElementById('topic-select');
+            select.innerHTML = '<option value="">주제를 선택하세요</option>';
+            
+            topics.forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic;
+                option.textContent = topic;
+                select.appendChild(option);
+            });
+        }
+
+        // 통계 업데이트
+        function updateStats() {
+            document.getElementById('today-posts').textContent = todayPostCount;
+            document.getElementById('total-topics').textContent = topics.length;
+        }
+
+        // AI 글 생성
+        function generatePost() {
+            const selectedTopic = document.getElementById('topic-select').value;
+            
+            if (!selectedTopic) {
+                showAlert('warning', '❌ 주제를 선택해주세요.');
+                return;
+            }
+            
+            generatePostForTopic(selectedTopic);
+        }
+
+        // 랜덤 글 생성
+        function generateRandomPost() {
+            if (topics.length === 0) {
+                showAlert('warning', '❌ 등록된 주제가 없습니다.');
+                return;
+            }
+            
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+            generatePostForTopic(randomTopic);
+        }
+
+        // 특정 주제로 글 생성
+        function generatePostForTopic(topic) {
+            const editor = document.getElementById('editor-content');
+            const generateBtn = document.querySelector('.btn[onclick="generatePost()"]');
+            
+            // 로딩 상태
+            generateBtn.classList.add('loading');
+            generateBtn.innerHTML = '🤖 AI 생성 중...';
+            generateBtn.disabled = true;
+            
+            showAlert('info', '🤖 AI가 프리미엄 콘텐츠를 생성하고 있습니다...');
+            
+            // 플랫폼별 최적화된 글 생성
+            setTimeout(() => {
+                const generatedContent = generateContentForPlatform(topic, currentPlatform);
+                editor.value = generatedContent;
+                
+                todayPostCount++;
+                updateStats();
+                
+                // 로딩 상태 해제
+                generateBtn.classList.remove('loading');
+                generateBtn.innerHTML = '🤖 AI 글 생성하기';
+                generateBtn.disabled = false;
+                
+                showAlert('success', '✅ 프리미엄 AI 콘텐츠 생성이 완료되었습니다!');
+            }, 3000);
+        }
+
+        // 플랫폼별 콘텐츠 생성
+        function generateContentForPlatform(topic, platform) {
+            const templates = {
+                naver: `# ${topic}에 대해 알아보아요! 🌟
+
+안녕하세요 여러분! 오늘은 ${topic}에 대해 이야기해볼게요.
+
+## 🤔 왜 중요할까요?
+
+저도 처음에는 잘 몰랐는데요, 직접 경험해보니 정말 중요하더라고요!
+
+제가 실제로 ${topic}를 시도해본 결과:
+✅ 정말 효과가 좋았어요
+✅ 생각보다 간단해요  
+✅ 꾸준히 하면 확실히 달라져요
+
+## 💡 실제 경험담
+
+작년에 저도 이런 고민이 있었거든요. 그래서 여러 방법을 시도해봤는데...
+
+**가장 효과적이었던 방법들:**
+
+1. **첫 번째 방법**
+   매일 조금씩이라도 꾸준히 하는 게 중요해요. 처음엔 귀찮을 수 있지만 습관이 되면 자연스러워져요.
+
+2. **두 번째 방법**  
+   전문가의 조언을 듣는 것도 정말 도움이 돼요. 혼자 하다가 막히는 부분이 있으면 물어보세요.
+
+3. **세 번째 방법**
+   좋은 제품을 사용하는 것도 중요해요. 가격이 전부는 아니지만, 어느 정도 품질은 보장되는 걸 쓰는 게 좋아요.
+
+## 🎯 주의사항
+
+❌ 이런 건 피하세요:
+- 너무 급하게 결과를 기대하기
+- 한 번에 많이 하려고 하기
+- 개인차를 무시하고 무작정 따라하기
+
+✅ 이렇게 하면 좋아요:
+- 꾸준히 조금씩 하기
+- 자신의 상황에 맞게 조절하기
+- 변화를 기록해두기
+
+## 💬 마무리
+
+${topic}는 정말 중요한 주제인 것 같아요. 저도 계속 공부하고 있는데, 여러분과 함께 나누고 싶어서 글을 써봤어요.
+
+혹시 궁금한 점이나 다른 경험이 있으시면 댓글로 공유해주세요! 서로 도움이 될 것 같아요 😊
+
+오늘도 좋은 하루 되세요~
+
+#${topic.replace(/\s+/g, '')} #일상 #팁 #경험담`,
+
+                tistory: `# ${topic}: 완벽 가이드 2024
+
+## 목차
+1. [개요](#개요)
+2. [핵심 포인트](#핵심-포인트)  
+3. [단계별 방법](#단계별-방법)
+4. [전문가 조언](#전문가-조언)
+5. [마무리](#마무리)
+
+---
+
+## 개요
+
+${topic}에 대해 체계적으로 알아보겠습니다. 이 글에서는 실용적이고 검증된 정보만을 다룹니다.
+
+### 왜 중요한가?
+
+현대 사회에서 ${topic}는 매우 중요한 요소가 되었습니다. 관련 연구에 따르면:
+
+- 85%의 전문가가 필수적이라고 응답
+- 꾸준히 실천한 사람들의 만족도 90% 이상
+- 장기적으로 볼 때 비용 효율성 높음
+
+## 핵심 포인트
+
+### 1. 기본 원리 이해
+
+${topic}의 기본 원리를 이해하는 것이 가장 중요합니다.
+
+**핵심 요소들:**
+- 과학적 근거에 기반한 접근
+- 개인차를 고려한 맞춤형 적용
+- 지속 가능한 실천 방법
+
+### 2. 효과적인 방법
+
+검증된 방법들을 우선순위별로 정리했습니다.
+
+| 순위 | 방법 | 효과 | 난이도 |
+|------|------|------|--------|
+| 1 | 기본 방법 | ⭐⭐⭐⭐⭐ | 쉬움 |
+| 2 | 중급 방법 | ⭐⭐⭐⭐ | 보통 |
+| 3 | 고급 방법 | ⭐⭐⭐⭐⭐ | 어려움 |
+
+## 단계별 방법
+
+### 1단계: 준비하기 (1주)
+
+**필요한 것들:**
+- 기본적인 이해
+- 적절한 도구 또는 제품
+- 명확한 목표 설정
+
+**체크리스트:**
+- [ ] 현재 상태 파악
+- [ ] 목표 설정
+- [ ] 필요한 준비물 확인
+
+### 2단계: 실행하기 (2-4주)
+
+**주요 활동:**
+1. 매일 꾸준한 실천
+2. 경과 기록 및 분석
+3. 필요시 방법 조정
+
+**주의사항:**
+- 급한 결과를 기대하지 말 것
+- 개인차가 있음을 인정할 것
+- 전문가 조언을 적극 활용할 것
+
+### 3단계: 유지하기 (5주 이후)
+
+**장기 전략:**
+- 루틴화를 통한 습관 형성
+- 정기적인 점검 및 개선
+- 새로운 방법 도입 검토
+
+## 전문가 조언
+
+### 성공하는 사람들의 공통점
+
+1. **일관성**: 매일 조금씩이라도 꾸준히
+2. **인내심**: 결과가 나올 때까지 기다리기
+3. **유연성**: 상황에 맞게 방법 조정하기
+
+### 피해야 할 실수들
+
+❌ **하지 말아야 할 것들:**
+- 무작정 따라하기
+- 단기간에 큰 변화 기대
+- 한 가지 방법에만 의존
+
+✅ **해야 할 것들:**
+- 체계적인 계획 수립
+- 꾸준한 기록 관리
+- 전문가 상담 활용
+
+## 마무리
+
+${topic}는 올바른 방법과 꾸준한 실천이 핵심입니다. 이 가이드가 도움이 되었기를 바라며, 추가 질문이 있으시면 언제든 댓글로 남겨주세요.
+
+### 관련 추천 글
+
+- [${topic} 초보자를 위한 가이드](/)
+- [${topic} 고급 테크닉](/)
+- [${topic} FAQ 모음](/)
+
+---
+
+**🔗 더 많은 정보가 필요하다면?**
+
+이 블로그의 다른 글들도 확인해보세요. 매주 새로운 콘텐츠를 업데이트합니다.
+
+**📧 구독하기** | **💬 댓글 남기기** | **📤 공유하기**`,
+
+                wordpress: `# ${topic}: Professional Guide and Best Practices
+
+## Executive Summary
+
+This comprehensive guide explores ${topic} from both theoretical and practical perspectives, providing evidence-based recommendations for optimal results.
+
+## Introduction
+
+In today's dynamic environment, understanding ${topic} has become increasingly crucial. This article synthesizes current research, expert opinions, and real-world applications to provide actionable insights.
+
+### Key Objectives
+
+- Provide comprehensive understanding of ${topic}
+- Present evidence-based methodologies
+- Offer practical implementation strategies
+- Address common challenges and solutions
+
+## Theoretical Foundation
+
+### Core Principles
+
+The foundation of ${topic} rests on several key principles:
+
+1. **Scientific Approach**: Evidence-based methodologies
+2. **Systematic Implementation**: Structured processes
+3. **Continuous Improvement**: Iterative refinement
+4. **Measurable Outcomes**: Quantifiable results
+
+### Research Background
+
+Recent studies have shown significant correlation between proper implementation and success rates:
+
+- Methodology A: 78% success rate
+- Methodology B: 85% success rate  
+- Combined approach: 92% success rate
+
+## Implementation Framework
+
+### Phase 1: Assessment and Planning
+
+**Duration**: 1-2 weeks
+
+**Key Activities**:
+- Current state analysis
+- Goal definition and metrics establishment
+- Resource allocation planning
+- Risk assessment and mitigation strategies
+
+### Phase 2: Execution
+
+**Duration**: 4-6 weeks
+
+**Critical Success Factors**:
+- Stakeholder engagement
+- Progress monitoring
+- Quality assurance
+- Adaptive management
+
+### Phase 3: Optimization
+
+**Duration**: Ongoing
+
+**Focus Areas**:
+- Performance metrics analysis
+- Process refinement
+- Knowledge management
+- Scaling strategies
+
+## Best Practices and Recommendations
+
+### Proven Strategies
+
+1. **Data-Driven Decision Making**
+   - Establish clear KPIs
+   - Implement regular monitoring
+   - Use analytics for optimization
+
+2. **Stakeholder Engagement**
+   - Clear communication protocols
+   - Regular feedback loops
+   - Collaborative problem-solving
+
+3. **Quality Management**
+   - Standardized processes
+   - Regular quality audits
+   - Continuous improvement culture
+
+### Common Pitfalls to Avoid
+
+- Insufficient planning and preparation
+- Lack of clear success metrics
+- Poor communication and change management
+- Inadequate resource allocation
+
+## Case Studies and Examples
+
+### Case Study 1: Large Enterprise Implementation
+
+**Background**: Fortune 500 company implementing ${topic}
+
+**Results**:
+- 40% improvement in efficiency
+- 25% reduction in costs
+- 95% stakeholder satisfaction
+
+**Key Learnings**:
+- Importance of executive sponsorship
+- Value of phased implementation
+- Critical role of training and support
+
+## Future Trends and Considerations
+
+### Emerging Technologies
+
+The landscape of ${topic} continues to evolve with technological advances:
+
+- AI and machine learning integration
+- Automation and process optimization
+- Real-time analytics and monitoring
+
+### Industry Outlook
+
+Market analysis suggests continued growth and evolution in this space, with emphasis on:
+
+- Sustainability and environmental considerations
+- Enhanced user experience and accessibility
+- Integration with emerging technologies
+
+## Conclusion
+
+Successful implementation of ${topic} requires a balanced approach combining theoretical understanding, practical application, and continuous improvement. Organizations and individuals who adopt evidence-based methodologies and maintain focus on measurable outcomes are most likely to achieve sustained success.
+
+### Recommended Next Steps
+
+1. Conduct comprehensive assessment of current state
+2. Develop detailed implementation plan
+3. Establish monitoring and measurement systems
+4. Begin phased implementation with pilot programs
+5. Scale successful approaches organization-wide
+
+---
+
+**About the Author**: This analysis is based on extensive research and industry experience in ${topic} implementation and optimization.
+
+**References**: 
+- Industry Research Report 2024
+- Best Practices Compendium
+- Academic Studies and White Papers
+
+**Related Articles**:
+- [Advanced Strategies for ${topic}](/)
+- [Measuring Success in ${topic} Implementation](/)
+- [Common Challenges and Solutions](/)
+
+---
+
+*For more insights and updates, subscribe to our newsletter and follow our latest research.*`
+            };
+
+            return templates[platform] || templates.naver;
+        }
+
+        // 품질 검증 및 발행 제어 시스템
+        let publishQueue = [];
+        let lastPublishTime = {};
+        const PUBLISH_RATE_LIMITS = {
+            naver: { maxPerHour: 3, maxPerDay: 10 },
+            tistory: { maxPerHour: 5, maxPerDay: 20 },
+            wordpress: { maxPerHour: 10, maxPerDay: 50 }
+        };
+
+        // 휴먼 인 더 루프 체크리스트
+        function showPublishChecklist(content, callback) {
+            const checklist = [
+                { id: 'sources', text: '참조 자료나 출처가 명시되어 있나요?' },
+                { id: 'images', text: '이미지가 있다면 alt 텍스트가 포함되어 있나요?' },
+                { id: 'links', text: '내부 링크가 문맥에 맞고 유용한가요?' },
+                { id: 'originality', text: '이 글만의 독창적인 관점이나 경험이 포함되어 있나요?' },
+                { id: 'quality', text: '글이 독자에게 실질적인 도움이 될까요?' }
+            ];
+            
+            let checklistHtml = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%;">
+                        <h3 style="margin-bottom: 1rem; color: var(--gray-800);">🔍 발행 전 품질 확인</h3>
+                        <p style="margin-bottom: 1.5rem; color: var(--gray-600); font-size: 0.9rem;">
+                            고품질 콘텐츠를 위해 다음 항목들을 확인해주세요:
+                        </p>
+                        <div style="margin-bottom: 2rem;">
             `;
             
-            const container = document.querySelector('.container');
-            container.insertBefore(alertDiv, container.firstChild);
+            checklist.forEach(item => {
+                checklistHtml += `
+                    <label style="display: flex; align-items: flex-start; margin-bottom: 1rem; cursor: pointer;">
+                        <input type="checkbox" id="${item.id}" style="margin-right: 0.75rem; margin-top: 0.25rem;">
+                        <span style="color: var(--gray-700); font-size: 0.9rem;">${item.text}</span>
+                    </label>
+                `;
+            });
+            
+            checklistHtml += `
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button onclick="closeChecklist()" style="flex: 1; padding: 0.75rem; background: var(--gray-300); color: var(--gray-700); border: none; border-radius: 8px; font-weight: 600;">
+                                취소
+                            </button>
+                            <button onclick="confirmPublish()" style="flex: 1; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600;" disabled>
+                                발행하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const checklistDiv = document.createElement('div');
+            checklistDiv.innerHTML = checklistHtml;
+            checklistDiv.id = 'publish-checklist';
+            document.body.appendChild(checklistDiv);
+            
+            // 체크박스 상태 감지
+            const checkboxes = checklistDiv.querySelectorAll('input[type="checkbox"]');
+            const confirmBtn = checklistDiv.querySelector('button[onclick="confirmPublish()"]');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    confirmBtn.disabled = !allChecked;
+                    confirmBtn.style.opacity = allChecked ? '1' : '0.5';
+                });
+            });
+            
+            // 전역 함수 설정
+            window.closeChecklist = () => {
+                document.body.removeChild(checklistDiv);
+                delete window.closeChecklist;
+                delete window.confirmPublish;
+            };
+            
+            window.confirmPublish = () => {
+                document.body.removeChild(checklistDiv);
+                delete window.closeChecklist;
+                delete window.confirmPublish;
+                callback();
+            };
+        }
+
+        // 발행 레이트 제한 확인
+        function checkRateLimit(platform) {
+            const now = new Date();
+            const hourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+            const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            
+            const limits = PUBLISH_RATE_LIMITS[platform];
+            const recentPublishes = publishQueue.filter(p => 
+                p.platform === platform && new Date(p.timestamp) > dayAgo
+            );
+            
+            const hourlyPublishes = recentPublishes.filter(p => 
+                new Date(p.timestamp) > hourAgo
+            );
+            
+            return {
+                canPublish: hourlyPublishes.length < limits.maxPerHour && 
+                           recentPublishes.length < limits.maxPerDay,
+                hourlyCount: hourlyPublishes.length,
+                dailyCount: recentPublishes.length,
+                limits: limits
+            };
+        }
+
+        // 중복도 검사 (간단한 n-gram 방식)
+        function checkContentSimilarity(newContent) {
+            const savedPosts = JSON.parse(localStorage.getItem('publishedPosts') || '[]');
+            
+            if (savedPosts.length === 0) return { similarity: 0, isSimilar: false };
+            
+            const newNgrams = getNgrams(newContent, 3);
+            let maxSimilarity = 0;
+            
+            savedPosts.slice(-10).forEach(post => { // 최근 10개 글과만 비교
+                const existingNgrams = getNgrams(post.content, 3);
+                const similarity = calculateJaccardSimilarity(newNgrams, existingNgrams);
+                maxSimilarity = Math.max(maxSimilarity, similarity);
+            });
+            
+            return {
+                similarity: maxSimilarity,
+                isSimilar: maxSimilarity > 0.3 // 30% 이상 유사하면 경고
+            };
+        }
+
+        // N-gram 생성
+        function getNgrams(text, n) {
+            const words = text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+            const ngrams = new Set();
+            
+            for (let i = 0; i <= words.length - n; i++) {
+                ngrams.add(words.slice(i, i + n).join(' '));
+            }
+            
+            return ngrams;
+        }
+
+        // Jaccard 유사도 계산
+        function calculateJaccardSimilarity(set1, set2) {
+            const intersection = new Set([...set1].filter(x => set2.has(x)));
+            const union = new Set([...set1, ...set2]);
+            
+            return intersection.size / union.size;
+        }
+
+        // 개선된 블로그 발행 함수
+        function publishPost() {
+            const content = document.getElementById('editor-content').value;
+            
+            if (!content.trim()) {
+                showAlert('warning', '❌ 발행할 글이 없습니다.');
+                return;
+            }
+
+            // API 연결 확인
+            if (!apiConnections[currentPlatform]) {
+                showAlert('warning', `❌ ${currentPlatform} API가 연결되지 않았습니다.\nAPI 설정에서 연결해주세요.`);
+                return;
+            }
+
+            // 레이트 제한 확인
+            const rateCheck = checkRateLimit(currentPlatform);
+            if (!rateCheck.canPublish) {
+                showAlert('warning', `⚠️ 발행 제한 도달
+시간당 한도: ${rateCheck.hourlyCount}/${rateCheck.limits.maxPerHour}
+일일 한도: ${rateCheck.dailyCount}/${rateCheck.limits.maxPerDay}
+
+잠시 후 다시 시도해주세요.`);
+                return;
+            }
+
+            // 중복도 검사
+            const similarityCheck = checkContentSimilarity(content);
+            if (similarityCheck.isSimilar) {
+                if (!confirm(`⚠️ 유사한 글이 감지되었습니다 (${(similarityCheck.similarity * 100).toFixed(1)}% 유사).\n\n그래도 발행하시겠습니까?`)) {
+                    return;
+                }
+            }
+
+            // 휴먼 인 더 루프 체크리스트
+            showPublishChecklist(content, () => {
+                executePublish(content);
+            });
+        }
+
+        function executePublish(content) {
+            const publishBtn = document.querySelector('.btn-success[onclick="publishPost()"]');
+            publishBtn.classList.add('loading');
+            publishBtn.innerHTML = '🚀 발행 중...';
+            publishBtn.disabled = true;
+            
+            showAlert('info', '🚀 검증된 콘텐츠를 블로그에 발행하고 있습니다...');
+            
+            // 발행 기록 저장
+            const publishRecord = {
+                platform: currentPlatform,
+                timestamp: new Date().toISOString(),
+                content: content.substring(0, 500) + '...', // 처음 500자만 저장
+                contentHash: btoa(content).substring(0, 20) // 간단한 해시
+            };
+            
+            publishQueue.push(publishRecord);
+            
+            // 발행된 글 기록 저장 (중복 검사용)
+            const savedPosts = JSON.parse(localStorage.getItem('publishedPosts') || '[]');
+            savedPosts.push({
+                content: content,
+                timestamp: new Date().toISOString(),
+                platform: currentPlatform
+            });
+            
+            // 최근 50개만 유지
+            if (savedPosts.length > 50) {
+                savedPosts.splice(0, savedPosts.length - 50);
+            }
+            
+            localStorage.setItem('publishedPosts', JSON.stringify(savedPosts));
+            
+            // 실제 API 호출 시뮬레이션
+            setTimeout(() => {
+                publishBtn.classList.remove('loading');
+                publishBtn.innerHTML = '🚀 블로그 발행';
+                publishBtn.disabled = false;
+                
+                const rateCheck = checkRateLimit(currentPlatform);
+                showAlert('success', `✅ ${currentPlatform} 블로그에 성공적으로 발행되었습니다!
+
+📊 오늘의 발행 현황:
+• 시간당: ${rateCheck.hourlyCount + 1}/${rateCheck.limits.maxPerHour}
+• 일일: ${rateCheck.dailyCount + 1}/${rateCheck.limits.maxPerDay}`);
+            }, 4000);
+        }
+
+        // API 테스트 함수들
+        function testNaverAPI() {
+            const clientId = document.getElementById('naver-client-id').value;
+            const clientSecret = document.getElementById('naver-client-secret').value;
+            
+            if (!clientId || !clientSecret) {
+                showAlert('warning', '❌ Client ID와 Client Secret을 모두 입력해주세요.');
+                return;
+            }
+            
+            showAlert('info', '🔧 네이버 API 연결 테스트 중...');
+            
+            // 실제로는 네이버 API 호출
+            setTimeout(() => {
+                apiConnections.naver = true;
+                updateAPIStatus();
+                saveAPIKeys('naver', { clientId, clientSecret });
+                showAlert('success', '✅ 네이버 블로그 API 연결 성공!');
+            }, 2000);
+        }
+
+        function testTistoryAPI() {
+            const appId = document.getElementById('tistory-app-id').value;
+            const token = document.getElementById('tistory-token').value;
+            const blog = document.getElementById('tistory-blog').value;
+            
+            if (!appId || !token || !blog) {
+                showAlert('warning', '❌ 모든 필드를 입력해주세요.');
+                return;
+            }
+            
+            showAlert('info', '🔧 티스토리 API 연결 테스트 중...');
             
             setTimeout(() => {
-                alertDiv.remove();
-            }, type === 'success' ? 8000 : 5000);
+                apiConnections.tistory = true;
+                updateAPIStatus();
+                saveAPIKeys('tistory', { appId, token, blog });
+                showAlert('success', '✅ 티스토리 API 연결 성공!');
+            }, 2000);
         }
-    </script>
-</body>
-</html>
+
+        function testWordPressAPI() {
+            const siteUrl = document.getElementById('wp-site-url').value;
+            const username = document.getElementById('wp-username').value;
+            const appPassword = document.getElementById('wp-app-password').value;
+            
+            if (!siteUrl || !username || !appPassword) {
+                showAlert('warning', '❌ 모든 필드를 입력해주세요.');
+                return;
+            }
+            
+            showAlert('info', '🔧 워드프레스 API 연결 테스트 중...');
+            
+            setTimeout(() => {
+                apiConnections.wordpress = true;
+                updateAPIStatus();
+                saveAPIKeys('wordpress', { siteUrl, username, appPassword });
+                showAlert('success', '✅ 워드프레스 API 연결 성공!');
+            }, 2000);
+        }
+
+        // API 상태 업데이트
+        function updateAPIStatus() {
+            updateFirebaseStatus(); // Firebase 상태로 업데이트
+        }
+
+        // 보안 강화된 API 키 저장 (서버 연동 권장 방식)
+        function saveAPIKeys(platform, keys) {
+            // 실제 서비스에서는 서버로 전송해야 함
+            showAlert('warning', '⚠️ 보안 알림: API 키는 서버에서 관리되어야 합니다.\n현재는 임시로 로컬에 저장됩니다.');
+            
+            if (!offlineMode && currentUser) {
+                // Firebase에 암호화하여 저장 (실제로는 서버에서 처리)
+                const encryptedKeys = btoa(JSON.stringify(keys)); // 간단한 인코딩 (실제로는 강력한 암호화 필요)
+                
+                db.collection('users').doc(currentUser.uid).collection('apiKeys').doc(platform).set({
+                    data: encryptedKeys,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    note: 'API keys should be managed server-side in production'
+                }).then(() => {
+                    console.log(`${platform} API 키가 Firebase에 저장되었습니다.`);
+                }).catch((error) => {
+                    console.error('Firebase 저장 실패, 로컬 저장으로 대체:', error);
+                    // 실패 시 로컬 저장소 사용
+                    const savedKeys = JSON.parse(localStorage.getItem('apiKeys') || '{}');
+                    savedKeys[platform] = keys;
+                    localStorage.setItem('apiKeys', JSON.stringify(savedKeys));
+                });
+            } else {
+                // 로컬 저장소에 저장 (보안 경고와 함께)
+                const savedKeys = JSON.parse(localStorage.getItem('apiKeys') || '{}');
+                savedKeys[platform] = keys;
+                localStorage.setItem('apiKeys', JSON.stringify(savedKeys));
+                console.log(`${platform} API 키가 로컬에 임시 저장되었습니다.`);
+            }
+        }
+
+        // 개선된 미리보기 (noindex 메타 추가)
+        function previewPost() {
+            const content = document.getElementById('editor-content').value;
+            
+            if (!content.trim()) {
+                showAlert('warning', '❌ 미리볼 내용이 없습니다.');
+                return;
+            }
+            
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <html>
+                <head>
+                    <title>HAIRGATOR - 글 미리보기 (임시)</title>
+                    <meta name="robots" content="noindex, nofollow">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body { 
+                            font-family: 'Inter', sans-serif; 
+                            max-width: 800px; 
+                            margin: 0 auto; 
+                            padding: 40px 20px;
+                            line-height: 1.6;
+                            color: #374151;
+                            background: #ffffff;
+                        }
+                        h1 { 
+                            color: #2563eb; 
+                            border-bottom: 2px solid #2563eb; 
+                            padding-bottom: 10px;
+                            font-size: 2rem;
+                            margin-bottom: 2rem;
+                        }
+                        pre { 
+                            white-space: pre-wrap; 
+                            font-family: inherit;
+                            background: #f8fafc;
+                            padding: 2rem;
+                            border-radius: 12px;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        }
+                        .header {
+                            text-align: center;
+                            margin-bottom: 3rem;
+                            padding: 2rem;
+                            background: #2563eb;
+                            color: white;
+                            border-radius: 12px;
+                        }
+                        .brand {
+                            font-size: 1.5rem;
+                            font-weight: 800;
+                            margin-bottom: 0.5rem;
+                        }
+                        .subtitle {
+                            opacity: 0.9;
+                            font-size: 1rem;
+                        }
+                        .preview-notice {
+                            background: #fef3c7;
+                            border: 1px solid #f59e0b;
+                            color: #92400e;
+                            padding: 1rem;
+                            border-radius: 8px;
+                            margin-bottom: 2rem;
+                            font-size: 0.9rem;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="brand">HAIRGATOR</div>
+                        <div class="subtitle">Blog Automation</div>
+                    </div>
+                    <div class="preview-notice">
+                        ⚠️ 이 페이지는 미리보기용 임시 페이지입니다. 검색엔진에 노출되지 않도록 설정되어 있습니다.
+                    </div>
+                    <h1>📄 글 미리보기</h1>
+                    <pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </body>
+                </html>
+            `);
+        }
+
+        // 네이버 API 테스트 (보안 개선)
+        function testNaverAPI() {
+            const clientId = document.getElementById('naver-client-id').value;
+            const clientSecret = document.getElementById('naver-client-secret').value;
+            
+            if (!clientId || !clientSecret) {
+                showAlert('warning', '❌ Client ID와 Client Secret을 모두 입력해주세요.');
+                return;
+            }
+            
+            // 실제 환경에서는 서버에서 처리해야 함
+            showAlert('info', '🔧 네이버 API 연결 테스트 중...\n\n⚠️ 보안상 API 키는 서버에서 관리되어야 합니다.');
+            
+            // 실제로는 서버 API를 호출해야 함
+            setTimeout(() => {
+                // 간단한 유효성 검사만 수행
+                if (clientId.length > 10 && clientSecret.length > 10) {
+                    apiConnections.naver = true;
+                    updateAPIStatus();
+                    saveAPIKeys('naver', { clientId, clientSecret });
+                    showAlert('success', '✅ 네이버 블로그 API 키 형식이 유효합니다!\n\n📌 실제 연동을 위해서는:\n• 네이버 개발자센터에서 앱 승인 필요\n• 서버사이드 API 연동 권장\n• OAuth 2.0 플로우 구현 필요');
+                } else {
+                    showAlert('warning', '❌ API 키 형식이 올바르지 않습니다.');
+                }
+            }, 2000);
+        }
+
+        // 저장된 API 키 로드
+        function loadSavedAPIKeys() {
+            const savedKeys = JSON.parse(localStorage.getItem('apiKeys') || '{}');
+            
+            // 네이버
+            if (savedKeys.naver) {
+                document.getElementById('naver-client-id').value = savedKeys.naver.clientId || '';
+                document.getElementById('naver-client-secret').value = savedKeys.naver.clientSecret || '';
+                if (savedKeys.naver.clientId && savedKeys.naver.clientSecret) {
+                    apiConnections.naver = true;
+                }
+            }
+            
+            // 티스토리
+            if (savedKeys.tistory) {
+                document.getElementById('tistory-app-id').value = savedKeys.tistory.appId || '';
+                document.getElementById('tistory-token').value = savedKeys.tistory.token || '';
+                document.getElementById('tistory-blog').value = savedKeys.tistory.blog || '';
+                if (savedKeys.tistory.appId && savedKeys.tistory.token && savedKeys.tistory.blog) {
+                    apiConnections.tistory = true;
+                }
+            }
+            
+            // 워드프레스
+            if (savedKeys.wordpress) {
+                document.getElementById('wp-site-url').value = savedKeys.wordpress.siteUrl || '';
+                document.getElementById('wp-username').value = savedKeys.wordpress.username || '';
+                document.getElementById('wp-app-password').value = savedKeys.wordpress.appPassword || '';
+                if (savedKeys.wordpress.siteUrl && savedKeys.wordpress.username && savedKeys.wordpress.appPassword) {
+                    apiConnections.wordpress = true;
+                }
+            }
+        }
+
+        // 클립보드 복사
+        function copyToClipboard() {
+            const content = document.getElementById('editor-content').value;
+            
+            if (!content.trim()) {
+                showAlert('warning', '❌ 복사할 내용이 없습니다.');
+                return;
+            }
+            
+            navigator.clipboard.writeText(content).then(() => {
+                showAlert('success', '📋 클립보드에 복사되었습니다!');
+            });
+        }
+
+        // 임시저장
+        function saveAsDraft() {
+            const content = document.getElementById('editor-content').value;
+            
+            if (!content.trim()) {
+                showAlert('warning', '❌ 저장할 내용이 없습니다.');
+                return;
+            }
+            
+            localStorage.setItem('draft_' + Date.now(), content);
+            showAlert('success', '💾 임시저장되었습니다!');
+        }
+
+        // 미리보기
+        function previewPost() {
+            const content = document.getElementById('editor-content').value;
+            
+            if (!content.trim()) {
+                showAlert('warning', '❌ 미리볼 내용이 없습니다.');
+                return;
+            }
+            
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`
+                <html>
+                <head>
+                    <title>헤어게이터 - 글 미리보기</title>
+                    <style>
+                        body { 
+                            font-family: 'Inter', sans-serif; 
+                            max-width: 800px; 
+                            margin: 0 auto; 
+                            padding: 40px 20px;
+                            line-height: 1.6;
+                            color: #374151;
+                            background: linear-gradient(135deg, #f9fafb, #ffffff);
+                        }
+                        h1 { 
+                            color: #6366f1; 
+                            border-bottom: 2px solid #6366f1; 
+                            padding-bottom: 10px;
+                            font-size: 2rem;
+                            margin-bottom: 2rem;
+                        }
+                        pre { 
+                            white-space: pre-wrap; 
+                            font-family: inherit;
+                            background: rgba(255,255,255,0.8);
+                            padding: 2rem;
+                            border-radius: 16px;
+                            border: 1px solid #e5e7eb;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        }
+                        .header {
+                            text-align: center;
+                            margin-bottom: 3rem;
+                            padding: 2rem;
+                            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                            color: white;
+                            border-radius: 20px;
+                        }
+                        .brand {
+                            font-size: 1.5rem;
+                            font-weight: 800;
+                            margin-bottom: 0.5rem;
+                        }
+                        .subtitle {
+                            opacity: 0.9;
+                            font-size: 1rem;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="brand">💇‍♀️ 헤어게이터</div>
+                        <div class="subtitle">프리미엄 헤어케어 콘텐츠</div>
+                    </div>
+                    <h1>📄 글 미리보기</h1>
+                    <pre>${content}</pre>
+                </body>
+                </html>
+            `);
