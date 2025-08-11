@@ -527,6 +527,448 @@
             background: var(--bg-light);
             color: var(--text-color);
         }
+
+        /* ===================================
+           간편 작성 모드 전용 스타일
+           =================================== */
+        .simple-writer-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .simple-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #F59E0B20, #EC489920);
+            border-radius: 1rem;
+            border: 2px solid #F59E0B;
+        }
+
+        .simple-header h2 {
+            color: #F59E0B;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .simple-header p {
+            color: #6B7280;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .simple-step {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: #F9FAFB;
+            border-radius: 1rem;
+            border: 1px solid #E5E7EB;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #F59E0B;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .step-header h3 {
+            margin: 0;
+            color: #1F2937;
+            flex: 1;
+        }
+
+        .step-header small {
+            color: #6B7280;
+            font-style: italic;
+            margin-left: 1rem;
+        }
+
+        /* 타겟 입력 그룹 */
+        .target-input-group {
+            margin-bottom: 1rem;
+        }
+
+        .simple-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .simple-input:focus {
+            outline: none;
+            border-color: #F59E0B;
+            box-shadow: 0 0 0 3px #F59E0B20;
+        }
+
+        .target-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .example-tag {
+            background: #F3F4F6;
+            color: #374151;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #D1D5DB;
+        }
+
+        .example-tag:hover {
+            background: #F59E0B;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* 스토리 입력 */
+        .story-input-container {
+            margin-bottom: 2rem;
+        }
+
+        .story-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .line-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: #E5E7EB;
+            color: #6B7280;
+            border-radius: 50%;
+            font-weight: 500;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .story-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .story-input:focus {
+            outline: none;
+            border-color: #F59E0B;
+            box-shadow: 0 0 0 2px #F59E0B20;
+        }
+
+        .story-input:not(:placeholder-shown) {
+            border-color: #10B981;
+            background: #F0FDF4;
+        }
+
+        .story-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .add-line-btn, .remove-line-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.5rem;
+            background: white;
+            color: #6B7280;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .add-line-btn:hover {
+            background: #10B981;
+            color: white;
+            border-color: #10B981;
+        }
+
+        .remove-line-btn:hover {
+            background: #EF4444;
+            color: white;
+            border-color: #EF4444;
+        }
+
+        .line-counter {
+            margin-left: auto;
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        /* 템플릿 예시 */
+        .story-templates {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .story-templates h4 {
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .template-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .template-card {
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-card:hover {
+            border-color: #F59E0B;
+            box-shadow: 0 4px 12px #F59E0B20;
+            transform: translateY(-2px);
+        }
+
+        .template-card h5 {
+            color: #F59E0B;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .template-card ul {
+            margin: 0;
+            padding-left: 1rem;
+            color: #6B7280;
+            font-size: 0.85rem;
+        }
+
+        .template-card li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* 생성 버튼 */
+        .generate-section {
+            text-align: center;
+        }
+
+        .generate-simple-btn {
+            background: linear-gradient(135deg, #F59E0B, #EC4899);
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            padding: 1.5rem 3rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 250px;
+        }
+
+        .generate-simple-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 1.5rem;
+        }
+
+        .btn-text {
+            font-weight: 600;
+        }
+
+        .btn-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* 로딩 애니메이션 */
+        .simple-loader {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loader-animation {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .loader-circle {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: #F59E0B;
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .loader-circle:nth-child(1) { animation-delay: -0.32s; }
+        .loader-circle:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        .loader-steps {
+            margin-top: 1rem;
+        }
+
+        .loader-step {
+            padding: 0.5rem;
+            color: #6B7280;
+            transition: color 0.3s;
+        }
+
+        .loader-step.active {
+            color: #F59E0B;
+            font-weight: 500;
+        }
+
+        /* 결과 미리보기 */
+        .simple-result {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            border: 2px solid #10B981;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .result-header h3 {
+            color: #10B981;
+            margin: 0;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .result-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.9rem;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .meta-value {
+            color: #1F2937;
+            font-weight: 600;
+        }
+
+        .content-preview {
+            background: #F9FAFB;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #E5E7EB;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-seo {
+            border-top: 1px solid #E5E7EB;
+            padding-top: 1.5rem;
+        }
+
+        .result-seo h4 {
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .seo-item {
+            margin-bottom: 1rem;
+        }
+
+        .seo-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #6B7280;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .seo-value {
+            color: #1F2937;
+        }
+
+        .keyword-tags, .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .keyword-tag, .tag-item {
+            background: #EFF6FF;
+            color: #1E40AF;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            border: 1px solid #BFDBFE;
+        }
         
         /* 반응형 */
         @media (max-width: 1200px) {
@@ -553,6 +995,18 @@
             .feature-badge {
                 font-size: 0.8rem;
                 padding: 0.4rem 0.8rem;
+            }
+
+            .simple-writer-container {
+                padding: 1rem;
+            }
+
+            .simple-step {
+                padding: 1rem;
+            }
+
+            .template-examples {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -581,6 +1035,21 @@
                 margin: 10% auto;
                 padding: 1.5rem;
                 width: 95%;
+            }
+
+            .story-line {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .line-number {
+                align-self: flex-start;
+            }
+
+            .result-actions {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
         
@@ -643,6 +1112,21 @@
             background: var(--bg-color);
             color: var(--text-color);
         }
+
+        body.dark-mode .simple-step {
+            background: var(--bg-color);
+            border-color: var(--border-color);
+        }
+
+        body.dark-mode .template-card {
+            background: var(--bg-color);
+            border-color: var(--border-color);
+        }
+
+        body.dark-mode .content-preview {
+            background: var(--bg-light);
+            border-color: var(--border-color);
+        }
     </style>
 </head>
 <body>
@@ -655,6 +1139,7 @@
             <div class="feature-badge">📊 네이버 SEO 최적화</div>
             <div class="feature-badge">⚡ 실시간 품질 검사</div>
             <div class="feature-badge">📅 자동화 스케줄링</div>
+            <div class="feature-badge">✨ 간편 작성</div>
         </div>
     </div>
 
@@ -671,7 +1156,7 @@
                         <option value="beauty_enthusiasts">뷰티 애호가</option>
                         <option value="salon_owners">살롱 운영자</option>
                         <option value="general_consumers">일반 소비자</option>
-                        <option value="custom">사용자 정의</option>
+                        <option value="custom_simple">기타 (간편 작성)</option>
                     </select>
                 </div>
                 
@@ -726,6 +1211,7 @@
             <!-- 에디터 탭 네비게이션 -->
             <div class="tab-nav">
                 <button class="editor-tab active" data-tab="write">✍️ 글쓰기</button>
+                <button class="editor-tab" data-tab="simple">✨ 간편 작성</button>
                 <button class="editor-tab" data-tab="seo">🔍 SEO</button>
                 <button class="editor-tab" data-tab="image">🖼️ 이미지</button>
                 <button class="editor-tab" data-tab="preview">👁️ 미리보기</button>
@@ -782,6 +1268,203 @@
                     <div style="background: #f3f4f6; padding: 1rem; border-radius: 8px; text-align: center;">
                         <div class="btn-loader" style="display: inline-block; margin-right: 0.5rem;"></div>
                         AI가 헤어케어 전문 콘텐츠를 생성하고 있습니다...
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🆕 간편 작성 탭 -->
+            <div id="simpleTab" class="tab-content">
+                <div class="simple-writer-container">
+                    <!-- 헤더 -->
+                    <div class="simple-header">
+                        <h2>✨ 간편 작성 모드</h2>
+                        <p>타겟과 간단한 스토리만 입력하면 AI가 완성된 블로그 글로 만들어드려요!</p>
+                    </div>
+                    
+                    <!-- Step 1: 타겟 독자 설정 -->
+                    <div class="simple-step">
+                        <div class="step-header">
+                            <span class="step-number">1</span>
+                            <h3>🎯 누구를 위한 글인가요?</h3>
+                        </div>
+                        <div class="target-input-group">
+                            <input type="text" 
+                                   id="simpleTargetInput" 
+                                   class="simple-input" 
+                                   placeholder="예: 30대 직장인 여성들, 카페 사장님들, 펜션 운영자들, 헤어샵 사장님들">
+                            <div class="target-examples">
+                                <span class="example-tag" onclick="setSimpleTarget('30대 직장인 여성들')">30대 직장인 여성들</span>
+                                <span class="example-tag" onclick="setSimpleTarget('카페 사장님들')">카페 사장님들</span>
+                                <span class="example-tag" onclick="setSimpleTarget('펜션 운영자들')">펜션 운영자들</span>
+                                <span class="example-tag" onclick="setSimpleTarget('헤어샵 사장님들')">헤어샵 사장님들</span>
+                                <span class="example-tag" onclick="setSimpleTarget('대학생들')">대학생들</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: 스토리 입력 -->
+                    <div class="simple-step">
+                        <div class="step-header">
+                            <span class="step-number">2</span>
+                            <h3>📝 어떤 내용으로 쓸까요?</h3>
+                            <small>간단하게 5줄 정도로 적어주세요</small>
+                        </div>
+                        
+                        <div class="story-input-container">
+                            <div class="story-line" data-line="1">
+                                <span class="line-number">1</span>
+                                <input type="text" 
+                                       class="story-input" 
+                                       placeholder="예: 겨울철에 머리가 너무 건조해져서 고민이에요">
+                            </div>
+                            <div class="story-line" data-line="2">
+                                <span class="line-number">2</span>
+                                <input type="text" 
+                                       class="story-input" 
+                                       placeholder="예: 집에서 쉽게 할 수 있는 헤어케어 방법이 있을까요?">
+                            </div>
+                            <div class="story-line" data-line="3">
+                                <span class="line-number">3</span>
+                                <input type="text" 
+                                       class="story-input" 
+                                       placeholder="예: 비싼 제품 말고 가정에서 만들 수 있는 팩 같은 것도 좋고요">
+                            </div>
+                            <div class="story-line" data-line="4">
+                                <span class="line-number">4</span>
+                                <input type="text" 
+                                       class="story-input" 
+                                       placeholder="예: 직장에서도 간단하게 관리할 수 있는 팁이 있으면 좋겠어요">
+                            </div>
+                            <div class="story-line" data-line="5">
+                                <span class="line-number">5</span>
+                                <input type="text" 
+                                       class="story-input" 
+                                       placeholder="예: 주변 사람들도 같은 고민을 하는 것 같아요">
+                            </div>
+                            
+                            <!-- 줄 추가/삭제 버튼 -->
+                            <div class="story-controls">
+                                <button class="add-line-btn" onclick="addStoryLine()">➕ 줄 추가</button>
+                                <button class="remove-line-btn" onclick="removeStoryLine()">➖ 줄 삭제</button>
+                                <span class="line-counter">5/10 줄</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 예시 템플릿 -->
+                        <div class="story-templates">
+                            <h4>💡 이런 식으로 적어보세요</h4>
+                            <div class="template-examples">
+                                <div class="template-card" onclick="loadTemplate('winter_hair')">
+                                    <h5>겨울철 헤어케어</h5>
+                                    <ul>
+                                        <li>겨울에 머리가 너무 건조해져요</li>
+                                        <li>집에서 쉽게 할 수 있는 관리법 알고 싶어요</li>
+                                        <li>비싸지 않은 방법으로요</li>
+                                        <li>직장에서도 간단하게 할 수 있으면 좋겠어요</li>
+                                        <li>주변 친구들도 같은 고민을 해요</li>
+                                    </ul>
+                                </div>
+                                <div class="template-card" onclick="loadTemplate('salon_management')">
+                                    <h5>헤어샵 운영 고민</h5>
+                                    <ul>
+                                        <li>요즘 손님이 많이 줄어들어서 걱정이에요</li>
+                                        <li>SNS 마케팅을 해보고 싶은데 어떻게 시작할지 모르겠어요</li>
+                                        <li>다른 샵들은 어떤 이벤트를 하는지 궁금해요</li>
+                                        <li>단골 고객들을 더 늘리고 싶어요</li>
+                                        <li>작은 샵도 할 수 있는 마케팅이 있을까요?</li>
+                                    </ul>
+                                </div>
+                                <div class="template-card" onclick="loadTemplate('diy_care')">
+                                    <h5>홈케어 DIY</h5>
+                                    <ul>
+                                        <li>헤어팩을 직접 만들어보고 싶어요</li>
+                                        <li>집에 있는 재료로 만들 수 있으면 좋겠어요</li>
+                                        <li>효과는 확실했으면 해요</li>
+                                        <li>시간은 많이 걸리지 않았으면 좋겠고요</li>
+                                        <li>아이들도 같이 사용할 수 있으면 더 좋겠어요</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: 생성 버튼 -->
+                    <div class="simple-step">
+                        <div class="step-header">
+                            <span class="step-number">3</span>
+                            <h3>🚀 AI가 완성해드려요!</h3>
+                        </div>
+                        
+                        <div class="generate-section">
+                            <button class="generate-simple-btn" onclick="generateSimpleContent()">
+                                <span class="btn-icon">🤖</span>
+                                <span class="btn-text">AI 블로그 글 생성하기</span>
+                                <span class="btn-description">30초면 완성돼요!</span>
+                            </button>
+                            
+                            <!-- 생성 중 로딩 -->
+                            <div id="simpleGeneratingLoader" class="simple-loader hidden">
+                                <div class="loader-animation">
+                                    <div class="loader-circle"></div>
+                                    <div class="loader-circle"></div>
+                                    <div class="loader-circle"></div>
+                                </div>
+                                <p>AI가 열심히 글을 쓰고 있어요... ✍️</p>
+                                <div class="loader-steps">
+                                    <div class="loader-step active">📝 스토리 분석 중...</div>
+                                    <div class="loader-step">🎯 타겟 맞춤 조정 중...</div>
+                                    <div class="loader-step">✨ 완성된 글 생성 중...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 결과 미리보기 -->
+                    <div id="simpleResultPreview" class="simple-result hidden">
+                        <div class="result-header">
+                            <h3>🎉 완성된 블로그 글</h3>
+                            <div class="result-actions">
+                                <button class="btn btn-secondary" onclick="editSimpleResult()">✏️ 수정하기</button>
+                                <button class="btn btn-primary" onclick="useSimpleResult()">✅ 이 글 사용하기</button>
+                            </div>
+                        </div>
+                        
+                        <div class="result-content">
+                            <div class="result-meta">
+                                <div class="meta-item">
+                                    <span class="meta-label">제목</span>
+                                    <span id="simpleResultTitle" class="meta-value"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">예상 읽기 시간</span>
+                                    <span id="simpleResultReadTime" class="meta-value"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">글자 수</span>
+                                    <span id="simpleResultWordCount" class="meta-value"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="result-preview">
+                                <div id="simpleResultContent" class="content-preview"></div>
+                            </div>
+                            
+                            <div class="result-seo">
+                                <h4>🔍 SEO 정보</h4>
+                                <div class="seo-item">
+                                    <span class="seo-label">메타 설명</span>
+                                    <span id="simpleResultMeta" class="seo-value"></span>
+                                </div>
+                                <div class="seo-item">
+                                    <span class="seo-label">키워드</span>
+                                    <div id="simpleResultKeywords" class="keyword-tags"></div>
+                                </div>
+                                <div class="seo-item">
+                                    <span class="seo-label">태그</span>
+                                    <div id="simpleResultTags" class="tag-list"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -849,39 +1532,39 @@
         </div>
 
         <!-- 오른쪽 사이드바 -->
-<div class="sidebar">
-    <!-- AI 연결 상태 (API 키 입력 폼 제거) -->
-    <section class="ai-section">
-        <h3>🤖 AI 서비스</h3>
-        
-        <!-- Claude 상태 표시만 -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
-            <div>
-                <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
-                <div id="claudeStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
-            </div>
-            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
-        </div>
-        
-        <!-- OpenAI 상태 표시만 -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
-            <div>
-                <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
-                <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
-            </div>
-            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
-        </div>
-        
-        <!-- API 상태 정보 -->
-        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
-            <div style="font-size: 0.9rem; color: #166534; font-weight: 500; margin-bottom: 0.5rem;">🔑 API 키 상태</div>
-            <div style="font-size: 0.8rem; color: #15803d;">
-                • Claude & OpenAI API 키가 안전하게 연결되었습니다<br>
-                • 즉시 AI 콘텐츠 생성이 가능합니다<br>
-                • 별도 설정이 필요하지 않습니다
-            </div>
-        </div>
-    </section>
+        <div class="sidebar">
+            <!-- AI 연결 상태 (API 키 입력 폼 제거) -->
+            <section class="ai-section">
+                <h3>🤖 AI 서비스</h3>
+                
+                <!-- Claude 상태 표시만 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">📝 Claude (글 작성)</div>
+                        <div id="claudeStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testClaudeConnection()">테스트</button>
+                </div>
+                
+                <!-- OpenAI 상태 표시만 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; background: var(--bg-color);">
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-color); margin-bottom: 0.25rem;">🎨 OpenAI (이미지)</div>
+                        <div id="openaiStatus" style="font-size: 0.9rem; color: var(--success-color);">✅ 연결됨</div>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="testOpenAIConnection()">테스트</button>
+                </div>
+                
+                <!-- API 상태 정보 -->
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
+                    <div style="font-size: 0.9rem; color: #166534; font-weight: 500; margin-bottom: 0.5rem;">🔑 API 키 상태</div>
+                    <div style="font-size: 0.8rem; color: #15803d;">
+                        • Claude & OpenAI API 키가 안전하게 연결되었습니다<br>
+                        • 즉시 AI 콘텐츠 생성이 가능합니다<br>
+                        • 별도 설정이 필요하지 않습니다
+                    </div>
+                </div>
+            </section>
 
             <!-- 품질 메트릭 -->
             <section class="quality-section mt-2">
@@ -1090,9 +1773,9 @@
     </div>
 
     <!-- JavaScript 파일들 -->
-   <script type="module" src="js/utils.js"></script>
-<script type="module" src="js/ai-service.js"></script>
-<script type="module" src="js/app.js"></script>
+    <script type="module" src="js/utils.js"></script>
+    <script type="module" src="js/ai-service.js"></script>
+    <script type="module" src="js/app.js"></script>
 
     <!-- 키보드 단축키 안내 -->
     <div style="position: fixed; bottom: 80px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 8px; font-size: 0.8rem; z-index: 100;">
@@ -1102,8 +1785,296 @@
         <div>Ctrl+P: 미리보기</div>
         <div>F1: 도움말</div>
     </div>
+
+    <!-- 간편 작성 모드 전용 스크립트 -->
+    <script>
+        // 간편 작성 모드 함수들
+        function setSimpleTarget(target) {
+            document.getElementById('simpleTargetInput').value = target;
+        }
+
+        function addStoryLine() {
+            const container = document.querySelector('.story-input-container');
+            const lines = container.querySelectorAll('.story-line');
+            const currentCount = lines.length;
+            
+            if (currentCount >= 10) {
+                showNotification('warning', '줄 수 제한', '최대 10줄까지만 입력할 수 있습니다.');
+                return;
+            }
+            
+            const newLine = document.createElement('div');
+            newLine.className = 'story-line';
+            newLine.dataset.line = currentCount + 1;
+            
+            newLine.innerHTML = `
+                <span class="line-number">${currentCount + 1}</span>
+                <input type="text" class="story-input" placeholder="추가 내용을 입력하세요">
+            `;
+            
+            const controls = container.querySelector('.story-controls');
+            container.insertBefore(newLine, controls);
+            
+            updateLineCounter();
+        }
+
+        function removeStoryLine() {
+            const container = document.querySelector('.story-input-container');
+            const lines = container.querySelectorAll('.story-line');
+            const currentCount = lines.length;
+            
+            if (currentCount <= 1) {
+                showNotification('warning', '줄 수 제한', '최소 1줄은 있어야 합니다.');
+                return;
+            }
+            
+            lines[lines.length - 1].remove();
+            updateLineCounter();
+        }
+
+        function updateLineCounter() {
+            const lines = document.querySelectorAll('.story-line');
+            const counter = document.querySelector('.line-counter');
+            if (counter) {
+                counter.textContent = `${lines.length}/10 줄`;
+            }
+        }
+
+        function loadTemplate(templateType) {
+            const templates = {
+                winter_hair: [
+                    "겨울에 머리가 너무 건조해져요",
+                    "집에서 쉽게 할 수 있는 관리법 알고 싶어요",
+                    "비싸지 않은 방법으로요",
+                    "직장에서도 간단하게 할 수 있으면 좋겠어요",
+                    "주변 친구들도 같은 고민을 해요"
+                ],
+                salon_management: [
+                    "요즘 손님이 많이 줄어들어서 걱정이에요",
+                    "SNS 마케팅을 해보고 싶은데 어떻게 시작할지 모르겠어요",
+                    "다른 샵들은 어떤 이벤트를 하는지 궁금해요",
+                    "단골 고객들을 더 늘리고 싶어요",
+                    "작은 샵도 할 수 있는 마케팅이 있을까요?"
+                ],
+                diy_care: [
+                    "헤어팩을 직접 만들어보고 싶어요",
+                    "집에 있는 재료로 만들 수 있으면 좋겠어요",
+                    "효과는 확실했으면 해요",
+                    "시간은 많이 걸리지 않았으면 좋겠고요",
+                    "아이들도 같이 사용할 수 있으면 더 좋겠어요"
+                ]
+            };
+
+            const template = templates[templateType];
+            if (!template) return;
+
+            const storyInputs = document.querySelectorAll('.story-input');
+            template.forEach((text, index) => {
+                if (storyInputs[index]) {
+                    storyInputs[index].value = text;
+                }
+            });
+
+            showNotification('success', '템플릿 적용', '예시 템플릿이 적용되었습니다.');
+        }
+
+        async function generateSimpleContent() {
+            const targetInput = document.getElementById('simpleTargetInput');
+            const storyInputs = document.querySelectorAll('.story-input');
+            
+            const target = targetInput.value.trim();
+            const storyLines = Array.from(storyInputs)
+                .map(input => input.value.trim())
+                .filter(line => line.length > 0);
+
+            // 입력 검증
+            if (!target) {
+                showNotification('warning', '입력 필요', '타겟 독자를 입력해주세요.');
+                targetInput.focus();
+                return;
+            }
+
+            if (storyLines.length === 0) {
+                showNotification('warning', '입력 필요', '최소 1줄 이상의 스토리를 입력해주세요.');
+                storyInputs[0].focus();
+                return;
+            }
+
+            // 로딩 시작
+            const generateBtn = document.querySelector('.generate-simple-btn');
+            const loader = document.getElementById('simpleGeneratingLoader');
+            const resultPreview = document.getElementById('simpleResultPreview');
+            
+            generateBtn.style.display = 'none';
+            loader.classList.remove('hidden');
+            resultPreview.classList.add('hidden');
+
+            try {
+                // 로딩 단계 애니메이션
+                await animateLoaderSteps();
+
+                // AI 서비스 호출
+                if (window.HairGatorAI) {
+                    const prompt = window.HairGatorUtils.generateSimpleWritingPrompt(target, storyLines);
+                    
+                    const result = await window.HairGatorAI.generateHaircareContent({
+                        title: "간편 작성 모드",
+                        keywords: extractKeywordsFromStory(storyLines),
+                        targetAudience: target,
+                        customPrompt: prompt
+                    });
+
+                    // 결과 표시
+                    displaySimpleResult(result);
+                    
+                } else {
+                    throw new Error('AI 서비스가 초기화되지 않았습니다.');
+                }
+
+            } catch (error) {
+                console.error('간편 작성 생성 실패:', error);
+                showNotification('error', '생성 실패', `AI 콘텐츠 생성에 실패했습니다: ${error.message}`);
+            } finally {
+                // 로딩 종료
+                generateBtn.style.display = 'inline-flex';
+                loader.classList.add('hidden');
+            }
+        }
+
+        async function animateLoaderSteps() {
+            const steps = document.querySelectorAll('.loader-step');
+            
+            for (let i = 0; i < steps.length; i++) {
+                // 이전 단계 비활성화
+                steps.forEach(step => step.classList.remove('active'));
+                
+                // 현재 단계 활성화
+                steps[i].classList.add('active');
+                
+                // 각 단계마다 대기
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+
+        function extractKeywordsFromStory(storyLines) {
+            // 스토리에서 키워드 추출 (간단한 로직)
+            const allText = storyLines.join(' ');
+            const commonWords = ['헤어케어', '관리', '방법', '팁', '케어', '모발', '머리'];
+            return commonWords.slice(0, 5); // 임시로 기본 키워드 반환
+        }
+
+        function displaySimpleResult(result) {
+            const resultPreview = document.getElementById('simpleResultPreview');
+            
+            // 메타 정보 업데이트
+            document.getElementById('simpleResultTitle').textContent = result.title || '생성된 제목';
+            document.getElementById('simpleResultReadTime').textContent = `${Math.ceil(result.content.length / 500)} 분`;
+            document.getElementById('simpleResultWordCount').textContent = `${result.content.length} 자`;
+            
+            // 본문 미리보기
+            document.getElementById('simpleResultContent').innerHTML = result.content.replace(/\n/g, '<br>');
+            
+            // SEO 정보
+            document.getElementById('simpleResultMeta').textContent = result.metaDescription || '메타 설명 생성됨';
+            
+            // 키워드 태그
+            const keywordContainer = document.getElementById('simpleResultKeywords');
+            keywordContainer.innerHTML = '';
+            (result.targetKeywords || []).forEach(keyword => {
+                const tag = document.createElement('span');
+                tag.className = 'keyword-tag';
+                tag.textContent = keyword;
+                keywordContainer.appendChild(tag);
+            });
+            
+            // 태그 목록
+            const tagContainer = document.getElementById('simpleResultTags');
+            tagContainer.innerHTML = '';
+            (result.tags || []).forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag-item';
+                tagElement.textContent = tag;
+                tagContainer.appendChild(tagElement);
+            });
+            
+            // 결과 표시
+            resultPreview.classList.remove('hidden');
+            
+            // 성공 알림
+            showNotification('success', '생성 완료', '🎉 AI가 블로그 글을 성공적으로 생성했습니다!');
+        }
+
+        function editSimpleResult() {
+            // 글쓰기 탭으로 이동하여 편집
+            const result = {
+                title: document.getElementById('simpleResultTitle').textContent,
+                content: document.getElementById('simpleResultContent').textContent,
+                meta: document.getElementById('simpleResultMeta').textContent
+            };
+            
+            // 글쓰기 탭의 입력 필드에 값 설정
+            document.getElementById('postTitle').value = result.title;
+            document.getElementById('postContent').value = result.content;
+            document.getElementById('metaDescription').value = result.meta;
+            
+            // 글쓰기 탭으로 전환
+            document.querySelector('[data-tab="write"]').click();
+            
+            showNotification('info', '편집 모드', '생성된 글이 편집 모드로 이동되었습니다.');
+        }
+
+        function useSimpleResult() {
+            // 결과를 그대로 사용 (발행 준비)
+            editSimpleResult(); // 먼저 편집 탭으로 이동
+            
+            // 자동으로 품질 검사 실행
+            setTimeout(() => {
+                if (typeof checkQuality === 'function') {
+                    checkQuality();
+                }
+            }, 500);
+            
+            showNotification('success', '글 준비 완료', '🚀 발행할 준비가 되었습니다!');
+        }
+
+        // 탭 전환 기능 (기존 코드와 통합)
+        document.addEventListener('DOMContentLoaded', function() {
+            // 탭 전환 이벤트 리스너
+            const editorTabs = document.querySelectorAll('.editor-tab');
+            editorTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    switchEditorTab(targetTab);
+                });
+            });
+        });
+
+        function switchEditorTab(tabName) {
+            // 모든 탭 비활성화
+            document.querySelectorAll('.editor-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 선택된 탭 활성화
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // 해당 탭 콘텐츠 표시
+            const tabContentMap = {
+                'write': 'writeTab',
+                'simple': 'simpleTab',
+                'seo': 'seoTab',
+                'image': 'imageTab',
+                'preview': 'previewTab'
+            };
+            
+            const contentId = tabContentMap[tabName];
+            if (contentId) {
+                document.getElementById(contentId).classList.add('active');
+            }
+        }
+    </script>
 </body>
 </html>
-
-
-
