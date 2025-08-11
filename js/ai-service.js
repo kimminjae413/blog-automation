@@ -1,28 +1,67 @@
 // HAIRGATOR - ai-service.js
-// AI 연동 서비스 (보안 강화 버전)
+// AI 서비스 관리 및 API 연동 - 완전수정본 (API키 포함)
 
-// ⚠️ 보안 가이드라인 준수
-// - API 키는 서버에서만 관리
-// - 클라이언트는 서버 프록시를 통해서만 AI 호출
-// - 실제 운영시에는 /api/ 엔드포인트 사용 필수
-
+// AI 서비스 클래스
 class HairGatorAIService {
     constructor() {
-        this.currentAIService = 'claude'; // 기본값
+        // 개발/운영 환경 감지
         this.isDevMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         this.serverEndpoint = this.isDevMode ? 'http://localhost:3000' : '';
-        this.rateLimitDelay = 2000; // API 호출 간격
-        this.maxRetries = 3;
-        this.requestQueue = [];
-        this.isProcessing = false;
         
-        // 실제 운영에서는 제거해야 할 임시 키 저장소
-        this.tempKeys = {
-            claude: null,
-            openai: null
+        // API 설정 (하드코딩)
+        this.config = {
+            claude: {
+                apiKey: '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',
+                baseURL: 'https://api.anthropic.com/v1/messages',
+                model: 'claude-3-5-sonnet-20241022'
+            },
+            openai: {
+                apiKey: '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',
+                baseURL: 'https://api.openai.com/v1/chat/completions',
+                imageURL: 'https://api.openai.com/v1/images/generations',
+                model: 'gpt-4o'
+            }
         };
         
-        console.log('🤖 HairGator AI Service 초기화 완료');
+        // 큐 및 처리 설정
+        this.requestQueue = [];
+        this.isProcessing = false;
+        this.retryAttempts = 3;
+        this.retryDelay = 1000;
+        this.rateLimitDelay = 2000;
+        this.currentAIService = 'claude'; // 기본값
+        this.lastRequestTime = null;
+        
+        
+        // 통계 및 상태 추적
+        this.statistics = {
+            totalRequests: 0,
+            successfulRequests: 0,
+            failedRequests: 0,
+            currentService: 'claude',
+            averageResponseTime: 0,
+            lastRequestTime: null
+        };
+
+        // 사용자 글쓰기 스타일 학습 데이터
+        this.userWritingStyle = {
+            tone: 'professional', // professional, casual, friendly
+            structure: 'detailed', // detailed, concise, bullet-points
+            vocabulary: 'technical', // technical, simple, mixed
+            examples: [], // 사용자가 작성한 글 샘플들
+            preferences: {
+                introStyle: 'direct', // direct, story, question
+                conclusionStyle: 'actionable', // actionable, summary, call-to-action
+                useEmojis: false,
+                preferredLength: 'medium' // short, medium, long
+            }
+        };
+        
+        console.log('🤖 HAIRGATOR AI 서비스 초기화 완료');
+        console.log('📝 Claude: 글 작성 전용');
+        console.log('🎨 OpenAI: 이미지 생성 전용');
+        
+        // 서비스 초기화
         this.initializeService();
     }
     
@@ -42,7 +81,7 @@ class HairGatorAIService {
     
     // 서버 연결 상태 확인
     async checkServerConnection() {
-        if (this.isDevMode) {
+        if (this.isDevMode && this.serverEndpoint) {
             try {
                 const response = await fetch(`${this.serverEndpoint}/api/health`);
                 if (response.ok) {
@@ -52,8 +91,8 @@ class HairGatorAIService {
                     throw new Error('서버 응답 오류');
                 }
             } catch (error) {
-                console.warn('⚠️ AI 서버 미연결 - 샘플 모드로 실행');
-                this.logActivity('서버 연결', 'AI 서버 미연결 - 샘플 모드로 실행합니다.', 'warning');
+                console.warn('⚠️ AI 서버 미연결 - 클라이언트 직접 호출 모드');
+                this.logActivity('서버 연결', 'AI 서버 미연결 - 클라이언트 직접 호출 모드로 실행합니다.', 'warning');
             }
         }
     }
@@ -62,34 +101,164 @@ class HairGatorAIService {
     setAIService(service) {
         if (['claude', 'openai'].includes(service)) {
             this.currentAIService = service;
+            this.statistics.currentService = service;
             this.logActivity('AI 서비스 변경', `${service.toUpperCase()}로 AI 서비스가 변경되었습니다.`);
             return true;
         }
         return false;
     }
     
-    // API 키 설정 (개발 모드에서만 - 운영에서는 제거)
+    // API 키 설정 (하드코딩되어 있으므로 경고만 표시)
     setAPIKey(service, key) {
-        if (this.isDevMode && ['claude', 'openai'].includes(service)) {
-            this.tempKeys[service] = key;
-            console.warn(`⚠️ 개발 모드: ${service} API 키 임시 저장`);
-            return true;
+        console.warn(`⚠️ API 키가 이미 하드코딩되어 있습니다. 서비스: ${service}`);
+        return true;
+    
+    // ===========================================
+    // 사용자 글쓰기 스타일 학습 기능
+    // ===========================================
+    
+    // 사용자 글 샘플 추가
+    addWritingSample(title, content, category = 'general') {
+        const sample = {
+            title,
+            content,
+            category,
+            timestamp: new Date().toISOString(),
+            wordCount: content.split(' ').length,
+            analyzed: false
+        };
+        
+        this.userWritingStyle.examples.push(sample);
+        
+        // 최대 20개 샘플만 유지
+        if (this.userWritingStyle.examples.length > 20) {
+            this.userWritingStyle.examples.shift();
         }
-        console.error('❌ 운영 환경에서는 클라이언트 키 저장 불가');
-        return false;
+        
+        // 스타일 분석 실행
+        this.analyzeWritingStyle();
+        
+        console.log('📚 글쓰기 샘플 추가됨:', title);
+        return sample;
     }
     
-    // 메인 AI 콘텐츠 생성 함수
+    // 글쓰기 스타일 분석
+    analyzeWritingStyle() {
+        if (this.userWritingStyle.examples.length < 3) {
+            console.log('📊 스타일 분석을 위해 최소 3개의 샘플이 필요합니다.');
+            return;
+        }
+        
+        const samples = this.userWritingStyle.examples;
+        
+        // 평균 글 길이 분석
+        const avgWordCount = samples.reduce((sum, sample) => sum + sample.wordCount, 0) / samples.length;
+        if (avgWordCount < 500) {
+            this.userWritingStyle.preferences.preferredLength = 'short';
+        } else if (avgWordCount > 1500) {
+            this.userWritingStyle.preferences.preferredLength = 'long';
+        } else {
+            this.userWritingStyle.preferences.preferredLength = 'medium';
+        }
+        
+        // 톤 분석 (간단한 키워드 기반)
+        const allContent = samples.map(s => s.content).join(' ').toLowerCase();
+        const technicalWords = ['기술적', '전문적', '분석', '연구', '데이터', '효과', '성분', '방법', '과정'].filter(word => allContent.includes(word)).length;
+        const casualWords = ['정말', '진짜', '완전', '대박', '꿀팁', '간단히', '쉽게', '편하게'].filter(word => allContent.includes(word)).length;
+        
+        if (technicalWords > casualWords) {
+            this.userWritingStyle.tone = 'professional';
+            this.userWritingStyle.vocabulary = 'technical';
+        } else if (casualWords > technicalWords) {
+            this.userWritingStyle.tone = 'casual';
+            this.userWritingStyle.vocabulary = 'simple';
+        } else {
+            this.userWritingStyle.tone = 'friendly';
+            this.userWritingStyle.vocabulary = 'mixed';
+        }
+        
+        console.log('🎯 글쓰기 스타일 분석 완료:', this.userWritingStyle);
+    }
+    
+    // 사용자 스타일 기반 프롬프트 생성
+    generateStylePrompt() {
+        const style = this.userWritingStyle;
+        
+        let stylePrompt = '\n\n### 글쓰기 스타일 가이드:\n';
+        
+        // 톤 설정
+        switch (style.tone) {
+            case 'professional':
+                stylePrompt += '- 전문적이고 신뢰할 수 있는 톤으로 작성\n';
+                stylePrompt += '- 정확한 정보와 근거를 제시\n';
+                break;
+            case 'casual':
+                stylePrompt += '- 친근하고 편안한 톤으로 작성\n';
+                stylePrompt += '- 일상적인 표현과 예시 사용\n';
+                break;
+            case 'friendly':
+                stylePrompt += '- 친절하고 도움이 되는 톤으로 작성\n';
+                stylePrompt += '- 독자를 배려하는 표현 사용\n';
+                break;
+        }
+        
+        // 어휘 수준
+        switch (style.vocabulary) {
+            case 'technical':
+                stylePrompt += '- 전문 용어를 적절히 사용하되 설명 포함\n';
+                break;
+            case 'simple':
+                stylePrompt += '- 쉽고 이해하기 쉬운 표현 사용\n';
+                break;
+            case 'mixed':
+                stylePrompt += '- 전문 용어와 일반 용어를 적절히 혼합\n';
+                break;
+        }
+        
+        // 글 길이
+        switch (style.preferences.preferredLength) {
+            case 'short':
+                stylePrompt += '- 간결하고 핵심적인 내용으로 구성 (1000-1500자)\n';
+                break;
+            case 'long':
+                stylePrompt += '- 상세하고 깊이 있는 내용으로 구성 (2500-3500자)\n';
+                break;
+            case 'medium':
+                stylePrompt += '- 적절한 분량으로 균형 잡힌 구성 (1500-2500자)\n';
+                break;
+        }
+        
+        // 구조
+        stylePrompt += '- 소제목을 활용한 체계적인 구성\n';
+        stylePrompt += '- 실용적인 팁과 구체적인 예시 포함\n';
+        stylePrompt += '- 독자 행동을 유도하는 마무리\n';
+        
+        // 사용자 샘플이 있으면 참고 스타일 추가
+        if (style.examples.length > 0) {
+            stylePrompt += '\n### 참고할 사용자 글쓰기 스타일:\n';
+            const recentSample = style.examples[style.examples.length - 1];
+            const samplePreview = recentSample.content.substring(0, 200) + '...';
+            stylePrompt += `예시 글: "${samplePreview}"\n`;
+            stylePrompt += '위 예시와 유사한 스타일과 접근 방식을 참고하여 작성해주세요.\n';
+        }
+        
+        return stylePrompt;
+    }
+    
+    // ===========================================
+    // Claude 글 작성 전용 기능
+    // ===========================================
+    
+    // 헤어케어 콘텐츠 생성 (Claude 전용)
     async generateHaircareContent(topic, options = {}) {
         const requestData = {
-            service: this.currentAIService,
             topic: topic,
             options: {
-                targetAudience: options.targetAudience || currentTargetAudience,
+                targetAudience: options.targetAudience || 'hair_professionals',
                 contentType: options.contentType || 'guide',
-                naverSEO: options.naverSEO !== false, // 기본값 true
+                naverSEO: options.naverSEO !== false,
+                includeImages: false, // 이미지는 별도 OpenAI 처리
                 length: options.length || 'medium',
-                tone: options.tone || 'professional_friendly',
                 ...options
             },
             timestamp: Date.now()
@@ -98,23 +267,7 @@ class HairGatorAIService {
         return this.queueRequest('generate_content', requestData);
     }
     
-    // 이미지 생성
-    async generateHaircareImage(prompt, options = {}) {
-        const requestData = {
-            prompt: this.enhanceImagePrompt(prompt),
-            options: {
-                style: options.style || 'professional',
-                size: options.size || '1024x1024',
-                quality: options.quality || 'standard',
-                ...options
-            },
-            timestamp: Date.now()
-        };
-        
-        return this.queueRequest('generate_image', requestData);
-    }
-    
-    // 콘텐츠 품질 검사
+    // 콘텐츠 품질 검사 (Claude 전용)
     async checkContentQuality(content, options = {}) {
         const requestData = {
             content: content,
@@ -130,13 +283,13 @@ class HairGatorAIService {
         return this.queueRequest('check_quality', requestData);
     }
     
-    // 키워드 제안
+    // 키워드 제안 (Claude 전용)
     async suggestKeywords(topic, options = {}) {
         const requestData = {
             topic: topic,
             options: {
                 count: options.count || 10,
-                targetAudience: options.targetAudience || currentTargetAudience,
+                targetAudience: options.targetAudience || 'hair_professionals',
                 category: options.category || 'haircare',
                 ...options
             },
@@ -146,51 +299,64 @@ class HairGatorAIService {
         return this.queueRequest('suggest_keywords', requestData);
     }
     
-    // SEO 최적화 제안
-    async optimizeForNaverSEO(content, title, options = {}) {
+    // ===========================================
+    // OpenAI 이미지 생성 전용 기능
+    // ===========================================
+    
+    // 헤어케어 이미지 생성 (OpenAI 전용)
+    async generateHaircareImage(prompt, options = {}) {
         const requestData = {
-            content: content,
-            title: title,
+            prompt: prompt,
             options: {
-                targetKeywords: options.targetKeywords || [],
-                targetAudience: options.targetAudience || currentTargetAudience,
-                improvementAreas: options.improvementAreas || [],
+                size: options.size || '1024x1024',
+                quality: options.quality || 'standard',
+                style: options.style || 'natural',
+                haircareContext: true,
                 ...options
             },
             timestamp: Date.now()
         };
         
-        return this.queueRequest('optimize_seo', requestData);
+        return this.queueRequest('generate_image', requestData);
     }
+    
+    // 헤어스타일 이미지 생성
+    async generateHairstyleImage(hairstyle, options = {}) {
+        const enhancedPrompt = `Professional ${hairstyle} hairstyle, salon quality, professional lighting, clean background, detailed hair texture, modern styling, ${options.gender || 'female'} model`;
+        
+        return this.generateHaircareImage(enhancedPrompt, {
+            ...options,
+            hairstyleGeneration: true
+        });
+    }
+    
+    // ===========================================
+    // 요청 큐 및 처리 시스템
+    // ===========================================
     
     // 요청 큐에 추가
     async queueRequest(type, data) {
         return new Promise((resolve, reject) => {
             const request = {
                 id: Date.now() + Math.random(),
-                type: type,
-                data: data,
-                resolve: resolve,
-                reject: reject,
-                retries: 0,
-                createdAt: Date.now()
+                type,
+                data,
+                resolve,
+                reject,
+                timestamp: Date.now(),
+                retryCount: 0
             };
             
             this.requestQueue.push(request);
             console.log(`📝 AI 요청 큐에 추가: ${type} (대기: ${this.requestQueue.length})`);
             
-            // 큐 처리가 중단된 경우 재시작
-            if (!this.isProcessing) {
-                this.processQueue();
-            }
+            this.processQueue();
         });
     }
     
-    // 큐 처리
+    // 요청 큐 처리
     async processQueue() {
-        if (this.isProcessing || this.requestQueue.length === 0) {
-            return;
-        }
+        if (this.isProcessing || this.requestQueue.length === 0) return;
         
         this.isProcessing = true;
         
@@ -199,31 +365,30 @@ class HairGatorAIService {
             
             try {
                 console.log(`🔄 AI 요청 처리 중: ${request.type}`);
+                
+                const startTime = Date.now();
                 const result = await this.executeRequest(request);
+                const responseTime = Date.now() - startTime;
+                
+                // 통계 업데이트
+                this.updateStatistics(true, responseTime);
+                
+                console.log(`✅ AI 요청 완료: ${request.type} (${responseTime}ms)`);
                 request.resolve(result);
                 
-                this.logActivity('AI 요청 성공', `${request.type} 요청이 성공적으로 처리되었습니다.`, 'success');
-                
-                // 레이트 리밋 준수
-                if (this.requestQueue.length > 0) {
-                    await this.delay(this.rateLimitDelay);
-                }
-                
             } catch (error) {
-                console.error(`❌ AI 요청 실패: ${request.type}`, error);
+                console.log(`❌ AI 요청 실패: ${request.type}`, error.message);
                 
                 // 재시도 로직
-                if (request.retries < this.maxRetries) {
-                    request.retries++;
-                    this.requestQueue.unshift(request); // 큐 앞쪽에 다시 추가
-                    
-                    this.logActivity('AI 요청 재시도', `${request.type} 요청을 재시도합니다. (${request.retries}/${this.maxRetries})`, 'warning');
-                    
-                    // 재시도 전 대기
-                    await this.delay(this.rateLimitDelay * request.retries);
+                if (request.retryCount < this.retryAttempts) {
+                    request.retryCount++;
+                    console.log(`🔄 AI 요청 재시도: ${request.type} 요청을 재시도합니다. (${request.retryCount}/${this.retryAttempts})`);
+                    this.requestQueue.unshift(request);
+                    await new Promise(resolve => setTimeout(resolve, this.retryDelay));
                 } else {
+                    this.updateStatistics(false);
+                    console.log(`💥 AI 요청 최종 실패: ${request.type} 요청이 최종 실패했습니다: ${error.message}`);
                     request.reject(error);
-                    this.logActivity('AI 요청 실패', `${request.type} 요청이 최종 실패했습니다: ${error.message}`, 'error');
                 }
             }
         }
@@ -231,24 +396,24 @@ class HairGatorAIService {
         this.isProcessing = false;
     }
     
-    // 실제 요청 실행
+    // 개별 요청 실행
     async executeRequest(request) {
         const { type, data } = request;
         
-        // 서버 연결이 가능한 경우 서버로 요청
+        // 서버 요청 시도 (개발 모드)
         if (this.isDevMode && this.serverEndpoint) {
             try {
                 return await this.callServer(type, data);
             } catch (error) {
-                console.warn('서버 요청 실패, 로컬 처리로 전환:', error.message);
+                console.warn('🔄 서버 요청 실패, 클라이언트 직접 호출로 전환:', error.message);
             }
         }
         
-        // 로컬 처리 (샘플/시뮬레이션)
-        return await this.processLocally(type, data);
+        // 클라이언트 직접 API 호출
+        return await this.callDirectAPI(request);
     }
     
-    // 서버 API 호출
+    // 서버 API 호출 (개발 모드)
     async callServer(type, data) {
         const endpoint = `${this.serverEndpoint}/api/ai/${type}`;
         
@@ -269,316 +434,505 @@ class HairGatorAIService {
         return await response.json();
     }
     
-    // 로컬 처리 (샘플/개발 모드)
-    async processLocally(type, data) {
-        console.log(`🧪 로컬 처리: ${type}`);
+    // 클라이언트 직접 API 호출
+    async callDirectAPI(request) {
+        const { type, data } = request;
         
-        // 시뮬레이션 지연
-        await this.delay(1000 + Math.random() * 2000);
+        // 이미지 생성은 OpenAI, 나머지는 Claude
+        if (type === 'generate_image') {
+            return await this.callOpenAIAPI(data);
+        } else {
+            return await this.callClaudeAPI(type, data);
+        }
+    }
+    
+    // ===========================================
+    // Claude API 호출 (글 작성 전용)
+    // ===========================================
+    
+    async callClaudeAPI(type, data) {
+        const { apiKey, baseURL, model } = this.config.claude;
+        
+        let prompt = '';
         
         switch (type) {
             case 'generate_content':
-                return this.generateSampleContent(data);
-            case 'generate_image':
-                return this.generateSampleImage(data);
+                prompt = this.buildContentPrompt(data);
+                break;
             case 'check_quality':
-                return this.checkSampleQuality(data);
+                prompt = this.buildQualityCheckPrompt(data);
+                break;
             case 'suggest_keywords':
-                return this.suggestSampleKeywords(data);
-            case 'optimize_seo':
-                return this.optimizeSampleSEO(data);
+                prompt = this.buildKeywordPrompt(data);
+                break;
             default:
                 throw new Error(`지원하지 않는 요청 타입: ${type}`);
         }
+        
+        // 사용자 스타일 프롬프트 추가
+        prompt += this.generateStylePrompt();
+        
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey,
+                'anthropic-version': '2023-06-01'
+            },
+            body: JSON.stringify({
+                model: model,
+                max_tokens: 4000,
+                messages: [
+                    {
+                        role: 'user',
+                        content: prompt
+                    }
+                ]
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(`Claude API 오류 (${response.status}): ${errorData}`);
+        }
+        
+        const result = await response.json();
+        const generatedText = result.content[0].text;
+        
+        return this.parseClaudeResponse(type, generatedText, data);
     }
     
-    // 샘플 콘텐츠 생성
-    generateSampleContent(data) {
+    // 콘텐츠 생성 프롬프트 구축
+    buildContentPrompt(data) {
         const { topic, options } = data;
-        const targetData = targetAudienceData[options.targetAudience] || targetAudienceData['hair_professionals'];
-        const targetName = targetData.name;
         
-        // 네이버 SEO 최적화된 샘플 콘텐츠 생성
-        if (options.naverSEO) {
-            return this.generateNaverOptimizedContent(topic, targetName, options);
-        }
+        // 타겟 독자 정보 (utils.js 의존성 제거)
+        const targetAudienceInfo = this.getTargetAudienceInfo(options.targetAudience);
         
-        // 일반 콘텐츠 생성
-        return this.generateStandardContent(topic, targetName, options);
+        return `헤어케어 전문 블로그 글을 작성해주세요.
+
+주제: ${topic.title}
+키워드: ${topic.keywords.join(', ')}
+타겟 독자: ${targetAudienceInfo.name}
+카테고리: ${topic.category || '헤어케어 일반'}
+
+요구사항:
+1. 네이버 SEO에 최적화된 구조
+2. 전문적이면서도 이해하기 쉬운 내용
+3. 실용적인 팁과 구체적인 예시 포함
+4. 소제목을 활용한 체계적인 구성
+5. 1500-2500자 분량
+
+구성 요소:
+- 매력적인 제목 (50-60자)
+- 도입부 (문제 제기 또는 호기심 유발)
+- 본문 (3-5개 소제목으로 구성)
+- 실용적인 팁 섹션
+- 마무리 (행동 유도 및 요약)
+- 메타 설명 (120-150자)
+
+응답 형식을 JSON으로 해주세요:
+{
+  "title": "생성된 제목",
+  "content": "마크다운 형식의 본문 내용",
+  "metaDescription": "SEO용 메타 설명",
+  "tags": ["태그1", "태그2", "태그3"],
+  "seoScore": 85
+}`;
     }
     
-    // 네이버 SEO 최적화 콘텐츠 생성
-    generateNaverOptimizedContent(topic, targetName, options) {
-        const seoTitle = this.generateSEOTitle(topic, targetName);
-        const content = this.generateSEOContent(topic, targetName, options);
-        const metaDescription = this.generateSEOMetaDescription(topic, targetName);
+    // 품질 검사 프롬프트 구축
+    buildQualityCheckPrompt(data) {
+        const { content, options } = data;
         
-        return {
-            success: true,
-            data: {
-                title: seoTitle,
-                content: content,
-                metaDescription: metaDescription,
-                seoOptimized: true,
-                naverSEO: {
-                    titleLength: seoTitle.length,
-                    keywordPlacement: this.analyzeKeywordPlacement(seoTitle, content, topic.keywords),
-                    structureScore: this.calculateStructureScore(content),
-                    readabilityScore: this.calculateReadabilityScore(content)
-                },
-                generatedAt: new Date().toISOString(),
-                aiService: this.currentAIService,
-                processingTime: Math.round(Math.random() * 3000 + 1000)
+        return `다음 헤어케어 블로그 글의 품질을 분석해주세요.
+
+제목: ${options.title || '제목 없음'}
+본문: ${content}
+타겟 키워드: ${(options.targetKeywords || []).join(', ')}
+
+분석 항목:
+1. 글자 수 및 가독성
+2. 키워드 밀도 및 SEO 최적화
+3. 구조 및 논리성
+4. 전문성 및 신뢰도
+5. 네이버 검색 최적화
+
+응답 형식을 JSON으로 해주세요:
+{
+  "overallScore": 85,
+  "wordCount": {"count": 2150, "score": 90},
+  "readability": {"score": 88, "level": "중급"},
+  "keywordDensity": {"density": 2.3, "score": 85},
+  "structure": {"score": 90, "headings": 5},
+  "expertise": {"score": 82, "trustSignals": 3},
+  "recommendations": ["개선사항1", "개선사항2"]
+}`;
+    }
+    
+    // 키워드 제안 프롬프트 구축
+    buildKeywordPrompt(data) {
+        const { topic, options } = data;
+        
+        return `다음 헤어케어 주제에 대한 SEO 키워드를 제안해주세요.
+
+주제: ${topic.title}
+기본 키워드: ${topic.keywords.join(', ')}
+타겟 독자: ${options.targetAudience}
+제안 개수: ${options.count}
+
+요구사항:
+1. 네이버 검색 최적화
+2. 롱테일 키워드 포함
+3. 검색 의도별 분류
+4. 난이도별 분류
+
+응답 형식을 JSON으로 해주세요:
+{
+  "keywords": [
+    {"keyword": "키워드1", "searchVolume": "높음", "difficulty": "중", "intent": "정보"},
+    {"keyword": "키워드2", "searchVolume": "중간", "difficulty": "낮음", "intent": "구매"}
+  ],
+  "categories": {
+    "정보성": ["키워드1", "키워드2"],
+    "상업성": ["키워드3", "키워드4"]
+  }
+}`;
+    }
+    
+    // Claude 응답 파싱
+    parseClaudeResponse(type, text, originalData) {
+        try {
+            // JSON 응답 파싱 시도
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const parsed = JSON.parse(jsonMatch[0]);
+                return {
+                    success: true,
+                    data: parsed,
+                    service: 'claude',
+                    type: type
+                };
             }
-        };
-    }
-    
-    // SEO 제목 생성
-    generateSEOTitle(topic, targetName) {
-        const titleTemplates = [
-            `${topic.title} | ${targetName} 완전 가이드 2024`,
-            `${topic.keywords[0]} 전문가가 알려주는 ${targetName} 필수 노하우`,
-            `2024년 최신 ${topic.keywords[0]} 완전정복 - ${targetName} 전용`,
-            `${targetName}을 위한 ${topic.keywords[0]} 실전 가이드`,
-            `${topic.keywords[0]} 베스트 방법 - ${targetName} 추천`,
-            `실무진이 인정한 ${topic.keywords[0]} 핵심 전략`,
-            `${topic.title}: 전문가 검증 ${targetName} 가이드`
-        ];
-        
-        let selectedTemplate = titleTemplates[Math.floor(Math.random() * titleTemplates.length)];
-        
-        // 길이 조정 (30-60자)
-        if (selectedTemplate.length > 60) {
-            selectedTemplate = selectedTemplate.substring(0, 57) + '...';
-        } else if (selectedTemplate.length < 30) {
-            selectedTemplate += ` | 완벽 분석`;
+        } catch (error) {
+            console.warn('JSON 파싱 실패, 텍스트 응답 처리:', error.message);
         }
         
-        return selectedTemplate;
+        // JSON 파싱 실패 시 텍스트 기반 처리
+        return this.parseTextResponse(type, text, originalData);
     }
     
-    // SEO 최적화 콘텐츠 생성
-    generateSEOContent(topic, targetName, options) {
-        const primaryKeyword = topic.keywords[0];
-        const secondaryKeywords = topic.keywords.slice(1);
-        
-        return `# ${topic.title}: ${targetName} 전문 가이드
-
-안녕하세요, **${targetName}** 여러분! 오늘은 **${primaryKeyword}**에 대해 현장에서 바로 활용할 수 있는 **전문적인 내용**을 상세히 공유하겠습니다.
-
-**${primaryKeyword}**는 ${targetName}에게 매우 중요한 요소입니다. 특히 **${secondaryKeywords[0]}**와 연관하여 체계적으로 접근하면 더욱 효과적인 결과를 얻을 수 있습니다.
-
-## ${primaryKeyword}의 핵심 이해
-
-### 왜 ${primaryKeyword}가 중요한가?
-
-**${targetName}**으로서 여러분이 일상적으로 마주치는 ${primaryKeyword} 관련 이슈들을 효과적으로 해결할 수 있는 방법들을 알아보겠습니다.
-
-현장에서 **${secondaryKeywords[0]}**와 관련된 업무를 처리할 때, 체계적인 접근법이 없다면 시간과 비용이 낭비될 수 있습니다. 특히 ${targetName}에게는 다음과 같은 이유로 중요합니다:
-
-- **효율성 향상**: 올바른 ${primaryKeyword} 적용으로 업무 처리 시간 30% 단축
-- **품질 개선**: 전문적인 ${secondaryKeywords[1] || secondaryKeywords[0]} 활용으로 서비스 품질 향상
-- **고객 만족**: 더 나은 결과로 고객 만족도 85% 이상 달성
-- **수익성**: 효과적인 방법으로 월평균 수익성 15% 개선
-
-## 실무 적용 가능한 구체적 방법론
-
-### 1단계: ${primaryKeyword} 현상 파악 및 분석
-
-**${primaryKeyword}**를 다룰 때 가장 먼저 해야 할 일은 정확한 현상 파악입니다. 실무에서 검증된 체크리스트를 활용해보세요.
-
-**필수 체크리스트:**
-- [ ] 기본 상황 및 조건 확인
-- [ ] 관련 요소들 종합 분석  
-- [ ] 명확한 목표 설정 및 우선순위 결정
-- [ ] 필요 자원 및 도구 파악
-- [ ] 예상 소요 시간 및 비용 산정
-
-### 2단계: 전문적 접근법 적용
-
-**${targetName}**의 전문성을 활용한 체계적 접근 방식입니다:
-
-**이론적 기반 마련**
-- ${primaryKeyword}의 핵심 원리와 작동 메커니즘 이해
-- 업계 표준 및 베스트 프랙티스 철저 검토
-- 최신 연구 결과 및 트렌드 분석
-
-**실무 기술 적용**
-- 현장에서 검증된 **${secondaryKeywords[0]}** 기법 활용
-- 개인별/상황별 맞춤 조정 방법
-- 효과 측정 및 개선 방안
-
-### 3단계: 고급 테크닉과 실전 노하우
-
-경험 많은 **${targetName}**들이 실제로 사용하는 고급 기법들을 공개합니다:
-
-**전문가 핵심 팁 #1**: ${secondaryKeywords[1] || secondaryKeywords[0]} 최대 활용법
-- 구체적인 적용 방법과 단계별 가이드
-- 주의해야 할 핵심 포인트 5가지
-- 다양한 상황별 응용 방법
-
-**전문가 핵심 팁 #2**: 효율성 극대화 전략
-- 시간 절약을 위한 핵심 테크닉
-- 품질 향상을 위한 체크포인트
-- 비용 효율적 접근법과 리소스 관리
-
-## ${targetName}을 위한 실제 현장 사례
-
-### 사례 1: 일반적인 상황에서의 ${primaryKeyword} 적용
-
-"실제로 저희 현장에서 **${primaryKeyword}**를 적용할 때 가장 효과적이었던 방법은..."
-
-**상황**: 전형적인 업무 환경에서의 적용 사례
-**적용 방법**: 단계별 구체적 실행 과정
-**결과**: 30일 후 측정된 정량적 성과
-**핵심 포인트**: 성공 요인 3가지 분석
-
-### 사례 2: 까다로운 상황에서의 문제 해결
-
-"특별히 어려운 케이스의 경우, **${secondaryKeywords[0]}** 접근법이 매우 유용했습니다..."
-
-**도전 과제**: 복잡하고 까다로운 상황 설명
-**해결 과정**: 창의적 문제 해결 접근법
-**교훈**: 향후 유사 상황 대비 노하우
-
-## 자주 묻는 질문 (FAQ)
-
-### Q1: ${primaryKeyword} 적용 시 가장 흔한 실수는?
-
-**A**: 가장 흔한 실수는 **기본기를 무시하고 고급 기법만 추구하는 것**입니다. ${primaryKeyword}의 기초 원리를 충분히 이해하지 못한 상태에서 복잡한 방법을 적용하면 오히려 역효과가 날 수 있습니다.
-
-### Q2: ${targetName} 초보자도 바로 적용 가능한가요?
-
-**A**: 네, 충분히 가능합니다. 다만 **단계별 접근**이 중요합니다. 처음에는 기본적인 ${secondaryKeywords[0]} 방법부터 시작하여 점차 고급 기법으로 발전시켜 나가세요.
-
-### Q3: 얼마나 자주 ${primaryKeyword}를 적용해야 하나요?
-
-**A**: **일관성**이 가장 중요합니다. 매일 조금씩이라도 꾸준히 적용하는 것이 일주일에 한 번 많이 하는 것보다 효과적입니다.
-
-## 마무리: ${targetName}을 위한 특별한 조언
-
-**${primaryKeyword}**에 대한 이해와 적용은 **${targetName}**에게 경쟁력을 제공하는 핵심 역량입니다. 
-
-오늘 소개한 방법들을 현장에서 단계적으로 적용해보시고, 여러분만의 노하우로 발전시켜 나가시기 바랍니다.
-
-**중요한 것은 꾸준함입니다.** 전문가는 하루아침에 만들어지지 않습니다. 지속적인 학습과 실습을 통해 더욱 발전된 **${targetName}**이 되어가시길 응원합니다.
-
----
-
-💬 **여러분의 ${primaryKeyword} 경험을 댓글로 공유해주세요!** 어떤 방법이 가장 효과적이었는지, 또는 어려웠던 점은 무엇인지 궁금합니다.
-
-👍 **이 글이 도움이 되셨다면 좋아요와 공유 부탁드립니다!** 더 많은 **${targetName}**들에게 유용한 정보가 전달될 수 있도록 함께해주세요.
-
-🔔 **정기적인 전문 정보를 받아보시려면 구독해주세요!** 매주 실무에 도움되는 최신 정보와 노하우를 공유하겠습니다.
-
----
-
-*본 글은 현장 경험이 풍부한 **${targetName}**들의 실무 노하우와 최신 연구 결과를 바탕으로 작성되었습니다.*`;
-    }
-    
-    // SEO 메타 설명 생성
-    generateSEOMetaDescription(topic, targetName) {
-        const templates = [
-            `${topic.title}에 대한 ${targetName} 전용 완벽 가이드입니다. ${topic.keywords.slice(0, 3).join(', ')} 관련 전문 노하우와 실무 팁을 상세히 알아보세요.`,
-            `${targetName}을 위한 ${topic.keywords[0]} 전문 가이드! 실무에 바로 적용 가능한 ${topic.keywords[1]} 노하우와 현장 경험을 공유합니다.`,
-            `${topic.keywords[0]} 관련 ${targetName} 필수 정보를 한눈에! ${topic.keywords[1]}, ${topic.keywords[2] || topic.keywords[0]} 중심으로 전문가가 직접 알려드립니다.`
-        ];
-        
-        let description = templates[Math.floor(Math.random() * templates.length)];
-        
-        // 150자 제한
-        if (description.length > 150) {
-            description = description.substring(0, 147) + '...';
+    // 텍스트 응답 파싱
+    parseTextResponse(type, text, originalData) {
+        switch (type) {
+            case 'generate_content':
+                return {
+                    success: true,
+                    data: {
+                        title: originalData.topic.title + ' - 전문가 가이드',
+                        content: text,
+                        metaDescription: text.substring(0, 150) + '...',
+                        tags: originalData.topic.keywords || [],
+                        seoScore: 75
+                    },
+                    service: 'claude',
+                    type: type
+                };
+                
+            case 'check_quality':
+                const wordCount = text.split(' ').length;
+                return {
+                    success: true,
+                    data: {
+                        overallScore: 75,
+                        wordCount: { count: wordCount, score: 70 },
+                        readability: { score: 75, level: '중급' },
+                        keywordDensity: { density: 2.0, score: 70 },
+                        structure: { score: 80, headings: 3 },
+                        expertise: { score: 70, trustSignals: 2 },
+                        recommendations: ['구조 개선 필요', 'SEO 최적화 필요']
+                    },
+                    service: 'claude',
+                    type: type
+                };
+                
+            default:
+                return {
+                    success: true,
+                    data: { content: text },
+                    service: 'claude',
+                    type: type
+                };
         }
-        
-        return description;
     }
     
-    // 표준 콘텐츠 생성
-    generateStandardContent(topic, targetName, options) {
-        return {
-            success: true,
-            data: {
-                title: `${topic.title}: ${targetName} 전문 가이드`,
-                content: `# ${topic.title}\n\n${targetName}을 위한 전문적인 ${topic.keywords[0]} 가이드입니다.\n\n## 주요 내용\n\n${topic.keywords.map(keyword => `### ${keyword}\n\n전문적인 ${keyword} 관련 내용을 여기에 작성합니다.\n`).join('\n')}`,
-                metaDescription: `${topic.title}에 대한 ${targetName}의 전문 정보를 확인하세요.`,
-                seoOptimized: false,
-                generatedAt: new Date().toISOString(),
-                aiService: this.currentAIService,
-                processingTime: Math.round(Math.random() * 2000 + 500)
-            }
-        };
-    }
+    // ===========================================
+    // OpenAI API 호출 (이미지 생성 전용)
+    // ===========================================
     
-    // 샘플 이미지 생성
-    generateSampleImage(data) {
+    async callOpenAIAPI(data) {
+        const { apiKey, imageURL } = this.config.openai;
         const { prompt, options } = data;
         
-        // 헤어케어 관련 이미지 URL 풀
-        const sampleImages = [
-            'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1024&h=1024&fit=crop',
-            'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1024&h=1024&fit=crop',
-            'https://images.unsplash.com/photo-1580618432485-c1f0c1e6da84?w=1024&h=1024&fit=crop',
-            'https://images.unsplash.com/photo-1595475038665-8e8be3a4f7db?w=1024&h=1024&fit=crop',
-            'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1024&h=1024&fit=crop',
-            'https://images.unsplash.com/photo-1522338242992-e1633a5603c5?w=1024&h=1024&fit=crop'
-        ];
+        // 헤어케어 전용 프롬프트 향상
+        const enhancedPrompt = this.enhanceImagePrompt(prompt, options);
         
-        const selectedImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
+        const response = await fetch(imageURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'dall-e-3',
+                prompt: enhancedPrompt,
+                size: options.size || '1024x1024',
+                quality: options.quality || 'standard',
+                n: 1
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(`OpenAI API 오류 (${response.status}): ${errorData}`);
+        }
+        
+        const result = await response.json();
         
         return {
             success: true,
             data: {
-                imageUrl: selectedImage,
-                prompt: prompt,
-                enhancedPrompt: this.enhanceImagePrompt(prompt),
-                style: options.style,
-                size: options.size,
-                generatedAt: new Date().toISOString(),
-                processingTime: Math.round(Math.random() * 1500 + 500)
-            }
+                imageUrl: result.data[0].url,
+                prompt: enhancedPrompt,
+                originalPrompt: prompt,
+                size: options.size || '1024x1024',
+                quality: options.quality || 'standard'
+            },
+            service: 'openai',
+            type: 'generate_image'
         };
     }
     
     // 이미지 프롬프트 향상
-    enhanceImagePrompt(originalPrompt) {
-        const enhancements = [
-            'professional haircare',
-            'modern salon setting',
-            'high quality photography',
-            'clean aesthetic',
-            'beautiful lighting',
-            'Korean beauty style'
-        ];
+    enhanceImagePrompt(originalPrompt, options) {
+        let enhancedPrompt = originalPrompt;
         
-        const selectedEnhancements = enhancements
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 3);
+        // 헤어케어 컨텍스트 추가
+        if (options.haircareContext) {
+            enhancedPrompt += ', professional hair salon setting, modern styling tools, clean professional environment';
+        }
         
-        return `${originalPrompt}, ${selectedEnhancements.join(', ')}, professional photography, high resolution`;
+        // 품질 향상 키워드 추가
+        enhancedPrompt += ', high quality, professional photography, detailed, realistic, clean composition';
+        
+        // 스타일 지정
+        if (options.style === 'natural') {
+            enhancedPrompt += ', natural lighting, realistic colors';
+        } else if (options.style === 'artistic') {
+            enhancedPrompt += ', artistic lighting, creative composition';
+        }
+        
+        return enhancedPrompt;
     }
     
-    // 샘플 품질 검사
-    checkSampleQuality(data) {
-        const { content } = data;
-        
-        // 실제 품질 분석 로직 (기존 함수 활용)
-        const analysis = this.performDetailedQualityAnalysis(content);
-        
-        return {
-            success: true,
-            data: {
-                overallScore: analysis.overallScore,
-                naverSEOScore: analysis.naverSEOScore,
-                details: analysis.details,
-                recommendations: analysis.recommendations,
-                checkedAt: new Date().toISOString(),
-                processingTime: Math.round(Math.random() * 1000 + 300)
+    // ===========================================
+    // 유틸리티 및 헬퍼 함수
+    // ===========================================
+    
+    // 타겟 독자 정보 반환 (utils.js 의존성 제거)
+    getTargetAudienceInfo(audienceKey) {
+        const audiences = {
+            hair_professionals: {
+                name: "헤어 디자이너 & 헤어 관련 종사자",
+                description: "헤어 전문가들을 위한 실무 중심 콘텐츠"
+            },
+            beauty_professionals: {
+                name: "뷰티 전문가 & 미용사",
+                description: "뷰티 전문가들을 위한 종합 미용 정보"
+            },
+            general_users: {
+                name: "일반인",
+                description: "헤어케어에 관심 있는 일반인들을 위한 가이드"
+            },
+            beginners: {
+                name: "헤어케어 초보자",
+                description: "헤어케어를 처음 시작하는 분들을 위한 기초 정보"
             }
         };
+        
+        return audiences[audienceKey] || audiences.general_users;
     }
     
-    // 상세 품질 분석
+    // 통계 업데이트
+    updateStatistics(success, responseTime = 0) {
+        this.statistics.totalRequests++;
+        this.statistics.lastRequestTime = new Date().toISOString();
+        
+        if (success) {
+            this.statistics.successfulRequests++;
+            
+            // 평균 응답 시간 계산
+            if (responseTime > 0) {
+                const currentAvg = this.statistics.averageResponseTime;
+                const totalSuccessful = this.statistics.successfulRequests;
+                this.statistics.averageResponseTime = 
+                    ((currentAvg * (totalSuccessful - 1)) + responseTime) / totalSuccessful;
+            }
+        } else {
+            this.statistics.failedRequests++;
+        }
+    }
+    
+    // API 키 설정 (하드코딩되어 있으므로 경고만 표시)
+    setAPIKey(service, key) {
+        console.warn('⚠️ API 키가 이미 하드코딩되어 있습니다. 보안상 하드코딩은 권장하지 않습니다.');
+        return true;
+    }
+    
+    // 연결 상태 테스트
+    async testConnection(service = 'claude') {
+        try {
+            if (service === 'claude') {
+                // Claude 연결 테스트
+                const testResult = await this.generateHaircareContent({
+                    title: "연결 테스트",
+                    keywords: ["테스트"]
+                }, {
+                    targetAudience: 'general_users',
+                    length: 'short'
+                });
+                
+                return {
+                    success: testResult.success,
+                    service: 'claude',
+                    message: '글 작성 서비스 연결 성공'
+                };
+            } else if (service === 'openai') {
+                // OpenAI 연결 테스트
+                const testResult = await this.generateHaircareImage('test haircut style');
+                
+                return {
+                    success: testResult.success,
+                    service: 'openai',
+                    message: '이미지 생성 서비스 연결 성공'
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                service: service,
+                message: `연결 테스트 실패: ${error.message}`
+            };
+        }
+    }
+    
+    // 마크다운을 HTML로 변환 (간단한 변환)
+    markdownToHTML(markdown) {
+        return markdown
+            .replace(/^### (.+)/gm, '<h3>$1</h3>')
+            .replace(/^## (.+)/gm, '<h2>$1</h2>')
+            .replace(/^# (.+)/gm, '<h1>$1</h1>')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>')
+            .replace(/^- (.+)/gm, '<li>$1</li>')
+            .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/^(.+)$/gm, '<p>$1</p>');
+    }
+    
+    // 키워드 밀도 계산
+    calculateKeywordDensity(content, keywords) {
+        const words = content.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+        const totalWords = words.length;
+        
+        let totalKeywordCount = 0;
+        keywords.forEach(keyword => {
+            const keywordCount = content.toLowerCase().split(keyword.toLowerCase()).length - 1;
+            totalKeywordCount += keywordCount;
+        });
+        
+        return (totalKeywordCount / totalWords) * 100;
+    }
+    
+    // 키워드 배치 분석
+    analyzeKeywordPlacement(title, content, keywords) {
+        const placements = {
+            title: keywords.some(k => title.toLowerCase().includes(k.toLowerCase())),
+            firstParagraph: false,
+            headings: false,
+            lastParagraph: false,
+            score: 0
+        };
+        
+        const firstParagraph = content.split('\n\n')[0] || '';
+        const lastParagraph = content.split('\n\n').slice(-1)[0] || '';
+        const headings = content.match(/^#+\s.+/gm) || [];
+        
+        placements.firstParagraph = keywords.some(k => 
+            firstParagraph.toLowerCase().includes(k.toLowerCase())
+        );
+        
+        placements.lastParagraph = keywords.some(k => 
+            lastParagraph.toLowerCase().includes(k.toLowerCase())
+        );
+        
+        placements.headings = headings.some(h => 
+            keywords.some(k => h.toLowerCase().includes(k.toLowerCase()))
+        );
+        
+        // 점수 계산
+        let score = 0;
+        if (placements.title) score += 30;
+        if (placements.firstParagraph) score += 25;
+        if (placements.headings) score += 25;
+        if (placements.lastParagraph) score += 20;
+        
+        placements.score = score;
+        return placements;
+    }
+    
+    // 구조 점수 계산
+    calculateStructureScore(content) {
+        let score = 0;
+        
+        const headings = (content.match(/^#+\s/gm) || []).length;
+        const lists = (content.match(/^[-*+]\s/gm) || []).length;
+        const bold = (content.match(/\*\*[^*]+\*\*/g) || []).length;
+        const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+        
+        if (headings >= 3) score += 30;
+        else if (headings >= 1) score += 15;
+        
+        if (lists >= 5) score += 25;
+        else if (lists >= 2) score += 12;
+        
+        if (bold >= 5) score += 20;
+        else if (bold >= 2) score += 10;
+        
+        if (paragraphs >= 5) score += 25;
+        else if (paragraphs >= 3) score += 12;
+        
+        return Math.min(100, score);
+    }
+    
+    // 가독성 점수 계산
+    calculateReadabilityScore(content) {
+        const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        const words = content.split(/\s+/).filter(w => w.length > 0);
+        
+        if (sentences.length === 0 || words.length === 0) return 0;
+        
+        const avgWordsPerSentence = words.length / sentences.length;
+        
+        // 한국어 기준 가독성 (문장당 단어 수 기준)
+        let score = 100;
+        if (avgWordsPerSentence > 25) score -= (avgWordsPerSentence - 25) * 2;
+        if (avgWordsPerSentence < 8) score -= (8 - avgWordsPerSentence) * 3;
+        
+        return Math.max(0, Math.min(100, score));
+    }
+    
+    // 상세 품질 분석 (기존 함수 복원)
     performDetailedQualityAnalysis(content) {
         const wordCount = content.length;
         const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0);
@@ -626,52 +980,11 @@ class HairGatorAIService {
         }
     }
     
-    // 구조 점수 계산
-    calculateStructureScore(content) {
-        let score = 0;
-        
-        const headings = (content.match(/^#+\s/gm) || []).length;
-        const lists = (content.match(/^[-*+]\s/gm) || []).length;
-        const bold = (content.match(/\*\*[^*]+\*\*/g) || []).length;
-        const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
-        
-        if (headings >= 3) score += 30;
-        else if (headings >= 1) score += 15;
-        
-        if (lists >= 5) score += 25;
-        else if (lists >= 2) score += 12;
-        
-        if (bold >= 5) score += 20;
-        else if (bold >= 2) score += 10;
-        
-        if (paragraphs >= 5) score += 25;
-        else if (paragraphs >= 3) score += 12;
-        
-        return Math.min(100, score);
-    }
-    
-    // 가독성 점수 계산
-    calculateReadabilityScore(content) {
-        const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0);
-        const words = content.split(/\s+/).filter(w => w.length > 0);
-        
-        if (sentences.length === 0 || words.length === 0) return 0;
-        
-        const avgWordsPerSentence = words.length / sentences.length;
-        
-        // 한국어 기준 가독성 (문장당 단어 수 기준)
-        let score = 100;
-        if (avgWordsPerSentence > 25) score -= (avgWordsPerSentence - 25) * 2;
-        if (avgWordsPerSentence < 8) score -= (8 - avgWordsPerSentence) * 3;
-        
-        return Math.max(0, Math.min(100, score));
-    }
-    
     // SEO 점수 계산
     calculateSEOScore(content) {
         let score = 0;
         
-        // 키워드 밀도 체크 (currentTopic 사용)
+        // 키워드 밀도 체크 (전역 currentTopic 사용)
         if (window.currentTopic && window.currentTopic.keywords) {
             const keywords = window.currentTopic.keywords;
             const keywordDensity = this.calculateKeywordDensity(content, keywords);
@@ -701,20 +1014,6 @@ class HairGatorAIService {
         if (hasCTA) score += 5;
         
         return Math.min(100, score);
-    }
-    
-    // 키워드 밀도 계산
-    calculateKeywordDensity(content, keywords) {
-        const words = content.toLowerCase().split(/\s+/).filter(w => w.length > 0);
-        const totalWords = words.length;
-        
-        let totalKeywordCount = 0;
-        keywords.forEach(keyword => {
-            const keywordCount = content.toLowerCase().split(keyword.toLowerCase()).length - 1;
-            totalKeywordCount += keywordCount;
-        });
-        
-        return (totalKeywordCount / totalWords) * 100;
     }
     
     // 품질 개선 추천사항 생성
@@ -772,200 +1071,6 @@ class HairGatorAIService {
         return recommendations;
     }
     
-    // 샘플 키워드 제안
-    suggestSampleKeywords(data) {
-        const { topic, options } = data;
-        
-        const baseKeywords = topic.keywords || [];
-        const targetAudience = options.targetAudience || 'hair_professionals';
-        
-        // 타겟별 추가 키워드
-        const additionalKeywords = {
-            hair_professionals: ['헤어기법', '살롱운영', '고객상담', '트렌드분석', '스타일링'],
-            beauty_professionals: ['뷰티트렌드', '고객관리', '샵운영', '서비스기법', '마케팅'],
-            fitness_trainers: ['운동처방', 'PT기법', '고객관리', '트레이닝', '재활운동'],
-            chefs_cooks: ['조리기법', '메뉴개발', '식재료', '주방운영', '레시피'],
-            it_developers: ['개발기술', '코딩', '프로그래밍', '시스템', '프로젝트']
-        };
-        
-        // 관련 키워드 생성
-        const relatedKeywords = [
-            ...baseKeywords,
-            ...(additionalKeywords[targetAudience] || additionalKeywords['hair_professionals']),
-            '전문가', '가이드', '노하우', '팁', '방법', '실무', '현장', '경험',
-            '2024', '최신', '트렌드', '완전정복', '베스트', '추천'
-        ];
-        
-        // 중복 제거 및 셔플
-        const uniqueKeywords = [...new Set(relatedKeywords)]
-            .sort(() => 0.5 - Math.random())
-            .slice(0, options.count || 10);
-        
-        return {
-            success: true,
-            data: {
-                keywords: uniqueKeywords.map((keyword, index) => ({
-                    keyword: keyword,
-                    relevance: Math.round((100 - index * 3) + Math.random() * 10),
-                    searchVolume: Math.round(Math.random() * 10000 + 1000),
-                    competition: ['낮음', '보통', '높음'][Math.floor(Math.random() * 3)]
-                })),
-                generatedAt: new Date().toISOString(),
-                processingTime: Math.round(Math.random() * 800 + 200)
-            }
-        };
-    }
-    
-    // 샘플 SEO 최적화
-    optimizeSampleSEO(data) {
-        const { content, title, options } = data;
-        
-        const currentAnalysis = this.performDetailedQualityAnalysis(content);
-        const improvements = this.generateSEOImprovements(content, title, currentAnalysis);
-        
-        return {
-            success: true,
-            data: {
-                currentScore: currentAnalysis.overallScore,
-                optimizedScore: Math.min(100, currentAnalysis.overallScore + 15),
-                improvements: improvements,
-                optimizedTitle: this.optimizeTitle(title, options.targetKeywords),
-                optimizedContent: this.optimizeContent(content, options.targetKeywords),
-                processedAt: new Date().toISOString(),
-                processingTime: Math.round(Math.random() * 1200 + 500)
-            }
-        };
-    }
-    
-    // SEO 개선사항 생성
-    generateSEOImprovements(content, title, analysis) {
-        const improvements = [];
-        
-        if (analysis.details.wordCount.score < 80) {
-            improvements.push({
-                type: 'content_length',
-                priority: 'high',
-                current: `${analysis.details.wordCount.count}자`,
-                suggestion: '1500-3000자로 조정',
-                impact: '네이버 검색 노출 개선'
-            });
-        }
-        
-        if (analysis.details.structure.headings < 3) {
-            improvements.push({
-                type: 'structure',
-                priority: 'high',
-                current: `${analysis.details.structure.headings}개 소제목`,
-                suggestion: '3-5개 소제목(H2, H3) 추가',
-                impact: '가독성 및 SEO 향상'
-            });
-        }
-        
-        if (analysis.details.structure.lists < 3) {
-            improvements.push({
-                type: 'formatting',
-                priority: 'medium',
-                current: `${analysis.details.structure.lists}개 목록`,
-                suggestion: '핵심 내용을 목록으로 정리',
-                impact: '사용자 경험 개선'
-            });
-        }
-        
-        if (!/(댓글|공유|좋아요)/.test(content)) {
-            improvements.push({
-                type: 'engagement',
-                priority: 'medium',
-                current: 'CTA 없음',
-                suggestion: '댓글 유도 문구 추가',
-                impact: '사용자 참여 증가'
-            });
-        }
-        
-        return improvements;
-    }
-    
-    // 제목 최적화
-    optimizeTitle(title, targetKeywords = []) {
-        let optimizedTitle = title;
-        
-        // 키워드가 없으면 추가
-        if (targetKeywords.length > 0 && !title.toLowerCase().includes(targetKeywords[0].toLowerCase())) {
-            optimizedTitle = `${targetKeywords[0]} ${title}`;
-        }
-        
-        // 길이 조정
-        if (optimizedTitle.length > 60) {
-            optimizedTitle = optimizedTitle.substring(0, 57) + '...';
-        } else if (optimizedTitle.length < 30) {
-            optimizedTitle += ' | 완벽 가이드';
-        }
-        
-        // 숫자 추가 (클릭률 향상)
-        if (!/\d/.test(optimizedTitle)) {
-            optimizedTitle = optimizedTitle.replace('가이드', '5가지 핵심 가이드');
-        }
-        
-        return optimizedTitle;
-    }
-    
-    // 콘텐츠 최적화
-    optimizeContent(content, targetKeywords = []) {
-        let optimizedContent = content;
-        
-        // 첫 문단에 키워드 추가
-        if (targetKeywords.length > 0) {
-            const paragraphs = optimizedContent.split('\n\n');
-            if (paragraphs.length > 0 && !paragraphs[0].toLowerCase().includes(targetKeywords[0].toLowerCase())) {
-                paragraphs[0] = paragraphs[0] + ` **${targetKeywords[0]}**에 대해 자세히 알아보겠습니다.`;
-                optimizedContent = paragraphs.join('\n\n');
-            }
-        }
-        
-        // CTA 추가
-        if (!/(댓글|공유|좋아요)/.test(optimizedContent)) {
-            optimizedContent += '\n\n---\n\n💬 **이 글이 도움이 되셨다면 댓글로 의견을 공유해주세요!**\n👍 **좋아요와 공유로 더 많은 분들에게 도움을 주세요!**';
-        }
-        
-        return optimizedContent;
-    }
-    
-    // 키워드 배치 분석
-    analyzeKeywordPlacement(title, content, keywords) {
-        const placements = {
-            title: keywords.some(k => title.toLowerCase().includes(k.toLowerCase())),
-            firstParagraph: false,
-            headings: false,
-            lastParagraph: false,
-            score: 0
-        };
-        
-        const firstParagraph = content.split('\n\n')[0] || '';
-        const lastParagraph = content.split('\n\n').slice(-1)[0] || '';
-        const headings = content.match(/^#+\s.+/gm) || [];
-        
-        placements.firstParagraph = keywords.some(k => 
-            firstParagraph.toLowerCase().includes(k.toLowerCase())
-        );
-        
-        placements.lastParagraph = keywords.some(k => 
-            lastParagraph.toLowerCase().includes(k.toLowerCase())
-        );
-        
-        placements.headings = headings.some(h => 
-            keywords.some(k => h.toLowerCase().includes(k.toLowerCase()))
-        );
-        
-        // 점수 계산
-        let score = 0;
-        if (placements.title) score += 30;
-        if (placements.firstParagraph) score += 25;
-        if (placements.headings) score += 25;
-        if (placements.lastParagraph) score += 20;
-        
-        placements.score = score;
-        return placements;
-    }
-    
     // 건강 상태 체크
     async healthCheck() {
         const status = {
@@ -974,15 +1079,16 @@ class HairGatorAIService {
             queueLength: this.requestQueue.length,
             isProcessing: this.isProcessing,
             serverConnection: false,
-            lastRequestTime: this.lastRequestTime || null
+            lastRequestTime: this.lastRequestTime || null,
+            statistics: this.getStatistics()
         };
         
-        // 서버 연결 체크
+        // 서버 연결 체크 (개발 모드)
         if (this.isDevMode && this.serverEndpoint) {
             try {
                 const response = await fetch(`${this.serverEndpoint}/api/health`, {
                     method: 'GET',
-                    timeout: 5000
+                    signal: AbortSignal.timeout(5000)
                 });
                 status.serverConnection = response.ok;
             } catch (error) {
@@ -998,34 +1104,30 @@ class HairGatorAIService {
         return status;
     }
     
-    // 통계 정보 가져오기
-    getStatistics() {
-        return {
-            totalRequests: this.requestQueue.length,
-            currentService: this.currentAIService,
-            isProcessing: this.isProcessing,
-            rateLimitDelay: this.rateLimitDelay,
-            maxRetries: this.maxRetries,
-            serverEndpoint: this.serverEndpoint,
-            isDevMode: this.isDevMode
-        };
-    }
-    
     // 서비스 재시작
     restart() {
         this.requestQueue = [];
         this.isProcessing = false;
+        this.statistics = {
+            totalRequests: 0,
+            successfulRequests: 0,
+            failedRequests: 0,
+            currentService: this.currentAIService,
+            averageResponseTime: 0,
+            lastRequestTime: null
+        };
+        
         console.log('🔄 AI 서비스 재시작 완료');
         this.logActivity('서비스 재시작', 'AI 서비스가 재시작되었습니다.', 'info');
     }
     
-    // 유틸리티 함수들
+    // 유틸리티 함수
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     
+    // 로그 활동 (전역 함수 사용)
     logActivity(action, message, type = 'info') {
-        // 전역 logActivity 함수 사용
         if (typeof window.logActivity === 'function') {
             window.logActivity(action, message, type);
         } else {
@@ -1034,74 +1136,35 @@ class HairGatorAIService {
     }
 }
 
-// 전역 AI 서비스 인스턴스 생성
-window.HairGatorAI = new HairGatorAIService();
+// AI 서비스 인스턴스 생성 및 전역 등록
+const hairGatorAI = new HairGatorAIService();
 
-// 기존 함수들과의 호환성을 위한 래퍼 함수들
-async function generateHaircareContent(topic) {
-    try {
-        const result = await window.HairGatorAI.generateHaircareContent(topic, {
-            targetAudience: currentTargetAudience,
-            naverSEO: true
-        });
-        
-        if (result.success) {
-            return result.data;
-        } else {
-            throw new Error(result.error || 'AI 콘텐츠 생성 실패');
+// 전역에서 접근 가능하도록 설정
+window.HairGatorAI = hairGatorAI;
+
+// 모듈 내보내기
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HairGatorAIService;
+}
+
+console.log('🤖 HAIRGATOR AI 서비스 로드 완료');
+console.log('📝 Claude API: 글 작성 전용 서비스');
+console.log('🎨 OpenAI API: 이미지 생성 전용 서비스');
+console.log('🧠 사용자 글쓰기 스타일 학습 기능 포함');
+
+// 초기 연결 테스트 (개발 모드에서만)
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    console.log('🔧 개발 모드: AI 서비스 연결 테스트 실행');
+    
+    setTimeout(async () => {
+        try {
+            const claudeTest = await hairGatorAI.testConnection('claude');
+            const openaiTest = await hairGatorAI.testConnection('openai');
+            
+            console.log('📝 Claude 테스트:', claudeTest.success ? '✅ 성공' : '❌ 실패');
+            console.log('🎨 OpenAI 테스트:', openaiTest.success ? '✅ 성공' : '❌ 실패');
+        } catch (error) {
+            console.warn('⚠️ 초기 연결 테스트 중 오류:', error.message);
         }
-    } catch (error) {
-        console.error('콘텐츠 생성 오류:', error);
-        throw error;
-    }
+    }, 2000);
 }
-
-async function generateImageWithChatGPT(prompt) {
-    try {
-        const result = await window.HairGatorAI.generateHaircareImage(prompt);
-        
-        if (result.success) {
-            return result.data.imageUrl;
-        } else {
-            throw new Error(result.error || 'AI 이미지 생성 실패');
-        }
-    } catch (error) {
-        console.error('이미지 생성 오류:', error);
-        throw error;
-    }
-}
-
-// AI 서비스 설정 함수들
-function setAIService(service) {
-    return window.HairGatorAI.setAIService(service);
-}
-
-function setAIAPIKey(service, key) {
-    return window.HairGatorAI.setAPIKey(service, key);
-}
-
-// AI 서비스 상태 확인
-function getAIServiceStatus() {
-    return window.HairGatorAI.getStatistics();
-}
-
-// AI 서비스 재시작
-function restartAIService() {
-    window.HairGatorAI.restart();
-    showNotification('success', 'AI 서비스 재시작', 'AI 서비스가 재시작되었습니다.');
-}
-
-// 개발자 도구용 전역 함수들
-window.HAIRGATOR_AI_DEBUG = {
-    getQueue: () => window.HairGatorAI.requestQueue,
-    getStats: () => window.HairGatorAI.getStatistics(),
-    healthCheck: () => window.HairGatorAI.healthCheck(),
-    restart: () => window.HairGatorAI.restart(),
-    processQueue: () => window.HairGatorAI.processQueue()
-};
-
-console.log('🤖 HAIRGATOR AI Service 로드 완료');
-console.log('🔧 디버그 도구: window.HAIRGATOR_AI_DEBUG');
-console.log('📊 현재 AI 서비스:', window.HairGatorAI.currentAIService);
-
-export { HairGatorAIService };
