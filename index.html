@@ -6,689 +6,1086 @@
     <title>HAIRGATOR Blog Auto | 헤어케어 전문 블로그 자동화 시스템</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS 파일들 연결 -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- 임시 인라인 CSS (GitHub Pages 로딩 문제 해결용) -->
+    <style>
+        /* 기본 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --bg-color: #ffffff;
+            --bg-light: #f8fafc;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+        
+        .brand-logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .brand-tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .brand-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .feature-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+        
+        /* 사이드바 */
+        .sidebar {
+            background: var(--bg-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .sidebar h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 메인 에디터 */
+        .main-editor {
+            background: var(--bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        /* 탭 */
+        .tab-nav {
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            overflow-x: auto;
+        }
+        
+        .tab-btn, .editor-tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .tab-btn:hover, .editor-tab:hover {
+            color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .tab-btn.active, .editor-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: white;
+        }
+        
+        /* 탭 콘텐츠 */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 폼 요소들 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 300px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* 버튼들 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-error {
+            background: var(--error-color);
+            color: white;
+        }
+        
+        /* 주제 목록 */
+        .topic-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .topic-item {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-color);
+        }
+        
+        .topic-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+        
+        .topic-item.selected {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .topic-meta {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* 품질 메트릭 */
+        .quality-score {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+        
+        .quality-score.excellent {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .quality-score.good {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .quality-score.fair {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .quality-score.poor {
+            background: var(--error-color);
+            color: white;
+        }
+        
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-bar {
+            width: 100px;
+            height: 8px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .metric-fill {
+            height: 100%;
+            transition: var(--transition);
+        }
+        
+        .metric-fill.excellent {
+            background: var(--success-color);
+        }
+        
+        .metric-fill.good {
+            background: #22c55e;
+        }
+        
+        .metric-fill.fair {
+            background: var(--warning-color);
+        }
+        
+        .metric-fill.poor {
+            background: var(--error-color);
+        }
+        
+        /* 알림 */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .notification {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            animation: notificationSlideIn 0.3s ease forwards;
+        }
+        
+        .notification.success {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .notification.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .notification.error {
+            border-left: 4px solid var(--error-color);
+        }
+        
+        .notification.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1rem 0.5rem;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-body {
+            padding: 0 1rem 1rem;
+            color: var(--text-light);
+        }
+        
+        /* 애니메이션 */
+        @keyframes notificationSlideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes notificationSlideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* 로딩 스피너 */
+        .btn-loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: var(--bg-light);
+            color: var(--text-color);
+        }
+        
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 300px 1fr 300px;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .brand-features {
+                gap: 1rem;
+            }
+            
+            .feature-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .header {
+                padding: 1.5rem 1rem;
+            }
+            
+            .brand-logo {
+                font-size: 2rem;
+            }
+            
+            .brand-tagline {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .tab-content {
+                padding: 1rem;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                padding: 1.5rem;
+                width: 95%;
+            }
+        }
+        
+        /* 유틸리티 클래스 */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .gap-1 {
+            gap: 0.5rem;
+        }
+        
+        .gap-2 {
+            gap: 1rem;
+        }
+        
+        /* 다크 모드 */
+        body.dark-mode {
+            --bg-color: #1f2937;
+            --bg-light: #111827;
+            --text-color: #f9fafb;
+            --text-light: #d1d5db;
+            --border-color: #374151;
+        }
+        
+        body.dark-mode .form-input,
+        body.dark-mode .form-textarea,
+        body.dark-mode .form-select {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        body.dark-mode .notification,
+        body.dark-mode .modal-content {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+    </style>
 </head>
 <body>
     <!-- 헤더 -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <h1>💇‍♀️ HAIRGATOR <span class="subtitle">-Blog Auto-</span></h1>
-                    <p class="tagline">AI 기반 헤어케어 전문 블로그 자동화 시스템</p>
-                </div>
-                <div class="header-info">
-                    <div class="system-status" id="systemStatus">준비됨</div>
-                    <div class="current-time" id="currentTime"></div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- 네비게이션 -->
-    <nav class="nav-tabs">
-        <button class="tab-btn active" data-tab="ai-settings">🤖 AI 설정</button>
-        <button class="tab-btn" data-tab="topic-management">📝 주제 관리</button>
-        <button class="tab-btn" data-tab="content-generation">✨ 콘텐츠 생성</button>
-        <button class="tab-btn" data-tab="editor">📄 에디터</button>
-        <button class="tab-btn" data-tab="quality-analysis">🔍 품질 분석</button>
-        <button class="tab-btn" data-tab="meta-seo">🎯 메타/SEO</button>
-        <button class="tab-btn" data-tab="publish-management">🚀 발행 관리</button>
-        <button class="tab-btn" data-tab="automation-scheduler">⏰ 자동화</button>
-        <button class="tab-btn" data-tab="preview">👁️ 미리보기</button>
-    </nav>
-
-    <!-- 메인 컨테이너 -->
-    <main class="container">
-        <!-- AI 설정 패널 -->
-        <div id="ai-settings" class="tab-content active">
-            <div class="panel">
-                <h2>🤖 AI 서비스 설정</h2>
-                <div class="panel-content">
-                    <div class="form-section">
-                        <div class="form-group">
-                            <label for="aiProvider">AI 제공자</label>
-                            <select id="aiProvider" class="form-control">
-                                <option value="claude">Claude (Anthropic)</option>
-                                <option value="openai">OpenAI GPT</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="targetAudience">타겟 독자</label>
-                            <select id="targetAudience" class="form-control">
-                                <optgroup label="🎨 뷰티 전문가">
-                                    <option value="hair-designer">헤어 디자이너 & 헤어 관련 종사자</option>
-                                    <option value="beauty-expert">뷰티 전문가 & 미용사</option>
-                                    <option value="nail-artist">네일 아티스트 & 관련 종사자</option>
-                                </optgroup>
-                                <optgroup label="💪 헬스/피트니스">
-                                    <option value="personal-trainer">퍼스널 트레이너 & 피트니스 전문가</option>
-                                    <option value="yoga-instructor">요가 강사 & 필라테스 전문가</option>
-                                    <option value="nutritionist">영양사 & 다이어트 코치</option>
-                                </optgroup>
-                                <optgroup label="🍳 요리/식음료">
-                                    <option value="chef">셰프 & 요리사</option>
-                                    <option value="barista">바리스타 & 카페 운영자</option>
-                                    <option value="baker">베이커 & 제빵사</option>
-                                </optgroup>
-                                <optgroup label="💻 IT/테크">
-                                    <option value="developer">개발자 & IT 전문가</option>
-                                    <option value="designer">UI/UX 디자이너</option>
-                                    <option value="marketer">디지털 마케터</option>
-                                </optgroup>
-                                <optgroup label="🏢 비즈니스">
-                                    <option value="entrepreneur">창업자 & 사업가</option>
-                                    <option value="consultant">컨설턴트 & 전문가</option>
-                                    <option value="educator">교육자 & 강사</option>
-                                </optgroup>
-                                <optgroup label="🎯 기타 전문분야">
-                                    <option value="medical">의료진 & 간호사</option>
-                                    <option value="finance">재정 관리사 & 투자 전문가</option>
-                                    <option value="real-estate">부동산 전문가</option>
-                                    <option value="custom">사용자 정의 타겟</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <div class="form-group hidden" id="customTargetGroup">
-                            <label for="customTarget">사용자 정의 타겟</label>
-                            <input type="text" id="customTarget" class="form-control" placeholder="예: 카페 사장들, 펜션 운영자들">
-                        </div>
-                    </div>
-
-                    <div class="connection-status-panel">
-                        <h3>🔗 연결 상태</h3>
-                        <div class="status-grid">
-                            <div class="status-item">
-                                <span class="status-label">Claude API</span>
-                                <span class="status" id="claudeStatus">연결 안됨</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">OpenAI API</span>
-                                <span class="status" id="openaiStatus">연결 안됨</span>
-                            </div>
-                        </div>
-                        <button id="aiTestBtn" class="btn btn-primary">🧪 AI 연결 테스트</button>
-                    </div>
-
-                    <div class="api-keys-section">
-                        <h3>🔐 API 키 설정</h3>
-                        <p class="warning-text">⚠️ 보안을 위해 API 키는 서버에서 관리하는 것을 권장합니다</p>
-                        <div class="form-group">
-                            <label for="claudeKey">Claude API 키</label>
-                            <input type="password" id="claudeKey" class="form-control" placeholder="sk-ant-api03-...">
-                        </div>
-                        <div class="form-group">
-                            <label for="openaiKey">OpenAI API 키</label>
-                            <input type="password" id="openaiKey" class="form-control" placeholder="sk-...">
-                        </div>
-                        <button onclick="saveAPIKeys()" class="btn btn-secondary">💾 API 키 저장</button>
-                    </div>
-
-                    <div class="publish-stats">
-                        <h3>📊 발행 통계</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-value" id="totalPublished">0</span>
-                                <span class="stat-label">총 발행</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="successRate">0%</span>
-                                <span class="stat-label">성공률</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="lastPublish">-</span>
-                                <span class="stat-label">최근 발행</span>
-                            </div>
-                        </div>
-                        
-                        <div id="publishHistoryList" class="publish-list">
-                            <p class="status-indicator">발행 이력이 없습니다.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 주제 관리 패널 -->
-        <div id="topic-management" class="tab-content">
-            <div class="panel">
-                <h2>📝 주제 관리</h2>
-                <div class="panel-content">
-                    <div class="topic-categories">
-                        <h3>🎯 헤어케어 전문 카테고리</h3>
-                        <div class="categories-grid">
-                            <div class="category-card" data-category="basic">
-                                <div class="category-icon">🧴</div>
-                                <div class="category-name">헤어케어 기초</div>
-                                <div class="category-count">5개 주제</div>
-                            </div>
-                            <div class="category-card" data-category="styling">
-                                <div class="category-icon">✂️</div>
-                                <div class="category-name">헤어 스타일링</div>
-                                <div class="category-count">7개 주제</div>
-                            </div>
-                            <div class="category-card" data-category="treatment">
-                                <div class="category-icon">💊</div>
-                                <div class="category-name">모발 트리트먼트</div>
-                                <div class="category-count">4개 주제</div>
-                            </div>
-                            <div class="category-card" data-category="trend">
-                                <div class="category-icon">🌟</div>
-                                <div class="category-name">헤어 트렌드</div>
-                                <div class="category-count">6개 주제</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="custom-topics">
-                        <h3>➕ 커스텀 주제 추가</h3>
-                        <div class="form-row">
-                            <input type="text" id="customTopicTitle" class="form-control" placeholder="주제 제목">
-                            <input type="text" id="customTopicKeywords" class="form-control" placeholder="키워드 (쉼표로 구분)">
-                            <button onclick="addCustomTopic()" class="btn btn-primary">추가</button>
-                        </div>
-                    </div>
-
-                    <div class="topics-list">
-                        <h3>📋 저장된 주제 목록</h3>
-                        <div id="topicsList" class="topics-container">
-                            <!-- 동적으로 생성됨 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 콘텐츠 생성 패널 -->
-        <div id="content-generation" class="tab-content">
-            <div class="panel">
-                <h2>✨ 콘텐츠 생성</h2>
-                <div class="panel-content">
-                    <div class="generation-options">
-                        <div class="form-section">
-                            <h3>🎯 생성 설정</h3>
-                            <div class="form-group">
-                                <label for="selectedTopic">주제 선택</label>
-                                <select id="selectedTopic" class="form-control">
-                                    <option value="">주제를 선택하세요</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contentLength">글 길이</label>
-                                <select id="contentLength" class="form-control">
-                                    <option value="short">짧은 글 (800-1200자)</option>
-                                    <option value="medium" selected>보통 글 (1500-2500자)</option>
-                                    <option value="long">긴 글 (2500-4000자)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="writingStyle">글쓰기 스타일</label>
-                                <select id="writingStyle" class="form-control">
-                                    <option value="professional">전문적이고 신뢰감 있는</option>
-                                    <option value="friendly" selected>친근하고 접근하기 쉬운</option>
-                                    <option value="authoritative">권위 있고 학술적인</option>
-                                    <option value="conversational">대화형이고 편안한</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="generation-actions">
-                            <button id="generateBtn" class="btn btn-primary btn-large">
-                                🎨 AI 콘텐츠 생성
-                            </button>
-                            <button id="regenerateBtn" class="btn btn-secondary">
-                                🔄 다시 생성
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bulk-generation">
-                        <h3>📦 일괄 생성</h3>
-                        <div class="bulk-options">
-                            <div class="form-group">
-                                <label for="bulkCount">생성 개수</label>
-                                <select id="bulkCount" class="form-control">
-                                    <option value="3">3개</option>
-                                    <option value="5" selected>5개</option>
-                                    <option value="10">10개</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="bulkCategory">카테고리</label>
-                                <select id="bulkCategory" class="form-control">
-                                    <option value="all">전체 카테고리</option>
-                                    <option value="basic">헤어케어 기초</option>
-                                    <option value="styling">헤어 스타일링</option>
-                                    <option value="treatment">모발 트리트먼트</option>
-                                    <option value="trend">헤어 트렌드</option>
-                                </select>
-                            </div>
-                            <button id="bulkGenerateBtn" class="btn btn-primary">🚀 일괄 생성</button>
-                        </div>
-                        
-                        <div class="progress-container hidden" id="progressContainer">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressBar"></div>
-                            </div>
-                            <div class="progress-text" id="progressText">0/0 완료</div>
-                        </div>
-                    </div>
-
-                    <div class="generation-history">
-                        <h3>📚 최근 생성 이력</h3>
-                        <div id="contentHistory" class="content-history">
-                            <p class="status-indicator">생성된 콘텐츠가 없습니다.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 에디터 패널 -->
-        <div id="editor" class="tab-content">
-            <div class="panel">
-                <h2>📄 콘텐츠 에디터</h2>
-                <div class="panel-content">
-                    <div class="editor-toolbar">
-                        <button onclick="saveContent()" class="btn btn-secondary">💾 임시저장</button>
-                        <button onclick="loadContent()" class="btn btn-secondary">📂 불러오기</button>
-                        <button onclick="clearEditor()" class="btn btn-outline">🗑️ 초기화</button>
-                        <div class="editor-stats">
-                            <span id="wordCount">0자</span>
-                            <span id="readingTime">예상 읽기 시간: 0분</span>
-                        </div>
-                    </div>
-
-                    <div class="editor-container">
-                        <div class="form-group">
-                            <label for="contentTitle">제목</label>
-                            <input type="text" id="contentTitle" class="form-control title-input" placeholder="매력적인 제목을 입력하세요">
-                            <div class="title-suggestions" id="titleSuggestions"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contentBody">본문</label>
-                            <textarea id="contentBody" class="form-control content-textarea" rows="20" placeholder="여기에 글 내용을 작성하거나 AI 생성 결과가 표시됩니다"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="keywords">키워드</label>
-                            <input type="text" id="keywords" class="form-control" placeholder="키워드를 쉼표로 구분하여 입력">
-                            <div class="keyword-suggestions" id="keywordSuggestions"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 품질 분석 패널 -->
-        <div id="quality-analysis" class="tab-content">
-            <div class="panel">
-                <h2>🔍 품질 분석</h2>
-                <div class="panel-content">
-                    <div class="analysis-actions">
-                        <button id="analyzeBtn" class="btn btn-primary">🔍 품질 분석 실행</button>
-                        <button onclick="generateQualityReport()" class="btn btn-secondary">📊 상세 리포트</button>
-                    </div>
-
-                    <div class="quality-overview">
-                        <h3>📊 품질 점수 개요</h3>
-                        <div class="score-grid">
-                            <div class="score-item">
-                                <div class="score-label">종합 점수</div>
-                                <div class="score-value" id="overallScore">0</div>
-                                <div class="score-bar">
-                                    <div class="score-fill" id="overallScoreFill"></div>
-                                </div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-label">SEO 점수</div>
-                                <div class="score-value" id="seoScore">0</div>
-                                <div class="score-bar">
-                                    <div class="score-fill" id="seoScoreFill"></div>
-                                </div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-label">가독성</div>
-                                <div class="score-value" id="readabilityScore">0</div>
-                                <div class="score-bar">
-                                    <div class="score-fill" id="readabilityScoreFill"></div>
-                                </div>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-label">전문성</div>
-                                <div class="score-value" id="expertiseScore">0</div>
-                                <div class="score-bar">
-                                    <div class="score-fill" id="expertiseScoreFill"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detailed-analysis">
-                        <h3>🔬 상세 분석</h3>
-                        
-                        <div class="analysis-section">
-                            <h4>📝 기본 지표</h4>
-                            <div class="metrics-grid">
-                                <div class="metric-item">
-                                    <span class="metric-label">글자 수</span>
-                                    <span class="metric-value" id="charCount">0자</span>
-                                    <span class="metric-status" id="charStatus">📊</span>
-                                </div>
-                                <div class="metric-item">
-                                    <span class="metric-label">문단 수</span>
-                                    <span class="metric-value" id="paragraphCount">0개</span>
-                                    <span class="metric-status" id="paragraphStatus">📊</span>
-                                </div>
-                                <div class="metric-item">
-                                    <span class="metric-label">소제목 수</span>
-                                    <span class="metric-value" id="headingCount">0개</span>
-                                    <span class="metric-status" id="headingStatus">📊</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="analysis-section">
-                            <h4>🎯 SEO 분석</h4>
-                            <div class="seo-checklist" id="seoChecklist">
-                                <p class="status-indicator">분석할 콘텐츠를 입력하세요.</p>
-                            </div>
-                        </div>
-
-                        <div class="analysis-section">
-                            <h4>💡 개선 제안</h4>
-                            <div class="suggestions" id="qualitySuggestions">
-                                <p class="status-indicator">품질 분석을 실행하면 개선 제안이 표시됩니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 메타/SEO 패널 -->
-        <div id="meta-seo" class="tab-content">
-            <div class="panel">
-                <h2>🎯 메타정보 & SEO 최적화</h2>
-                <div class="panel-content">
-                    <div class="seo-tools">
-                        <h3>🛠️ SEO 도구</h3>
-                        <div class="tools-grid">
-                            <button id="generateSeoTitle" class="btn btn-primary">🎯 SEO 제목 생성</button>
-                            <button id="generateSeoDesc" class="btn btn-primary">📝 메타 설명 생성</button>
-                            <button id="suggestKeywords" class="btn btn-primary">🔍 키워드 제안</button>
-                            <button id="checkSeoScore" class="btn btn-primary">📊 SEO 점수 체크</button>
-                        </div>
-                    </div>
-
-                    <div class="meta-form">
-                        <h3>📋 메타 정보</h3>
-                        
-                        <div class="form-group">
-                            <label for="seoTitle">SEO 제목</label>
-                            <input type="text" id="seoTitle" class="form-control" placeholder="클릭을 유도하는 SEO 최적화 제목">
-                            <div class="char-counter">
-                                <span id="seoTitleCount">0</span>/60자 
-                                <span class="status-indicator" id="seoTitleStatus">📊</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="metaDescription">메타 설명</label>
-                            <textarea id="metaDescription" class="form-control" rows="3" placeholder="검색 결과에 표시될 설명 (120-150자 권장)"></textarea>
-                            <div class="char-counter">
-                                <span id="metaDescCount">0</span>/150자
-                                <span class="status-indicator" id="metaDescStatus">📊</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="focusKeyword">포커스 키워드</label>
-                            <input type="text" id="focusKeyword" class="form-control" placeholder="주요 타겟 키워드">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tags">태그</label>
-                            <input type="text" id="tags" class="form-control" placeholder="태그를 쉼표로 구분하여 입력">
-                        </div>
-                    </div>
-
-                    <div class="seo-analysis">
-                        <h3>📊 실시간 SEO 분석</h3>
-                        <div class="seo-status" id="seoAnalysisResult">
-                            <div class="seo-indicator">
-                                <span class="indicator-icon">🔍</span>
-                                <span class="indicator-text">분석을 위해 콘텐츠를 입력하고 SEO 점수 체크를 실행하세요</span>
-                            </div>
-                        </div>
-                        
-                        <div class="keyword-analysis" id="keywordAnalysis">
-                            <!-- 동적으로 생성됨 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 발행 관리 패널 -->
-        <div id="publish-management" class="tab-content">
-            <div class="panel">
-                <h2>🚀 발행 관리</h2>
-                <div class="panel-content">
-                    <div class="publish-options">
-                        <h3>📤 발행 설정</h3>
-                        
-                        <div class="platform-selection">
-                            <label>발행 플랫폼</label>
-                            <div class="platform-grid">
-                                <label class="platform-option">
-                                    <input type="checkbox" id="publishNaver" checked>
-                                    <span class="platform-icon">📗</span>
-                                    <span class="platform-name">네이버 블로그</span>
-                                </label>
-                                <label class="platform-option">
-                                    <input type="checkbox" id="publishTistory">
-                                    <span class="platform-icon">📘</span>
-                                    <span class="platform-name">티스토리</span>
-                                </label>
-                                <label class="platform-option">
-                                    <input type="checkbox" id="publishWordPress">
-                                    <span class="platform-icon">📙</span>
-                                    <span class="platform-name">워드프레스</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="publish-schedule">
-                            <label for="publishTime">발행 시간</label>
-                            <div class="schedule-options">
-                                <label>
-                                    <input type="radio" name="publishSchedule" value="immediate" checked>
-                                    즉시 발행
-                                </label>
-                                <label>
-                                    <input type="radio" name="publishSchedule" value="scheduled">
-                                    예약 발행
-                                </label>
-                            </div>
-                            <input type="datetime-local" id="publishDateTime" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="publish-actions">
-                        <button id="publishBtn" class="btn btn-primary btn-large">🚀 지금 발행</button>
-                        <button onclick="saveAsDraft()" class="btn btn-secondary">📝 임시저장</button>
-                        <button onclick="schedulePublish()" class="btn btn-outline">⏰ 예약 발행</button>
-                    </div>
-
-                    <div class="publish-history">
-                        <h3>📊 발행 이력</h3>
-                        <div class="history-stats">
-                            <div class="stat-item">
-                                <span class="stat-value" id="totalPosts">0</span>
-                                <span class="stat-label">총 포스트</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="successPosts">0</span>
-                                <span class="stat-label">성공 발행</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="avgQuality">0</span>
-                                <span class="stat-label">평균 품질</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 자동화 스케줄러 패널 -->
-        <div id="automation-scheduler" class="tab-content">
-            <div class="panel">
-                <h2>⏰ 자동화 스케줄러</h2>
-                <div class="panel-content">
-                    <div class="scheduler-settings">
-                        <h3>🎯 자동화 설정</h3>
-                        
-                        <div class="form-group">
-                            <label for="scheduleType">스케줄 타입</label>
-                            <select id="scheduleType" class="form-control">
-                                <option value="daily">매일</option>
-                                <option value="weekly">매주</option>
-                                <option value="monthly">매월</option>
-                                <option value="custom">사용자 정의</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="scheduleTime">실행 시간</label>
-                            <input type="time" id="scheduleTime" class="form-control" value="09:00">
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="scheduleEnabled">
-                                자동화 활성화
-                            </label>
-                        </div>
-
-                        <button id="scheduleBtn" class="btn btn-primary">⚙️ 스케줄 설정</button>
-                    </div>
-
-                    <div class="automation-rules">
-                        <h3>🤖 자동화 규칙</h3>
-                        
-                        <div class="rule-item">
-                            <label>
-                                <input type="checkbox" id="autoQualityCheck" checked>
-                                품질 검사 자동 실행 (70점 이상만 발행)
-                            </label>
-                        </div>
-                        
-                        <div class="rule-item">
-                            <label>
-                                <input type="checkbox" id="autoSeoOptimization" checked>
-                                SEO 자동 최적화
-                            </label>
-                        </div>
-                        
-                        <div class="rule-item">
-                            <label>
-                                <input type="checkbox" id="autoImageGeneration">
-                                이미지 자동 생성 및 삽입
-                            </label>
-                        </div>
-                        
-                        <div class="rule-item">
-                            <label>
-                                <input type="checkbox" id="autoNotification">
-                                발행 완료 알림
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="active-schedules">
-                        <h3>📅 활성 스케줄</h3>
-                        <div id="schedulesList" class="schedules-container">
-                            <p class="status-indicator">활성화된 스케줄이 없습니다.</p>
-                        </div>
-                    </div>
-
-                    <div class="automation-stats">
-                        <h3>📊 자동화 통계</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-value" id="totalGenerated">0</span>
-                                <span class="stat-label">총 생성</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="autoPublished">0</span>
-                                <span class="stat-label">자동 발행</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="averageQuality">0</span>
-                                <span class="stat-label">평균 품질</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 미리보기 패널 -->
-        <div id="preview" class="tab-content">
-            <div class="panel">
-                <h2>👁️ 콘텐츠 미리보기</h2>
-                <div class="panel-content">
-                    <div class="preview-toolbar">
-                        <button onclick="updatePreview()" class="btn btn-primary">🔄 미리보기 업데이트</button>
-                        <div class="preview-modes">
-                            <button class="preview-mode active" onclick="setPreviewMode('blog')">📝 블로그</button>
-                            <button class="preview-mode" onclick="setPreviewMode('mobile')">📱 모바일</button>
-                            <button class="preview-mode" onclick="setPreviewMode('seo')">🔍 SEO</button>
-                        </div>
-                    </div>
-
-                    <div class="preview-container">
-                        <div id="blogPreview" class="preview-content">
-                            <div class="preview-header">
-                                <h1 id="previewTitle">제목이 여기에 표시됩니다</h1>
-                                <div class="preview-meta">
-                                    <span class="preview-date" id="previewDate"></span>
-                                    <span class="preview-category" id="previewCategory"></span>
-                                </div>
-                            </div>
-                            <div class="preview-body" id="previewBody">
-                                <p>본문 내용이 여기에 표시됩니다...</p>
-                            </div>
-                            <div class="preview-footer">
-                                <div class="preview-tags" id="previewTags"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- 알림 시스템 -->
-    <div id="alertContainer" class="alert-container"></div>
-
-    <!-- 로딩 오버레이 -->
-    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <div class="loading-text">AI가 콘텐츠를 생성하고 있습니다...</div>
+    <div class="header">
+        <div class="brand-logo">💇‍♀️ HAIRGATOR</div>
+        <div class="brand-tagline">AI 기반 헤어케어 전문 블로그 자동화 시스템</div>
+        <div class="brand-features">
+            <div class="feature-badge">🤖 AI 콘텐츠 생성</div>
+            <div class="feature-badge">📊 네이버 SEO 최적화</div>
+            <div class="feature-badge">⚡ 실시간 품질 검사</div>
+            <div class="feature-badge">📅 자동화 스케줄링</div>
         </div>
     </div>
 
-    <!-- JavaScript 로드 -->
-    <script src="script.js"></script>
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <!-- 왼쪽 사이드바 -->
+        <div class="sidebar">
+            <!-- 타겟 독자 선택 -->
+            <section class="target-section">
+                <h3>🎯 타겟 독자</h3>
+                <div class="form-group">
+                    <select id="primaryTarget" class="form-select">
+                        <option value="hair_professionals">헤어 전문가</option>
+                        <option value="beauty_enthusiasts">뷰티 애호가</option>
+                        <option value="salon_owners">살롱 운영자</option>
+                        <option value="general_consumers">일반 소비자</option>
+                        <option value="custom">사용자 정의</option>
+                    </select>
+                </div>
+                
+                <div id="customTarget" class="form-group hidden">
+                    <input type="text" id="customTargetInput" class="form-input" placeholder="예: 카페 사장들, 펜션 운영자들">
+                </div>
+                
+                <div id="targetDescription" class="mt-2">
+                    <p><strong>헤어 전문가</strong>를 위한 전문 콘텐츠를 작성합니다.</p>
+                    <ul>
+                        <li>• 최신 헤어케어 트렌드 정보</li>
+                        <li>• 전문 기술과 제품 리뷰</li>
+                        <li>• 고객 상담 노하우</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 주제 카테고리 -->
+            <section class="category-section mt-2">
+                <h3>📂 주제 카테고리</h3>
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-category="all">전체</button>
+                    <button class="tab-btn" data-category="basic">기초케어</button>
+                    <button class="tab-btn" data-category="styling">스타일링</button>
+                    <button class="tab-btn" data-category="treatment">트리트먼트</button>
+                    <button class="tab-btn" data-category="trend">트렌드</button>
+                </div>
+            </section>
+
+            <!-- 주제 목록 -->
+            <section class="topics-section mt-2">
+                <div class="flex items-center justify-between">
+                    <h3>📝 헤어케어 주제</h3>
+                    <button class="btn btn-secondary" onclick="showTopicModal()">추가</button>
+                </div>
+                <div id="topicList" class="topic-list">
+                    <!-- 주제들이 여기에 동적으로 로드됩니다 -->
+                </div>
+            </section>
+
+            <!-- 선택된 주제 정보 -->
+            <section class="selected-topic mt-2">
+                <h3>✨ 선택된 주제</h3>
+                <div id="selectedTopic">
+                    <p class="text-center" style="color: #6b7280; font-style: italic;">주제를 선택해주세요</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- 메인 에디터 -->
+        <div class="main-editor">
+            <!-- 에디터 탭 네비게이션 -->
+            <div class="tab-nav">
+                <button class="editor-tab active" data-tab="write">✍️ 글쓰기</button>
+                <button class="editor-tab" data-tab="seo">🔍 SEO</button>
+                <button class="editor-tab" data-tab="image">🖼️ 이미지</button>
+                <button class="editor-tab" data-tab="preview">👁️ 미리보기</button>
+            </div>
+
+            <!-- 글쓰기 탭 -->
+            <div id="writeTab" class="tab-content active">
+                <div class="form-group">
+                    <label for="postTitle" class="form-label">제목</label>
+                    <input type="text" id="postTitle" class="form-input" placeholder="매력적인 헤어케어 글 제목을 입력하세요">
+                    <div id="titleCounter" class="char-counter">0/100자</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="postContent" class="form-label">본문</label>
+                    <textarea id="postContent" class="form-textarea" placeholder="## 헤어케어 전문 콘텐츠를 작성해보세요
+
+### 소제목 예시
+- 중요한 포인트들을 정리하세요
+- **굵은 글씨**로 강조하세요
+- *기울임꼴*로 부연 설명하세요
+
+헤어게이터의 전문적인 노하우를 공유해주세요!"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="flex gap-2">
+                        <select id="postCategory" class="form-select">
+                            <option value="basic">기초 케어</option>
+                            <option value="styling">스타일링</option>
+                            <option value="treatment">트리트먼트</option>
+                            <option value="trend">트렌드</option>
+                        </select>
+                        <input type="text" id="postTags" class="form-input" placeholder="태그 (쉼표로 구분)">
+                    </div>
+                </div>
+
+                <!-- 액션 버튼들 -->
+                <div class="flex gap-2 mt-2">
+                    <button class="btn btn-primary" onclick="generateContent()">
+                        <span class="btn-text">🤖 AI 콘텐츠 생성</span>
+                        <div class="btn-loader"></div>
+                    </button>
+                    <button class="btn btn-secondary" onclick="checkQuality()">📊 품질 검사</button>
+                    <button class="btn btn-secondary" onclick="previewContent()">👁️ 미리보기</button>
+                    <button class="btn btn-success" id="publishBtn" onclick="publishContent()">
+                        <span class="btn-text">🚀 발행하기</span>
+                        <div class="btn-loader"></div>
+                    </button>
+                </div>
+
+                <!-- 생성 진행 상태 -->
+                <div id="generationProgress" class="hidden mt-2">
+                    <div style="background: #f3f4f6; padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div class="btn-loader" style="display: inline-block; margin-right: 0.5rem;"></div>
+                        AI가 헤어케어 전문 콘텐츠를 생성하고 있습니다...
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO 탭 -->
+            <div id="seoTab" class="tab-content">
+                <div class="form-group">
+                    <label for="seoTitle" class="form-label">SEO 제목</label>
+                    <input type="text" id="seoTitle" class="form-input" placeholder="검색 최적화된 제목">
+                    <div id="seoTitleCounter" class="char-counter">0/60자</div>
+                    <button class="btn btn-secondary mt-1" onclick="generateSEOTitle()">🎯 SEO 제목 생성</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="metaDescription" class="form-label">메타 설명</label>
+                    <textarea id="metaDescription" class="form-input" rows="3" placeholder="검색 결과에 표시될 설명"></textarea>
+                    <div id="metaDescCounter" class="char-counter">0/150자</div>
+                    <button class="btn btn-secondary mt-1" onclick="generateMetaDescription()">📝 메타 설명 생성</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="primaryKeywords" class="form-label">주요 키워드</label>
+                    <input type="text" id="primaryKeywords" class="form-input" placeholder="헤어케어, 샴푸, 트리트먼트">
+                    <button class="btn btn-secondary mt-1" onclick="suggestKeywords()">💡 키워드 제안</button>
+                </div>
+
+                <div id="keywordSuggestions" class="mt-2">
+                    <!-- 키워드 제안들이 여기에 표시됩니다 -->
+                </div>
+
+                <div class="flex gap-2 mt-2">
+                    <button class="btn btn-primary" onclick="checkSEOScore()">📈 SEO 점수 체크</button>
+                </div>
+            </div>
+
+            <!-- 이미지 탭 -->
+            <div id="imageTab" class="tab-content">
+                <div class="form-group">
+                    <label for="imagePrompt" class="form-label">이미지 설명</label>
+                    <input type="text" id="imagePrompt" class="form-input" placeholder="예: 건강한 머리카락을 가진 여성이 미소짓는 모습">
+                    <button class="btn btn-primary mt-1" onclick="generateImage()">🎨 이미지 생성</button>
+                </div>
+
+                <div id="generatedImages" class="mt-2">
+                    <!-- 생성된 이미지들이 여기에 표시됩니다 -->
+                </div>
+
+                <div class="form-group mt-2">
+                    <label class="form-label">추천 이미지 프롬프트</label>
+                    <div class="flex gap-1" style="flex-wrap: wrap;">
+                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='아름다운 헤어케어 제품들이 정렬된 모습'">제품 진열</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='전문 헤어 스타일리스트가 고객을 케어하는 모습'">전문가 케어</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='건강하고 윤기나는 머리카락 클로즈업'">건강한 모발</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('imagePrompt').value='모던한 헤어살롱 인테리어'">살롱 인테리어</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 미리보기 탭 -->
+            <div id="previewTab" class="tab-content">
+                <div id="previewContainer">
+                    <p class="text-center" style="color: #6b7280; font-style: italic;">미리보기할 내용을 작성해주세요</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오른쪽 사이드바 -->
+        <div class="sidebar">
+            <!-- AI 연결 상태 -->
+            <section class="ai-section">
+                <h3>🤖 AI 서비스</h3>
+                <div class="form-group">
+                    <label for="claudeKey" class="form-label">Claude API 키</label>
+                    <input type="password" id="claudeKey" class="form-input" placeholder="sk-ant-...">
+                    <button class="btn btn-secondary mt-1 test-btn" data-service="claude">테스트</button>
+                    <div id="claudeStatus" class="connection-status">연결 대기</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="openaiKey" class="form-label">OpenAI API 키</label>
+                    <input type="password" id="openaiKey" class="form-input" placeholder="sk-...">
+                    <button class="btn btn-secondary mt-1 test-btn" data-service="openai">테스트</button>
+                    <div id="openaiStatus" class="connection-status">연결 대기</div>
+                </div>
+            </section>
+
+            <!-- 품질 메트릭 -->
+            <section class="quality-section mt-2">
+                <h3>📊 콘텐츠 품질</h3>
+                <div id="overallQuality" class="quality-score">--</div>
+                
+                <div class="quality-metrics">
+                    <div class="metric-item">
+                        <span>글자 수</span>
+                        <div class="flex items-center gap-1">
+                            <span id="wordCount">--</span>
+                            <div class="metric-bar">
+                                <div id="wordCountBar" class="metric-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-item">
+                        <span>가독성</span>
+                        <div class="flex items-center gap-1">
+                            <span id="readability">--</span>
+                            <div class="metric-bar">
+                                <div id="readabilityBar" class="metric-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-item">
+                        <span>키워드 밀도</span>
+                        <div class="flex items-center gap-1">
+                            <span id="keywordDensity">--%</span>
+                            <div class="metric-bar">
+                                <div id="keywordDensityBar" class="metric-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-item">
+                        <span>구조 점수</span>
+                        <div class="flex items-center gap-1">
+                            <span id="structureScore">--</span>
+                            <div class="metric-bar">
+                                <div id="structureScoreBar" class="metric-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-item">
+                        <span>전문성</span>
+                        <div class="flex items-center gap-1">
+                            <span id="expertiseScore">--</span>
+                            <div class="metric-bar">
+                                <div id="expertiseScoreBar" class="metric-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="qualityRecommendations" class="mt-2">
+                    <!-- 품질 개선 추천사항들이 여기에 표시됩니다 -->
+                </div>
+            </section>
+
+            <!-- 자동화 설정 -->
+            <section class="automation-section mt-2">
+                <h3>⚙️ 자동화</h3>
+                <div class="form-group">
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" id="automationEnabled" onchange="toggleAutomation()">
+                        자동 포스팅 활성화
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="publishFrequency" class="form-label">발행 주기</label>
+                    <select id="publishFrequency" class="form-select">
+                        <option value="daily">매일</option>
+                        <option value="weekly">매주</option>
+                        <option value="biweekly">격주</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="publishTime" class="form-label">발행 시간</label>
+                    <input type="time" id="publishTime" class="form-input" value="09:00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="publishDate" class="form-label">예약 발행</label>
+                    <input type="datetime-local" id="publishDate" class="form-input">
+                    <button class="btn btn-secondary mt-1" onclick="schedulePublish()">📅 예약하기</button>
+                </div>
+            </section>
+
+            <!-- 시스템 상태 -->
+            <section class="status-section mt-2">
+                <h3>📈 시스템 상태</h3>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span>생성된 글</span>
+                        <span id="totalPosts">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span>발행된 글</span>
+                        <span id="publishedPosts">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span>평균 품질</span>
+                        <span id="qualityScore">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span>시스템 상태</span>
+                        <span id="systemStatus">대기중</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 모달들 -->
+    <!-- 미리보기 모달 -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📄 콘텐츠 미리보기</h2>
+                <button class="modal-close" onclick="closeModal('previewModal')">&times;</button>
+            </div>
+            <div id="previewContainer">
+                <!-- 미리보기 내용이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 추가 모달 -->
+    <div id="topicModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">➕ 새 주제 추가</h2>
+                <button class="modal-close" onclick="closeModal('topicModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="newTopicTitle" class="form-label">주제 제목</label>
+                <input type="text" id="newTopicTitle" class="form-input" placeholder="예: 겨울철 헤어케어 방법">
+            </div>
+            <div class="form-group">
+                <label for="newTopicCategory" class="form-label">카테고리</label>
+                <select id="newTopicCategory" class="form-select">
+                    <option value="basic">기초 케어</option>
+                    <option value="styling">스타일링</option>
+                    <option value="treatment">트리트먼트</option>
+                    <option value="trend">트렌드</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="newTopicKeywords" class="form-label">키워드 (쉼표로 구분)</label>
+                <input type="text" id="newTopicKeywords" class="form-input" placeholder="예: 겨울, 헤어케어, 건조, 보습">
+            </div>
+            <div class="form-group">
+                <label for="newTopicTarget" class="form-label">타겟 독자</label>
+                <select id="newTopicTarget" class="form-select">
+                    <option value="beginner">초보자</option>
+                    <option value="intermediate">일반인</option>
+                    <option value="expert">전문가</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="newTopicDifficulty" class="form-label">난이도</label>
+                <select id="newTopicDifficulty" class="form-select">
+                    <option value="beginner">초급</option>
+                    <option value="intermediate">중급</option>
+                    <option value="expert">고급</option>
+                </select>
+            </div>
+            <div class="flex gap-2">
+                <button class="btn btn-primary" onclick="addNewTopic()">추가</button>
+                <button class="btn btn-secondary" onclick="closeModal('topicModal')">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 활동 로그 모달 -->
+    <div id="logModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📋 활동 로그</h2>
+                <button class="modal-close" onclick="closeModal('logModal')">&times;</button>
+            </div>
+            <div id="activityLog" style="max-height: 400px; overflow-y: auto;">
+                <!-- 활동 로그들이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 알림 컨테이너 -->
+    <div id="notificationContainer" class="notification-container">
+        <!-- 알림들이 여기에 동적으로 추가됩니다 -->
+    </div>
+
+    <!-- 하단 액션 바 -->
+    <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100;">
+        <div class="flex gap-2">
+            <button class="btn btn-secondary" onclick="showModal('logModal')">📋 로그</button>
+            <button class="btn btn-secondary" onclick="location.reload()">🔄 새로고침</button>
+            <button class="btn btn-secondary" onclick="toggleDarkMode()">🌙 다크모드</button>
+        </div>
+    </div>
+
+    <!-- JavaScript 파일들 -->
+    <script src="js/utils.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- 키보드 단축키 안내 -->
+    <div style="position: fixed; bottom: 80px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 8px; font-size: 0.8rem; z-index: 100;">
+        <div><strong>💡 키보드 단축키</strong></div>
+        <div>Ctrl+Enter: 콘텐츠 생성</div>
+        <div>Ctrl+S: 임시저장</div>
+        <div>Ctrl+P: 미리보기</div>
+        <div>F1: 도움말</div>
+    </div>
 </body>
 </html>
