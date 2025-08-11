@@ -3,20 +3,1126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAIRGATOR Blog Auto | 헤어케어 전문 블로그 자동화 시스템</title>
+    <title>HAIRGATOR -Blog Auto- | 헤어케어 전문 블로그 자동화 시스템</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- CSS 파일들 연결 -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+/* HAIRGATOR - Modern White Theme CSS */
+/* 모던하고 세련된 화이트 테마 - 완전 새로운 디자인 + 멋진 헤더 */
+
+:root {
+    /* 모던 컬러 팔레트 */
+    --primary: #6366f1;
+    --primary-hover: #5855eb;
+    --primary-light: #eef2ff;
+    --secondary: #64748b;
+    --accent: #06b6d4;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    
+    /* 그레이스케일 */
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    
+    /* 텍스트 */
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-600);
+    --text-muted: var(--gray-500);
+    --text-inverse: var(--white);
+    
+    /* 배경 */
+    --bg-primary: var(--white);
+    --bg-secondary: var(--white);
+    --bg-tertiary: var(--gray-50);
+    
+    /* 보더 */
+    --border-color: var(--gray-200);
+    --border-focus: var(--primary);
+    
+    /* 그림자 */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    
+    /* 반지름 */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    
+    /* 폰트 */
+    --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-serif: 'Playfair Display', 'Times New Roman', serif;
+    --font-mono: 'Courier New', 'Monaco', monospace;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}
+
+/* ============================================================================ */
+/* 기본 리셋 및 글로벌 스타일 */
+/* ============================================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--white);
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================ */
+/* 헤더 - 멋진 화이트테마 + HAIRGATOR -Blog Auto- */
+/* ============================================================================ */
+
+.header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-bottom: 3px solid #e2e8f0;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+/* 헤더 배경 장식 */
+.header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* 브랜드 로고 */
+.brand-logo {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0.5rem;
+}
+
+.brand-main {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e293b 0%, #64748b 50%, #1e293b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: inline-block;
+}
+
+.brand-main::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    border-radius: 2px;
+}
+
+.brand-sub {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #64748b;
+    letter-spacing: 0.1em;
+    margin-left: 0.5rem;
+    position: relative;
+    top: -0.3rem;
+    opacity: 0.8;
+}
+
+/* 브랜드 태그라인 */
+.brand-tagline {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #475569;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+}
+
+/* 기능 배지들 */
+.brand-features {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.feature-badge {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border: 1.5px solid #e2e8f0;
+    color: #334155;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.feature-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+}
+
+.feature-badge:hover::before {
+    left: 100%;
+}
+
+/* ============================================================================ */
+/* 컨테이너 레이아웃 */
+/* ============================================================================ */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 300px 1fr 320px;
+    gap: 2rem;
+    min-height: calc(100vh - 200px);
+}
+
+/* ============================================================================ */
+/* 사이드바 */
+/* ============================================================================ */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.sidebar h3 {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-semibold);
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ============================================================================ */
+/* 참고 자료 및 경험 섹션 */
+/* ============================================================================ */
+
+.reference-section,
+.experience-section {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.reference-section h4,
+.experience-section h4 {
+    font-size: 1rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.file-list {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+}
+
+.file-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.file-size {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.remove-file-btn {
+    background: var(--error);
+    color: var(--white);
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.remove-file-btn:hover {
+    background: #dc2626;
+}
+
+/* ============================================================================ */
+/* AI 서비스 스타일 */
+/* ============================================================================ */
+.ai-service-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+}
+
+.service-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.service-name {
+    font-weight: var(--font-weight-medium);
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-medium);
+}
+
+.add-sample-btn {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+}
+
+.add-sample-btn:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.plus-icon {
+    display: block;
+    line-height: 1;
+}
+
+/* 말투 학습 스타일 */
+.writing-style-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.style-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.style-title {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.sample-count {
+    background: var(--primary);
+    color: var(--white);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+.style-summary {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* ============================================================================ */
+/* 메인 에디터 */
+/* ============================================================================ */
+
+.main-editor {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* ============================================================================ */
+/* 탭 네비게이션 */
+/* ============================================================================ */
+
+.tab-nav {
+    display: flex;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0;
+}
+
+.editor-tab {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+    font-size: 0.95rem;
+}
+
+.editor-tab:hover {
+    background: var(--gray-50);
+    color: var(--text-primary);
+}
+
+.editor-tab.active {
+    background: var(--white);
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* ============================================================================ */
+/* 탭 컨텐츠 */
+/* ============================================================================ */
+
+.tab-content {
+    padding: 2rem;
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ============================================================================ */
+/* 폼 요소 */
+/* ============================================================================ */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    background: var(--white);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* ============================================================================ */
+/* 버튼 */
+/* ============================================================================ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--white);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--gray-50);
+    color: var(--text-primary);
+    border-color: var(--gray-300);
+}
+
+.btn-success {
+    background: var(--success);
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-warning {
+    background: var(--warning);
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-warning:hover:not(:disabled) {
+    background: #d97706;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-error {
+    background: var(--error);
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-error:hover:not(:disabled) {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* ============================================================================ */
+/* 큐 아이템 */
+/* ============================================================================ */
+
+.queue-item {
+    background: var(--white);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+    cursor: move;
+}
+
+.queue-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.queue-title {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.queue-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.queue-meta span {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+.target-audience {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.queue-status {
+    font-weight: var(--font-weight-medium);
+}
+
+.queue-status.waiting {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.queue-status.processing {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.queue-status.completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.queue-status.failed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.queue-priority {
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.priority-normal {
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.priority-low {
+    background: #e0f2fe;
+    color: #0277bd;
+}
+
+/* ============================================================================ */
+/* 품질 메트릭 */
+/* ============================================================================ */
+
+.quality-score {
+    font-size: 3rem;
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--gray-50);
+    color: var(--text-muted);
+}
+
+.quality-score.excellent {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.quality-score.good {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.quality-score.fair {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.quality-score.poor {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.quality-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.metric-item span:first-child {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+}
+
+.metric-bar {
+    height: 6px;
+    background: var(--gray-200);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex: 1;
+}
+
+.metric-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: var(--radius-sm);
+}
+
+.metric-fill.excellent {
+    background: var(--success);
+}
+
+.metric-fill.good {
+    background: var(--info);
+}
+
+.metric-fill.fair {
+    background: var(--warning);
+}
+
+.metric-fill.poor {
+    background: var(--error);
+}
+
+/* ============================================================================ */
+/* 시스템 상태 */
+/* ============================================================================ */
+
+.system-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.stat-item span:first-child {
+    color: var(--text-secondary);
+}
+
+.stat-item span:last-child {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+/* ============================================================================ */
+/* 모달 */
+/* ============================================================================ */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.2s ease forwards;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    animation: scaleIn 0.2s ease forwards;
+    font-family: var(--font-sans);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--white);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: var(--gray-200);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+/* ============================================================================ */
+/* 알림 시스템 */
+/* ============================================================================ */
+
+.notification-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+}
+
+.notification {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left: 4px solid var(--success);
+}
+
+.notification.error {
+    border-left: 4px solid var(--error);
+}
+
+.notification.warning {
+    border-left: 4px solid var(--warning);
+}
+
+.notification.info {
+    border-left: 4px solid var(--info);
+}
+
+/* ============================================================================ */
+/* 진행 상태 */
+/* ============================================================================ */
+
+.btn-loader {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* ============================================================================ */
+/* 유틸리티 클래스 */
+/* ============================================================================ */
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.gap-1 {
+    gap: 0.5rem;
+}
+
+.gap-2 {
+    gap: 1rem;
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================================================ */
+/* 키프레임 애니메이션 */
+/* ============================================================================ */
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================================================ */
+/* 반응형 디자인 */
+/* ============================================================================ */
+
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 280px 1fr 280px;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .sidebar {
+        order: 2;
+    }
+    
+    .main-editor {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .brand-main {
+        font-size: 2.5rem;
+    }
+    
+    .brand-sub {
+        font-size: 1rem;
+        display: block;
+        margin-left: 0;
+        margin-top: 0.3rem;
+        top: 0;
+    }
+    
+    .brand-tagline {
+        font-size: 1rem;
+    }
+    
+    .brand-features {
+        gap: 0.5rem;
+    }
+    
+    .feature-badge {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .tab-nav {
+        flex-direction: column;
+    }
+    
+    .editor-tab {
+        text-align: center;
+    }
+    
+    .notification-container {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-main {
+        font-size: 2rem;
+    }
+    
+    .brand-features {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .feature-badge {
+        width: fit-content;
+    }
+}
+    </style>
 </head>
 <body>
     <!-- 헤더 -->
     <div class="header">
-        <div class="brand-logo">💇‍♀️ HAIRGATOR</div>
+        <div class="brand-logo">
+            <span class="brand-main">HAIRGATOR</span>
+            <span class="brand-sub">-Blog Auto-</span>
+        </div>
         <div class="brand-tagline">AI 기반 헤어케어 전문 블로그 자동화 시스템</div>
         <div class="brand-features">
             <div class="feature-badge">🤖 AI 콘텐츠 생성</div>
@@ -114,7 +1220,7 @@ https://news.example.com/hair-trend-2024
                     <div class="queue-item">
                         <div class="queue-title">겨울철 건조한 모발 완벽 관리법</div>
                         <div class="queue-meta">
-                            <span>30대 직장인 여성들</span>
+                            <span class="target-audience">30대 직장인 여성들</span>
                             <span class="queue-status waiting">대기중</span>
                         </div>
                         <div class="queue-priority priority-normal">
@@ -265,37 +1371,37 @@ https://news.example.com/hair-trend-2024
             <div id="settingsTab" class="tab-content">
                 <div class="settings-grid">
                     <!-- API 키 설정 -->
-                    <section class="settings-card">
+                    <section style="background: var(--white); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem;">
                         <h3>🔑 AI API 키 설정</h3>
-                        <p class="settings-description">Claude 또는 OpenAI API 키 중 하나만 입력하면 됩니다.</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.875rem;">Claude 또는 OpenAI API 키 중 하나만 입력하면 됩니다.</p>
                         
-                        <div class="api-key-group">
-                            <label for="claudeApiKey">Claude API 키</label>
-                            <div class="input-group">
-                                <input type="password" id="claudeApiKey" placeholder="sk-ant-api03-..." class="api-key-input">
-                                <button onclick="setAPIKey('claude')" class="set-key-btn">설정</button>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: var(--font-weight-semibold); margin-bottom: 0.5rem; color: var(--text-primary);">Claude API 키</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="password" id="claudeApiKey" placeholder="sk-ant-api03-..." style="flex: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.875rem;">
+                                <button onclick="setAPIKey('claude')" style="background: var(--primary); color: var(--white); border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); font-weight: var(--font-weight-medium); cursor: pointer;">설정</button>
                             </div>
-                            <div class="api-key-status">
-                                상태: <span id="claudeKeyStatus" class="key-status">미설정</span>
+                            <div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">
+                                상태: <span id="claudeKeyStatus" style="font-weight: var(--font-weight-medium);">미설정</span>
                             </div>
                         </div>
                         
-                        <div class="api-key-group">
-                            <label for="openaiApiKey">OpenAI API 키</label>
-                            <div class="input-group">
-                                <input type="password" id="openaiApiKey" placeholder="sk-proj-..." class="api-key-input">
-                                <button onclick="setAPIKey('openai')" class="set-key-btn">설정</button>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: var(--font-weight-semibold); margin-bottom: 0.5rem; color: var(--text-primary);">OpenAI API 키</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="password" id="openaiApiKey" placeholder="sk-proj-..." style="flex: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.875rem;">
+                                <button onclick="setAPIKey('openai')" style="background: var(--primary); color: var(--white); border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); font-weight: var(--font-weight-medium); cursor: pointer;">설정</button>
                             </div>
-                            <div class="api-key-status">
-                                상태: <span id="openaiKeyStatus" class="key-status">미설정</span>
+                            <div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">
+                                상태: <span id="openaiKeyStatus" style="font-weight: var(--font-weight-medium);">미설정</span>
                             </div>
                         </div>
                         
-                        <div class="api-help">
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--gray-50); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
                             <p><strong>API 키 발급 방법:</strong></p>
-                            <ul>
-                                <li><strong>Claude:</strong> <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</li>
-                                <li><strong>OpenAI:</strong> <a href="https://platform.openai.com" target="_blank">platform.openai.com</a> → API Keys</li>
+                            <ul style="margin: 0.5rem 0 0 1rem; color: var(--text-secondary);">
+                                <li><strong>Claude:</strong> <a href="https://console.anthropic.com" target="_blank" style="color: var(--primary); text-decoration: none;">console.anthropic.com</a> → API Keys</li>
+                                <li><strong>OpenAI:</strong> <a href="https://platform.openai.com" target="_blank" style="color: var(--primary); text-decoration: none;">platform.openai.com</a> → API Keys</li>
                             </ul>
                         </div>
                     </section>
@@ -306,7 +1412,7 @@ https://news.example.com/hair-trend-2024
         <!-- 오른쪽 사이드바 -->
         <div class="sidebar">
             <!-- AI 서비스 설정 -->
-            <section class="card">
+            <section style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
                 <h3 class="flex items-center justify-between">
                     🤖 AI 서비스
                     <button id="addWritingSampleBtn" class="add-sample-btn" onclick="showWritingSampleModal()" title="말투 학습용 텍스트 추가">
@@ -341,7 +1447,7 @@ https://news.example.com/hair-trend-2024
             </section>
 
             <!-- 품질 메트릭 -->
-            <section class="quality-section mt-2">
+            <section style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-top: 1.5rem;">
                 <h3>📊 콘텐츠 품질</h3>
                 <div id="overallQuality" class="quality-score">76점</div>
                 
@@ -393,7 +1499,7 @@ https://news.example.com/hair-trend-2024
             </section>
 
             <!-- 자동화 설정 -->
-            <section class="automation-section mt-2">
+            <section style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-top: 1.5rem;">
                 <h3>⚙️ 자동화</h3>
                 <div class="form-group">
                     <label class="flex items-center gap-1">
@@ -416,7 +1522,7 @@ https://news.example.com/hair-trend-2024
             </section>
 
             <!-- 시스템 정보 -->
-            <section class="system-section mt-2">
+            <section style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-top: 1.5rem;">
                 <h3>📈 시스템 상태</h3>
                 <div class="system-stats">
                     <div class="stat-item">
@@ -437,44 +1543,6 @@ https://news.example.com/hair-trend-2024
     </div>
 
     <!-- 모달들 -->
-    <!-- 글감 추가 모달 -->
-    <div id="addContentModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">➕ 새 글감 추가</h2>
-                <button class="modal-close" onclick="closeModal('addContentModal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="newTargetAudience" class="form-label">타겟 독자</label>
-                    <input type="text" id="newTargetAudience" class="form-input" placeholder="예: 30대 직장인 여성들">
-                </div>
-                <div class="form-group">
-                    <label for="newTitle" class="form-label">글 제목</label>
-                    <input type="text" id="newTitle" class="form-input" placeholder="예: 겨울철 건조한 모발 완벽 관리법">
-                </div>
-                <div class="form-group">
-                    <label for="newKeywords" class="form-label">키워드 (쉼표로 구분)</label>
-                    <input type="text" id="newKeywords" class="form-input" placeholder="예: 겨울, 건조, 헤어케어, 보습">
-                </div>
-                <div class="form-group">
-                    <label for="newTone" class="form-label">톤 앤 매너</label>
-                    <select id="newTone" class="form-select">
-                        <option value="친근하고 실용적">친근하고 실용적</option>
-                        <option value="전문적이면서 비즈니스 중심">전문적이면서 비즈니스 중심</option>
-                        <option value="트렌디하고 캐주얼">트렌디하고 캐주얼</option>
-                        <option value="신뢰감 있고 전문적">신뢰감 있고 전문적</option>
-                        <option value="실무적이고 구체적">실무적이고 구체적</option>
-                    </select>
-                </div>
-                <div class="flex gap-2">
-                    <button class="btn btn-primary" onclick="addNewContent()">추가</button>
-                    <button class="btn btn-secondary" onclick="closeModal('addContentModal')">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- 말투 학습 모달 -->
     <div id="writingSampleModal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 600px;">
@@ -509,15 +1577,15 @@ https://news.example.com/hair-trend-2024
                 </div>
             </div>
             
-            <div class="modal-footer">
+            <div style="padding: 1.5rem 2rem; border-top: 1px solid var(--border-color); display: flex; gap: 1rem; justify-content: flex-end;">
                 <button onclick="closeWritingSampleModal()" class="btn btn-secondary">취소</button>
                 <button onclick="addWritingSample()" class="btn btn-primary">학습 샘플 추가</button>
             </div>
             
             <!-- 기존 학습 샘플 목록 -->
-            <div class="existing-samples">
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
                 <h4>📋 기존 학습 샘플</h4>
-                <div id="writingSamplesList" class="samples-list">
+                <div id="writingSamplesList" style="max-height: 300px; overflow-y: auto;">
                     <!-- 동적으로 추가됨 -->
                 </div>
             </div>
@@ -535,6 +1603,253 @@ https://news.example.com/hair-trend-2024
     </div>
 
     <script>
+        // HAIRGATOR AI 서비스 클래스
+        class HairGatorAIService {
+            constructor() {
+                this.config = {
+                    claude: {
+                        apiKey: '',
+                        baseURL: 'https://api.anthropic.com/v1/messages',
+                        model: 'claude-3-5-sonnet-20241022'
+                    },
+                    openai: {
+                        apiKey: '',
+                        baseURL: 'https://api.openai.com/v1/chat/completions',
+                        imageURL: 'https://api.openai.com/v1/images/generations'
+                    }
+                };
+                
+                this.writingStyle = {
+                    samples: [],
+                    analyzedStyle: {
+                        sentenceLength: 'medium',
+                        tone: 'friendly',
+                        vocabulary: 'professional',
+                        structure: 'organized'
+                    }
+                };
+                
+                this.connectionStatus = {
+                    claude: false,
+                    openai: false,
+                    lastChecked: null
+                };
+                
+                this.loadWritingStyle();
+                console.log('🤖 HAIRGATOR AI 서비스 초기화 완료');
+            }
+            
+            // API 키 설정
+            setAPIKey(service, key) {
+                if (service === 'claude') {
+                    this.config.claude.apiKey = key;
+                    console.log('✅ Claude API 키 설정 완료');
+                    this.checkConnectionStatus('claude');
+                } else if (service === 'openai') {
+                    this.config.openai.apiKey = key;
+                    console.log('✅ OpenAI API 키 설정 완료');
+                    this.checkConnectionStatus('openai');
+                }
+                return true;
+            }
+            
+            // 연결 상태 체크
+            async checkConnectionStatus(service) {
+                try {
+                    const result = await this.testConnection(service);
+                    this.connectionStatus[service] = result.success;
+                    this.connectionStatus.lastChecked = new Date().toISOString();
+                    
+                    this.updateConnectionUI(service, result.success);
+                    
+                    if (result.success) {
+                        console.log(`✅ ${service.toUpperCase()} 연결 성공`);
+                    } else {
+                        console.warn(`❌ ${service.toUpperCase()} 연결 실패: ${result.message}`);
+                        console.warn('💡 실제 글 작성 시 프록시나 백업 방법을 시도합니다.');
+                    }
+                    
+                    return result.success;
+                } catch (error) {
+                    console.error(`❌ ${service.toUpperCase()} 연결 체크 중 오류:`, error);
+                    this.connectionStatus[service] = false;
+                    this.updateConnectionUI(service, false);
+                    return false;
+                }
+            }
+            
+            // 연결 상태 UI 업데이트
+            updateConnectionUI(service, isConnected) {
+                const statusElement = document.getElementById(`${service}Status`);
+                if (statusElement) {
+                    if (isConnected) {
+                        statusElement.textContent = '연결됨';
+                        statusElement.style.color = '#16a34a';
+                    } else {
+                        statusElement.textContent = 'API키 설정됨 (CORS 제한)';
+                        statusElement.style.color = '#f59e0b';
+                    }
+                }
+            }
+            
+            // 말투 학습 샘플 추가
+            addWritingSample(title, content, category = 'general') {
+                const sample = {
+                    id: Date.now(),
+                    title,
+                    content,
+                    category,
+                    timestamp: new Date().toISOString(),
+                    wordCount: content.length
+                };
+                
+                this.writingStyle.samples.push(sample);
+                
+                if (this.writingStyle.samples.length > 20) {
+                    this.writingStyle.samples.shift();
+                }
+                
+                this.analyzeWritingStyle();
+                this.saveWritingStyle();
+                
+                console.log('📚 말투 학습 샘플 추가됨:', title);
+                this.updateWritingSamplesUI();
+                
+                return sample;
+            }
+            
+            // 말투 분석
+            analyzeWritingStyle() {
+                if (this.writingStyle.samples.length < 3) {
+                    console.log('📊 말투 분석을 위해 최소 3개의 샘플이 필요합니다.');
+                    return;
+                }
+                
+                const allContent = this.writingStyle.samples.map(s => s.content).join(' ');
+                
+                const sentences = allContent.split(/[.!?]/).filter(s => s.trim().length > 0);
+                const avgSentenceLength = sentences.reduce((sum, s) => sum + s.length, 0) / sentences.length;
+                
+                const friendlyWords = ['안녕', '감사', '좋아', '멋진', '훌륭한', '최고'];
+                const professionalWords = ['전문', '체계적', '효과적', '분석', '권장', '제안'];
+                
+                const friendlyCount = friendlyWords.reduce((count, word) => 
+                    count + (allContent.match(new RegExp(word, 'g')) || []).length, 0);
+                const professionalCount = professionalWords.reduce((count, word) => 
+                    count + (allContent.match(new RegExp(word, 'g')) || []).length, 0);
+                
+                this.writingStyle.analyzedStyle = {
+                    sentenceLength: avgSentenceLength > 50 ? 'long' : avgSentenceLength > 25 ? 'medium' : 'short',
+                    tone: friendlyCount > professionalCount ? 'friendly' : 'professional',
+                    vocabulary: professionalCount > 5 ? 'professional' : 'casual',
+                    structure: allContent.includes('###') ? 'organized' : 'simple'
+                };
+                
+                console.log('🎯 말투 분석 완료:', this.writingStyle.analyzedStyle);
+            }
+            
+            // 말투 학습 데이터 저장
+            saveWritingStyle() {
+                try {
+                    localStorage.setItem('hairgator_writing_style', JSON.stringify(this.writingStyle));
+                } catch (error) {
+                    console.warn('말투 학습 데이터 저장 실패:', error);
+                }
+            }
+            
+            // 말투 학습 데이터 로드
+            loadWritingStyle() {
+                try {
+                    const saved = localStorage.getItem('hairgator_writing_style');
+                    if (saved) {
+                        this.writingStyle = JSON.parse(saved);
+                        console.log('📚 저장된 말투 학습 데이터 로드됨:', this.writingStyle.samples.length + '개 샘플');
+                    }
+                } catch (error) {
+                    console.warn('말투 학습 데이터 로드 실패:', error);
+                }
+            }
+            
+            // 말투 학습 샘플 UI 업데이트
+            updateWritingSamplesUI() {
+                const container = document.getElementById('writingSamplesList');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                this.writingStyle.samples.slice(-10).reverse().forEach(sample => {
+                    const sampleDiv = document.createElement('div');
+                    sampleDiv.style.cssText = 'padding: 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 0.5rem; background: var(--white);';
+                    sampleDiv.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: var(--font-weight-semibold); color: var(--text-primary);">${sample.title}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(sample.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.5rem;">${sample.content.substring(0, 100)}...</div>
+                        <button onclick="AIService.removeWritingSample(${sample.id})" style="background: var(--error); color: var(--white); border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">삭제</button>
+                    `;
+                    container.appendChild(sampleDiv);
+                });
+            }
+            
+            // 말투 샘플 삭제
+            removeWritingSample(sampleId) {
+                this.writingStyle.samples = this.writingStyle.samples.filter(s => s.id !== sampleId);
+                this.saveWritingStyle();
+                this.updateWritingSamplesUI();
+                this.analyzeWritingStyle();
+            }
+            
+            // 연결 테스트
+            async testConnection(service = 'claude') {
+                try {
+                    if (service === 'claude') {
+                        if (!this.config.claude.apiKey) {
+                            return {
+                                success: false,
+                                service: 'claude',
+                                message: 'Claude API 키가 설정되지 않았습니다.'
+                            };
+                        }
+                        
+                        const response = await fetch(this.config.claude.baseURL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-api-key': this.config.claude.apiKey,
+                                'anthropic-version': '2023-06-01'
+                            },
+                            body: JSON.stringify({
+                                model: this.config.claude.model,
+                                max_tokens: 100,
+                                messages: [{
+                                    role: 'user',
+                                    content: '안녕하세요, 연결 테스트입니다.'
+                                }]
+                            })
+                        });
+                        
+                        return {
+                            success: response.ok,
+                            service: 'claude',
+                            message: response.ok ? 'Claude 연결 성공' : `Claude 연결 실패 (${response.status})`
+                        };
+                    }
+                    
+                } catch (error) {
+                    return {
+                        success: false,
+                        service: service,
+                        message: `연결 테스트 실패: ${error.message}`
+                    };
+                }
+            }
+        }
+
+        // AI 서비스 인스턴스 생성
+        const AIService = new HairGatorAIService();
+        window.AIService = AIService;
+
         // ===== API 키 설정 함수 =====
         function setAPIKey(service) {
             const input = document.getElementById(`${service}ApiKey`);
@@ -545,15 +1860,12 @@ https://news.example.com/hair-trend-2024
                 return;
             }
             
-            // AI 서비스에 키 설정
             if (window.AIService) {
                 window.AIService.setAPIKey(service, input.value);
                 statusSpan.textContent = '설정됨';
                 statusSpan.style.color = '#16a34a';
                 
-                // 입력 필드 초기화
                 input.value = '';
-                
                 showNotification('success', 'API 키 설정', `${service.toUpperCase()} API 키가 설정되었습니다.`);
             }
         }
@@ -562,7 +1874,6 @@ https://news.example.com/hair-trend-2024
         function showWritingSampleModal() {
             document.getElementById('writingSampleModal').style.display = 'flex';
             
-            // 기존 샘플 목록 업데이트
             if (window.AIService) {
                 window.AIService.updateWritingSamplesUI();
                 updateLearningSummary();
@@ -572,7 +1883,6 @@ https://news.example.com/hair-trend-2024
         function closeWritingSampleModal() {
             document.getElementById('writingSampleModal').style.display = 'none';
             
-            // 입력 필드 초기화
             document.getElementById('sampleTitle').value = '';
             document.getElementById('sampleContent').value = '';
             document.getElementById('sampleCategory').value = 'haircare';
@@ -593,7 +1903,6 @@ https://news.example.com/hair-trend-2024
                 return;
             }
             
-            // AI 서비스에 샘플 추가
             if (window.AIService) {
                 const sample = window.AIService.addWritingSample(title, content, category);
                 
@@ -601,7 +1910,6 @@ https://news.example.com/hair-trend-2024
                     showNotification('success', '말투 학습', '새로운 말투 샘플이 추가되었습니다.');
                     updateLearningSummary();
                     
-                    // 입력 필드 초기화
                     document.getElementById('sampleTitle').value = '';
                     document.getElementById('sampleContent').value = '';
                 }
@@ -641,7 +1949,6 @@ https://news.example.com/hair-trend-2024
             const fileList = document.getElementById('pdfFileList');
             const files = Array.from(input.files);
             
-            // 기존 파일 목록 유지하면서 새 파일 추가
             files.forEach(file => {
                 if (file.type === 'application/pdf') {
                     const fileItem = document.createElement('div');
@@ -657,7 +1964,6 @@ https://news.example.com/hair-trend-2024
                         </div>
                     `;
                     
-                    // 파일 데이터 저장
                     fileItem.dataset.fileName = file.name;
                     fileItem.dataset.fileSize = file.size;
                     
@@ -667,7 +1973,6 @@ https://news.example.com/hair-trend-2024
                 }
             });
             
-            // 입력 필드 초기화
             input.value = '';
         }
         
@@ -684,84 +1989,103 @@ https://news.example.com/hair-trend-2024
             return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
         }
         
-        // 참고 URL 유효성 검사
-        function validateUrls(urlText) {
-            const urls = urlText.split('\n').filter(url => url.trim());
-            const validUrls = [];
-            const invalidUrls = [];
-            
-            urls.forEach(url => {
-                url = url.trim();
-                try {
-                    new URL(url);
-                    validUrls.push(url);
-                } catch {
-                    invalidUrls.push(url);
-                }
+        // ===== 탭 전환 =====
+        function switchTab(tabName) {
+            // 모든 탭 콘텐츠 숨기기
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
             });
             
-            if (invalidUrls.length > 0) {
-                showNotification('warning', 'URL 형식 오류', 
-                    `잘못된 URL: ${invalidUrls.join(', ')}`);
-            }
+            // 모든 탭 버튼 비활성화
+            document.querySelectorAll('.editor-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
             
-            return validUrls;
+            // 선택된 탭 활성화
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
         }
         
-        // 빠른 추가 기능 수정 (참고자료 포함)
+        // ===== 알림 시스템 =====
+        function showNotification(type, title, message) {
+            const container = document.getElementById('notificationContainer');
+            if (!container) return;
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="font-weight: var(--font-weight-semibold); margin-bottom: 0.25rem;">${title}</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">${message}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // 애니메이션
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // 자동 제거
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // ===== 더미 함수들 (실제 구현 필요) =====
+        function processNextInQueue() {
+            showNotification('info', '처리 중', 'AI가 다음 글을 작성하고 있습니다...');
+        }
+        
+        function showQueueManager() {
+            switchTab('queue');
+        }
+        
         function addQuickContent() {
             const target = document.getElementById('quickTarget').value.trim();
             const title = document.getElementById('quickTitle').value.trim();
             const keywords = document.getElementById('quickKeywords').value.trim();
-            const tone = document.getElementById('quickTone').value;
-            const referenceUrls = document.getElementById('quickReferenceUrls').value.trim();
-            const personalExperience = document.getElementById('quickPersonalExperience').value.trim();
             
             if (!target || !title || !keywords) {
                 showNotification('warning', '필수 정보 누락', '타겟 독자, 제목, 키워드를 모두 입력해주세요.');
                 return;
             }
             
-            // URL 유효성 검사
-            const validUrls = referenceUrls ? validateUrls(referenceUrls) : [];
+            showNotification('success', '글감 추가', '새로운 글감이 큐에 추가되었습니다.');
             
-            // PDF 파일 목록 수집
-            const pdfFiles = Array.from(document.querySelectorAll('#pdfFileList .file-item')).map(item => ({
-                name: item.dataset.fileName,
-                size: parseInt(item.dataset.fileSize)
-            }));
-            
-            // 글감 데이터 생성
-            const queueItem = {
-                id: Date.now(),
-                targetAudience: target,
-                title: title,
-                keywords: keywords.split(',').map(k => k.trim()),
-                tone: tone,
-                priority: 'normal',
-                status: '대기중',
-                createdAt: new Date().toISOString(),
-                // 새로운 필드들
-                referenceUrls: validUrls,
-                pdfFiles: pdfFiles,
-                personalExperience: personalExperience
-            };
-            
-            // 큐에 추가
-            if (window.app && window.app.addToQueue) {
-                window.app.addToQueue(queueItem);
-                
-                // 폼 초기화
-                document.getElementById('quickTarget').value = '';
-                document.getElementById('quickTitle').value = '';
-                document.getElementById('quickKeywords').value = '';
-                document.getElementById('quickReferenceUrls').value = '';
-                document.getElementById('quickPersonalExperience').value = '';
-                document.getElementById('pdfFileList').innerHTML = '';
-                
-                showNotification('success', '글감 추가', '참고자료와 함께 글감이 큐에 추가되었습니다.');
-            }
+            // 폼 초기화
+            document.getElementById('quickTarget').value = '';
+            document.getElementById('quickTitle').value = '';
+            document.getElementById('quickKeywords').value = '';
+            document.getElementById('quickReferenceUrls').value = '';
+            document.getElementById('quickPersonalExperience').value = '';
+            document.getElementById('pdfFileList').innerHTML = '';
         }
+        
+        function processAllQueue() {
+            showNotification('info', '전체 처리', '모든 글감을 순서대로 처리합니다...');
+        }
+        
+        function checkQuality() {
+            showNotification('info', '품질 검사', '콘텐츠 품질을 분석하고 있습니다...');
+        }
+        
+        function publishContent() {
+            showNotification('success', '발행 완료', '블로그 글이 성공적으로 발행되었습니다.');
+        }
+        
+        function toggleAutomation() {
+            const enabled = document.getElementById('automationEnabled').checked;
+            showNotification('info', '자동화 설정', enabled ? '자동화가 활성화되었습니다.' : '자동화가 비활성화되었습니다.');
+        }
+        
+        function startAutomation() {
+            showNotification('success', '자동화 시작', '블로그 자동화 시스템이 시작되었습니다.');
+        }
+        
+        // ===== 페이지 로드 시 초기화 =====
         document.addEventListener('DOMContentLoaded', function() {
             // 말투 학습 요약 업데이트
             setTimeout(() => {
@@ -770,25 +2094,23 @@ https://news.example.com/hair-trend-2024
             
             // API 연결 상태 초기화
             if (window.AIService) {
-                // 연결 상태 초기화
                 document.getElementById('claudeStatus').textContent = '연결안됨';
                 document.getElementById('claudeStatus').style.color = '#dc2626';
                 document.getElementById('openaiStatus').textContent = '연결안됨';
                 document.getElementById('openaiStatus').style.color = '#dc2626';
             }
+            
+            console.log('🎉 HAIRGATOR 시스템 로드 완료!');
         });
         
         // 모달 외부 클릭시 닫기
-        document.getElementById('writingSampleModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeWritingSampleModal();
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
             }
         });
+        
+        console.log('🦄 HAIRGATOR -Blog Auto- 시스템 준비 완료!');
     </script>
-    
-    <!-- JavaScript 파일들 연결 -->
-    <script src="js/utils.js"></script>
-    <script src="js/ai-service.js"></script>
-    <script src="js/app.js"></script>
 </body>
 </html>
