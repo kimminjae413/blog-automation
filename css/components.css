@@ -1,5 +1,5 @@
 /* HAIRGATOR - Modern White Theme CSS */
-/* 모던하고 세련된 화이트 테마 - 완전 새로운 디자인 */
+/* 모던하고 세련된 화이트 테마 - 완전 새로운 디자인 + 멋진 헤더 */
 
 :root {
     /* 모던 컬러 팔레트 */
@@ -55,10 +55,209 @@
     
     /* 폰트 */
     --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-serif: 'Playfair Display', 'Times New Roman', serif;
+    --font-mono: 'Courier New', 'Monaco', monospace;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+}
+
+/* ============================================================================ */
+/* 기본 리셋 및 글로벌 스타일 */
+/* ============================================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--white);
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================ */
+/* 헤더 - 멋진 화이트테마 + HAIRGATOR -Blog Auto- */
+/* ============================================================================ */
+
+.header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-bottom: 3px solid #e2e8f0;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+/* 헤더 배경 장식 */
+.header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* 브랜드 로고 */
+.brand-logo {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0.5rem;
+}
+
+.brand-main {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e293b 0%, #64748b 50%, #1e293b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: inline-block;
+}
+
+.brand-main::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    border-radius: 2px;
+}
+
+.brand-sub {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #64748b;
+    letter-spacing: 0.1em;
+    margin-left: 0.5rem;
+    position: relative;
+    top: -0.3rem;
+    opacity: 0.8;
+}
+
+/* 브랜드 태그라인 */
+.brand-tagline {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #475569;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+}
+
+/* 기능 배지들 */
+.brand-features {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.feature-badge {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border: 1.5px solid #e2e8f0;
+    color: #334155;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.feature-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+}
+
+.feature-badge:hover::before {
+    left: 100%;
+}
+
+/* ============================================================================ */
+/* 컨테이너 레이아웃 */
+/* ============================================================================ */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 300px 1fr 320px;
+    gap: 2rem;
+    min-height: calc(100vh - 200px);
+}
+
+/* ============================================================================ */
+/* 사이드바 */
+/* ============================================================================ */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.sidebar h3 {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-semibold);
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* ============================================================================ */
@@ -193,113 +392,6 @@
     font-size: 0.875rem;
     line-height: 1.4;
     color: var(--text-secondary);
-}
-
-/* ============================================================================ */
-/* 기본 리셋 및 글로벌 스타일 */
-/* ============================================================================ */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: var(--font-sans);
-    background: var(--white);
-    color: var(--text-primary);
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* ============================================================================ */
-/* 헤더 - 깔끔한 화이트 테마 */
-/* ============================================================================ */
-
-.header {
-    background: var(--white);
-    color: var(--text-primary);
-    padding: 2rem 0;
-    text-align: center;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 2rem;
-}
-
-.brand-logo {
-    font-size: 2.5rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-}
-
-.brand-tagline {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    font-weight: var(--font-weight-medium);
-    color: var(--text-secondary);
-}
-
-.brand-features {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.feature-badge {
-    background: var(--gray-50);
-    color: var(--text-secondary);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-lg);
-    font-size: 0.9rem;
-    font-weight: var(--font-weight-medium);
-    border: 1px solid var(--border-color);
-}
-
-/* ============================================================================ */
-/* 컨테이너 레이아웃 */
-/* ============================================================================ */
-
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 300px 1fr 320px;
-    gap: 2rem;
-    min-height: calc(100vh - 200px);
-}
-
-/* ============================================================================ */
-/* 사이드바 */
-/* ============================================================================ */
-
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.sidebar section {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
-}
-
-.sidebar h3 {
-    font-size: 1.1rem;
-    font-weight: var(--font-weight-semibold);
-    margin: 0 0 1rem 0;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 /* ============================================================================ */
@@ -484,7 +576,7 @@ body {
     padding: 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-mono);
     font-size: 0.875rem;
 }
 
@@ -1016,7 +1108,7 @@ body {
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl);
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
     transform: scale(0.95);
@@ -1108,20 +1200,6 @@ body {
 .cancel-btn:hover {
     background: var(--gray-50);
     color: var(--text-primary);
-}
-
-.add-sample-btn:not(.plus-icon) {
-    background: var(--primary);
-    color: var(--white);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.add-sample-btn:not(.plus-icon):hover {
-    background: var(--primary-hover);
 }
 
 /* ============================================================================ */
@@ -1287,8 +1365,20 @@ body {
         padding: 1.5rem 1rem;
     }
     
-    .brand-logo {
-        font-size: 2rem;
+    .brand-main {
+        font-size: 2.5rem;
+    }
+    
+    .brand-sub {
+        font-size: 1rem;
+        display: block;
+        margin-left: 0;
+        margin-top: 0.3rem;
+        top: 0;
+    }
+    
+    .brand-tagline {
+        font-size: 1rem;
     }
     
     .brand-features {
@@ -1313,5 +1403,20 @@ body {
         right: 1rem;
         left: 1rem;
         max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-main {
+        font-size: 2rem;
+    }
+    
+    .brand-features {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .feature-badge {
+        width: fit-content;
     }
 }
