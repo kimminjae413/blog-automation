@@ -636,7 +636,132 @@ https://news.example.com/hair-trend-2024
             }
         }
         
-        // ===== 페이지 로드 시 초기화 =====
+        // ===== 참고 자료 관리 =====
+        function handlePdfUpload(input) {
+            const fileList = document.getElementById('pdfFileList');
+            const files = Array.from(input.files);
+            
+            // 기존 파일 목록 유지하면서 새 파일 추가
+            files.forEach(file => {
+                if (file.type === 'application/pdf') {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <div class="file-name">
+                            <span>📄</span>
+                            <span>${file.name}</span>
+                        </div>
+                        <div class="file-info">
+                            <span class="file-size">${formatFileSize(file.size)}</span>
+                            <button class="remove-file-btn" onclick="removeFile(this)">삭제</button>
+                        </div>
+                    `;
+                    
+                    // 파일 데이터 저장
+                    fileItem.dataset.fileName = file.name;
+                    fileItem.dataset.fileSize = file.size;
+                    
+                    fileList.appendChild(fileItem);
+                } else {
+                    showNotification('warning', '파일 형식 오류', 'PDF 파일만 업로드 가능합니다.');
+                }
+            });
+            
+            // 입력 필드 초기화
+            input.value = '';
+        }
+        
+        function removeFile(button) {
+            const fileItem = button.closest('.file-item');
+            fileItem.remove();
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+        
+        // 참고 URL 유효성 검사
+        function validateUrls(urlText) {
+            const urls = urlText.split('\n').filter(url => url.trim());
+            const validUrls = [];
+            const invalidUrls = [];
+            
+            urls.forEach(url => {
+                url = url.trim();
+                try {
+                    new URL(url);
+                    validUrls.push(url);
+                } catch {
+                    invalidUrls.push(url);
+                }
+            });
+            
+            if (invalidUrls.length > 0) {
+                showNotification('warning', 'URL 형식 오류', 
+                    `잘못된 URL: ${invalidUrls.join(', ')}`);
+            }
+            
+            return validUrls;
+        }
+        
+        // 빠른 추가 기능 수정 (참고자료 포함)
+        function addQuickContent() {
+            const target = document.getElementById('quickTarget').value.trim();
+            const title = document.getElementById('quickTitle').value.trim();
+            const keywords = document.getElementById('quickKeywords').value.trim();
+            const tone = document.getElementById('quickTone').value;
+            const referenceUrls = document.getElementById('quickReferenceUrls').value.trim();
+            const personalExperience = document.getElementById('quickPersonalExperience').value.trim();
+            
+            if (!target || !title || !keywords) {
+                showNotification('warning', '필수 정보 누락', '타겟 독자, 제목, 키워드를 모두 입력해주세요.');
+                return;
+            }
+            
+            // URL 유효성 검사
+            const validUrls = referenceUrls ? validateUrls(referenceUrls) : [];
+            
+            // PDF 파일 목록 수집
+            const pdfFiles = Array.from(document.querySelectorAll('#pdfFileList .file-item')).map(item => ({
+                name: item.dataset.fileName,
+                size: parseInt(item.dataset.fileSize)
+            }));
+            
+            // 글감 데이터 생성
+            const queueItem = {
+                id: Date.now(),
+                targetAudience: target,
+                title: title,
+                keywords: keywords.split(',').map(k => k.trim()),
+                tone: tone,
+                priority: 'normal',
+                status: '대기중',
+                createdAt: new Date().toISOString(),
+                // 새로운 필드들
+                referenceUrls: validUrls,
+                pdfFiles: pdfFiles,
+                personalExperience: personalExperience
+            };
+            
+            // 큐에 추가
+            if (window.app && window.app.addToQueue) {
+                window.app.addToQueue(queueItem);
+                
+                // 폼 초기화
+                document.getElementById('quickTarget').value = '';
+                document.getElementById('quickTitle').value = '';
+                document.getElementById('quickKeywords').value = '';
+                document.getElementById('quickReferenceUrls').value = '';
+                document.getElementById('quickPersonalExperience').value = '';
+                document.getElementById('pdfFileList').innerHTML = '';
+                
+                showNotification('success', '글감 추가', '참고자료와 함께 글감이 큐에 추가되었습니다.');
+            }
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // 말투 학습 요약 업데이트
             setTimeout(() => {
