@@ -1,4 +1,71 @@
-// HAIRGATOR - ai-service.js
+// 모의 블로그 콘텐츠 생성
+    createMockBlogContent(queueItem) {
+        const templates = {
+            "겨울철 건조한 모발 완벽 관리법": `
+## 겨울철 건조한 모발, 이렇게 관리하세요!
+
+추운 겨울이 다가오면서 많은 분들이 **모발 건조**로 고민이 많으실 텐데요. 특히 ${queueItem.targetAudience}에게는 더욱 신경 쓰이는 부분일 것입니다.
+
+겨울철 모발 관리는 단순히 샴푸만 바꾸는 것으로는 부족합니다. **체계적인 케어 루틴**과 **올바른 제품 선택**이 건강한 모발을 유지하는 핵심입니다.
+
+### 1. 겨울철 모발이 건조해지는 과학적 원리
+
+**낮은 습도**와 **차가운 바람**, 그리고 **실내 난방**으로 인해 모발의 **수분**이 빠르게 증발합니다. 
+
+#### 주요 원인들:
+- **실내외 온도차** (20도 이상): 모발 큐티클 손상 가속화
+- **습도 20% 이하**: 모발 수분 손실률 300% 증가
+- **정전기 발생**: 큐티클 들뜸으로 인한 거칠어짐
+- **헤어드라이어 과도 사용**: 모발 단백질 변성
+
+### 2. 단계별 겨울 헤어케어 루틴
+
+#### 🧴 1단계: 올바른 세정
+**보습 성분**이 풍부한 샴푸를 선택하고, **38도 이하의 미지근한 물**을 사용하세요.
+
+- **세라마이드**, **히알루론산** 함유 제품 추천
+- **황산계 계면활성제** (SLS, SLES) 피하기
+- 주 2-3회 세정으로 충분
+
+#### 💆‍♀️ 2단계: 집중 영양 공급
+**딥컨디셔닝 트리트먼트**를 주 2회 이상 실시하세요.
+
+- **케라틴 단백질** 보충으로 모발 강화
+- **아르간오일**, **마카다미아오일** 활용
+- 모발 끝부분부터 중간까지 집중 케어
+
+#### 🌡️ 3단계: 열 보호 및 스타일링
+**히트 프로텍터** 사용은 필수입니다.
+
+- 드라이어 온도 80도 이하 유지
+- **세라믹 코팅** 도구 사용
+- 찬바람으로 마무리하여 큐티클 정리
+
+### 3. 겨울철 필수 헤어케어 아이템
+
+#### 🔹 기초 케어
+1. **보습 샴푸**: 아미노산 계면활성제 기반
+2. **단백질 컨디셔너**: 저분자 케라틴 함유
+3. **헤어 오일**: 식물성 오일 (호호바, 아르간)
+
+#### 🔹 집중 케어
+1. **헤어 마스크**: 주 1-2회 15분간 적용
+2. **리브인 트리트먼트**: 매일 사용 가능한 가벼운 제형
+3. **스칼프 세럼**: 두피 건조 방지
+
+### 4. 라이프스타일 개선 방법
+
+#### 🏠 실내 환경 관리
+- **가습기** 사용으로 습도 40-60% 유지
+- **공기청정기**로 미세먼지 차단
+- 취침 시 **실크 베개커버** 사용
+
+#### 🧥 외출 시 보호 전략
+- **모자**나 **스카프**로 바람 차단
+- **UV 차단** 헤어 스프레이 사용
+- 외출 후 즉시 **브러싱**으로 정전기 제거
+
+### 5. 전문가가// HAIRGATOR - ai-service.js
 // AI 서비스 관리 및 API 연동 - app.js 호환 버전
 
 // AI 서비스 클래스
@@ -37,8 +104,33 @@ class HairGatorAIService {
         try {
             const startTime = Date.now();
             
-            // Claude API 호출
-            const content = await this.callClaudeAPI(queueItem);
+            // 여러 방법으로 AI API 호출 시도
+            let content;
+            
+            // 방법 1: 직접 호출 시도
+            try {
+                content = await this.callClaudeAPIDirectly(queueItem);
+                console.log('✅ 직접 API 호출 성공');
+            } catch (error) {
+                console.log('❌ 직접 호출 실패, 대안 방법 시도:', error.message);
+                
+                // 방법 2: 다른 프록시 서비스 시도
+                try {
+                    content = await this.callClaudeAPIWithProxy(queueItem);
+                    console.log('✅ 프록시 API 호출 성공');
+                } catch (proxyError) {
+                    console.log('❌ 프록시 호출도 실패:', proxyError.message);
+                    
+                    // 방법 3: OpenAI API 시도 (Claude 대신)
+                    try {
+                        content = await this.callOpenAIAPIAsBackup(queueItem);
+                        console.log('✅ OpenAI 백업 API 호출 성공');
+                    } catch (openaiError) {
+                        console.log('❌ 모든 AI API 호출 실패');
+                        throw new Error('모든 AI 서비스 연결 실패. 네트워크를 확인해주세요.');
+                    }
+                }
+            }
             
             // 통계 업데이트
             const responseTime = Date.now() - startTime;
@@ -63,6 +155,138 @@ class HairGatorAIService {
                 service: 'claude'
             };
         }
+    }
+    
+    // Claude API 직접 호출 (기본 방법)
+    async callClaudeAPIDirectly(queueItem) {
+        const prompt = this.createContentPrompt(queueItem);
+        
+        const response = await fetch(this.config.claude.baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': this.config.claude.apiKey,
+                'anthropic-version': '2023-06-01'
+            },
+            body: JSON.stringify({
+                model: this.config.claude.model,
+                max_tokens: 4000,
+                messages: [{
+                    role: 'user',
+                    content: prompt
+                }]
+            })
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Claude API 오류 (${response.status}): ${errorText}`);
+        }
+        
+        const result = await response.json();
+        const generatedText = result.content[0].text;
+        
+        return {
+            title: queueItem.title,
+            content: generatedText,
+            metaDescription: this.generateMetaDescription(generatedText),
+            keywords: queueItem.keywords,
+            targetAudience: queueItem.targetAudience,
+            tone: queueItem.tone,
+            wordCount: generatedText.length
+        };
+    }
+    
+    // CORS 프록시를 통한 호출
+    async callClaudeAPIWithProxy(queueItem) {
+        const prompt = this.createContentPrompt(queueItem);
+        
+        // 여러 프록시 서비스 시도
+        const proxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://cors-proxy.htmldriven.com/?url='
+        ];
+        
+        for (const proxy of proxies) {
+            try {
+                const response = await fetch(proxy + encodeURIComponent(this.config.claude.baseURL), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': this.config.claude.apiKey,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify({
+                        model: this.config.claude.model,
+                        max_tokens: 4000,
+                        messages: [{
+                            role: 'user',
+                            content: prompt
+                        }]
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    const generatedText = result.content[0].text;
+                    
+                    return {
+                        title: queueItem.title,
+                        content: generatedText,
+                        metaDescription: this.generateMetaDescription(generatedText),
+                        keywords: queueItem.keywords,
+                        targetAudience: queueItem.targetAudience,
+                        tone: queueItem.tone,
+                        wordCount: generatedText.length
+                    };
+                }
+            } catch (error) {
+                console.log(`프록시 ${proxy} 실패:`, error.message);
+                continue;
+            }
+        }
+        
+        throw new Error('모든 프록시 서비스 실패');
+    }
+    
+    // OpenAI를 백업으로 사용
+    async callOpenAIAPIAsBackup(queueItem) {
+        const prompt = this.createContentPrompt(queueItem);
+        
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.config.openai.apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [{
+                    role: 'user',
+                    content: prompt
+                }],
+                max_tokens: 4000
+            })
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`OpenAI API 오류 (${response.status}): ${errorText}`);
+        }
+        
+        const result = await response.json();
+        const generatedText = result.choices[0].message.content;
+        
+        return {
+            title: queueItem.title,
+            content: generatedText,
+            metaDescription: this.generateMetaDescription(generatedText),
+            keywords: queueItem.keywords,
+            targetAudience: queueItem.targetAudience,
+            tone: queueItem.tone,
+            wordCount: generatedText.length
+        };
     }
     
     // ===== Claude API 직접 호출 =====
