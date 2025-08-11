@@ -46,29 +46,102 @@
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary), var(--naver-green), var(--tistory-orange));
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
             color: white;
-            padding: 40px;
-            border-radius: 16px;
-            margin-bottom: 30px;
+            padding: 60px 40px;
+            border-radius: 24px;
+            margin-bottom: 40px;
             text-align: center;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.1) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(255,255,255,0.1) 50%, 
+                rgba(255,255,255,0.1) 75%, 
+                transparent 75%, 
+                transparent);
+            background-size: 30px 30px;
+            animation: move 4s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes move {
+            0% { transform: translateX(-30px) translateY(-30px); }
+            100% { transform: translateX(0) translateY(0); }
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
+            font-size: 3rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            font-weight: 700;
+            gap: 20px;
+            font-weight: 800;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 .icon {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            font-weight: 400;
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 500;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-badge:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         .platform-selector {
@@ -444,11 +517,17 @@
     <div class="container">
         <header class="header">
             <h1>
-                <span>🌐</span>
+                <span class="icon">🌐</span>
                 통합 블로그 자동화 시스템
-                <span>✍️</span>
+                <span class="icon">✍️</span>
             </h1>
             <p>모든 블로그 플랫폼을 위한 맞춤형 콘텐츠 자동 생성</p>
+            <div class="header-features">
+                <div class="feature-badge">🟢 네이버 최적화</div>
+                <div class="feature-badge">🟠 티스토리 SEO</div>
+                <div class="feature-badge">🔵 워드프레스 전문</div>
+                <div class="feature-badge">🤖 AI 자동생성</div>
+            </div>
         </header>
 
         <!-- 플랫폼 선택기 -->
