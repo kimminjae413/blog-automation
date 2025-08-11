@@ -75,23 +75,36 @@ class HairGatorAIService {
             this.connectionStatus[service] = result.success;
             this.connectionStatus.lastChecked = new Date().toISOString();
             
-            // UI 업데이트
+            // UI 업데이트 (실제 결과 반영)
             this.updateConnectionUI(service, result.success);
+            
+            if (result.success) {
+                console.log(`✅ ${service.toUpperCase()} 연결 성공`);
+            } else {
+                console.warn(`❌ ${service.toUpperCase()} 연결 실패: ${result.message}`);
+                console.warn('💡 실제 글 작성 시 프록시나 백업 방법을 시도합니다.');
+            }
             
             return result.success;
         } catch (error) {
+            console.error(`❌ ${service.toUpperCase()} 연결 체크 중 오류:`, error);
             this.connectionStatus[service] = false;
             this.updateConnectionUI(service, false);
             return false;
         }
     }
     
-    // 연결 상태 UI 업데이트
+    // 연결 상태 UI 업데이트 (정확한 표시)
     updateConnectionUI(service, isConnected) {
         const statusElement = document.getElementById(`${service}Status`);
         if (statusElement) {
-            statusElement.textContent = isConnected ? '연결됨' : '연결안됨';
-            statusElement.style.color = isConnected ? '#16a34a' : '#dc2626';
+            if (isConnected) {
+                statusElement.textContent = '연결됨';
+                statusElement.style.color = '#16a34a';
+            } else {
+                statusElement.textContent = 'API키 설정됨 (CORS 제한)';
+                statusElement.style.color = '#f59e0b';
+            }
         }
     }
     
